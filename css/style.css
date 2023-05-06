@@ -1,0 +1,49 @@
+:root {
+    --grid-spacing-px: 8px;
+    --border-px: 1px;
+}
+
+.layout {
+    width: 100%;
+    
+    --extra-height-px: calc((var(--grid-spacing-px) + var(--border-px)) * 2);
+    height: calc(100vh - var(--extra-height-px)); 
+    height: calc(100dvh - var(--extra-height-px)); 
+
+    display: grid;
+    grid:
+        "header header header" auto
+        "leftSide body body" 1fr
+        "footer footer footer" auto
+        / auto 1fr auto;
+    gap: var(--grid-spacing-px);
+
+    border:var(--border-px) solid black;
+}
+  
+.header { 
+    grid-area: header;
+    width: 100%;
+    height: 40px;
+    border:var(--border-px) solid black;
+}
+.leftSide {
+    grid-area: leftSide; 
+    width: 100px;
+    border:var(--border-px) solid black;
+}
+.body {
+    grid-area: body; 
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%;
+    border:var(--border-px) solid black;
+}
+.footer {
+    grid-area: footer; 
+    width: 100%;
+    height: 40px;
+    border:var(--border-px) solid black;
+}
+  
