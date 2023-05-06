@@ -1,8 +1,37 @@
-const message: string = 'Hello, World!!!!';
+import { NavigationState } from "./navigation";
 
-const body = document.getElementById("body");
+class GameState {
+    private navigation: NavigationState;
 
-let heading = document.createElement('h1');
-heading.textContent = message;
+    private gameLoopThread: number | null;
 
-body?.appendChild(heading);
+    constructor() {
+        this.navigation = new NavigationState();
+        this.gameLoopThread = null;
+    }
+
+    start(): void {
+        stop();
+
+        this.gameLoopThread = setInterval(this.gameLoop, 1000);
+    }
+
+    stop(): void {
+        if (this.gameLoopThread === null) {
+            return;
+        } 
+
+        clearInterval(this.gameLoopThread);
+    }
+
+    gameLoop(): void {
+        console.log("In game loop");
+    }
+
+    getNavigationState(): NavigationState {
+        return this.navigation;
+    }
+}
+
+const game = new GameState();
+game.start();
