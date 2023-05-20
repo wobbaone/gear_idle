@@ -450,13 +450,15 @@ define("renderers/adventureZoneSelectionRenderer", ["require", "exports", "activ
         }
         drawZoneButton(zone) {
             const zoneDiv = document.createElement("div");
-            zoneDiv.className = "adventuring-zone-element";
+            zone.getName();
+            zoneDiv.className = "adventuring-zone-element adventuring-zone-element-" + zone.getName();
             zoneDiv.onclick = () => {
                 messagingBus_4.MessagingBus.publishToZoneChange(zone);
                 this.parent.buildDOM();
             };
-            const nameSpan = document.createElement("span");
+            const nameSpan = document.createElement("div");
             nameSpan.innerHTML = zone.getName();
+            nameSpan.className = "adventuring-activities-name";
             zoneDiv.appendChild(nameSpan);
             const zoneActivitiesDiv = document.createElement("div");
             zoneActivitiesDiv.className = "adventuring-activities";

@@ -78,10 +78,23 @@
     border:var(--border-px) solid black;
     background-color: #013A3A
 }
+
+
+.adventuring-zone-element-Woods {
+    background-image: url("../images/woods_cave_story.png");
+    background-size: cover;
+}
+
+
 .adventuring-activities {
     display: flex;
     flex-direction: row;
 }
+
+.adventuring-activities-name {
+    background-color: #013A3A
+}
+
 .adventure-activity-element {
     width: 50px;
     height: 50px;
@@ -91,7 +104,9 @@
     border:var(--border-px) solid black;
     font-size: 0.5vw;
     gap: 4px;
+    background-color: #013A3A
 }
+
 .back-button {
     border:var(--border-px) solid black;
     gap: 4px;
