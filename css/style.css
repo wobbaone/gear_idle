@@ -35,6 +35,7 @@
     flex-grow: 1;
     border:var(--border-px) solid black;
     gap: 4px;
+    overflow-y:auto
 }
 .navigation-element {
     width: 200px;
@@ -43,6 +44,46 @@
     align-items: center;
     justify-content: center;
     border:var(--border-px) solid black;
+    flex-shrink: 0;
+}
+.adventuring-zones {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    border:var(--border-px) solid black;
+    gap: 4px;
+    overflow-y:auto;
+    width: 100%;
+}
+.adventuring-zone-element {
+    width: 200px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border:var(--border-px) solid black;
+}
+.adventuring-activities {
+    display: flex;
+    flex-direction: row;
+}
+.adventure-activity-element {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border:var(--border-px) solid black;
+    font-size: 0.5vw;
+    gap: 4px;
+}
+.back-button {
+    border:var(--border-px) solid black;
+    gap: 4px;
+    width: 100px;
+    height: 20px;
 }
 .body {
     grid-area: body; 

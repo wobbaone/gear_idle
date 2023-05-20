@@ -1,4 +1,7 @@
+import { MessagingBus } from "./messagingBus";
 import { NavigationState } from "./navigation";
+import { Player } from "./player";
+import { IZone } from "./zones/zone";
 
 class GameState {
     private navigation: NavigationState;
@@ -26,6 +29,11 @@ class GameState {
 
     gameLoop(): void {
         console.log("In game loop");
+        
+        const zone: IZone | null = Player.getCurrentZoneActivity().getCurrentZone();
+        if (zone !== null) {
+            zone.onGameTick();
+        }
     }
 
     getNavigationState(): NavigationState {
