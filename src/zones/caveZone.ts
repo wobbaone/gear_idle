@@ -1,5 +1,6 @@
 import { AdventureActivityType } from "../activities/adventureActivity";
-import { Items } from "../inventory/inventoryState";
+import { Inventory } from "../inventory/inventoryState";
+import { Items } from "../inventory/items";
 import { MessagingBus } from "../messagingBus";
 import { Utils } from "../utils";
 import { IZone } from "./zone";
@@ -47,6 +48,6 @@ export class CavesZone implements IZone {
     onGameTick(): void {
         const orePerTick: number = Utils.randomIntBetween(1, 2);
         
-        MessagingBus.publishToResourceChange(Items.Item.Ore, orePerTick);
+        MessagingBus.publishToResourceChange(Items.getItem(Items.OreCopperItem).getId(), orePerTick);
     }
 }

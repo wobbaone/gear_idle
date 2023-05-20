@@ -1,5 +1,5 @@
 import { InventoryData } from "../inventory/inventoryData";
-import { Items } from "../inventory/inventoryState";
+import { Inventory } from "../inventory/inventoryState";
 import { MessagingBus } from "../messagingBus";
 import { Player } from "../player";
 import { Utils } from "../utils";
@@ -10,7 +10,7 @@ export class InventoryActivity extends AActivity {
     constructor() {
         super();
 
-        this.resourceChangeCallback = MessagingBus.subscribeToResourceChange((resourceId: Items.Item, amount: number) => {
+        this.resourceChangeCallback = MessagingBus.subscribeToResourceChange((resourceId: number, amount: number) => {
             this.buildDOM();
         });
     }
@@ -27,9 +27,9 @@ export class InventoryActivity extends AActivity {
         const inventoryContainer: HTMLElement = this.drawInventoryBox();
         body.appendChild(inventoryContainer);
 
-        const inventoryState: Items.InventoryState = Player.getCharacterData().getInventory().getInventoryState();
+        const inventoryState: Inventory.State = Player.getCharacterData().getInventory().getInventoryState();
         
-        const items: Items.ItemState[] = inventoryState.getItems();
+        const items: Inventory.ItemState[] = inventoryState.getItems();
         for (let i: number = 0; i < items.length; i++) {
             const itemDiv: HTMLDivElement = document.createElement("div");
             itemDiv.className = "item-element";

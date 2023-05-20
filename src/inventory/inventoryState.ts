@@ -1,35 +1,9 @@
 import { InventoryData } from "./inventoryData";
+import { ItemEntry } from "./itemEntry";
+import { Items } from "./items";
 
-export namespace Items {
-    export enum Item {
-        Ore = 0,
-        Wood = 1,
-        Meat
-    }
-
-    class ItemData {
-        itemList: ItemEntry[] = ItemData.buildItemList();
-
-        static buildItemList(): ItemEntry[] {
-            const list: ItemEntry[] = [];
-            for (const itemEnumEntry in Item) {
-                const id: number = Number(itemEnumEntry);
-                if (isNaN(id)) {
-                    continue;
-                }
-                if (id !== list.length) {
-                    console.error("Item enum is out of order");
-                    return [];
-                }
-
-                list.push(new ItemEntry(id, Item[id]));
-            }
-
-            return list
-        }
-    }  
-
-    export class InventoryState { 
+export namespace Inventory {
+    export class State { 
         private items: ItemState[];
 
         private constructor() {
@@ -40,8 +14,8 @@ export namespace Items {
             return this.items;
         }
 
-        static fromInventoryData(data: InventoryData): InventoryState {
-            const state: InventoryState =  new InventoryState();
+        static fromInventoryData(data: InventoryData): State {
+            const state: State =  new State();
             const stackableResources: Map<number, number> = data.getStackableResources();
 
             stackableResources.forEach((count: number, id: number) => {
@@ -70,27 +44,53 @@ export namespace Items {
         }
     }
 
-    export class ItemEntry {
-        private name: string;
-        private id: number;
+    class ItemData {
+        itemList: ItemEntry[];
+        itemMap: Map<new(id: number) => ItemEntry, number>;
 
-        constructor(id: number, name: string) {
-            this.id = id;
-            this.name = name;
+        constructor() {
+            this.itemList = [];
+            this.itemMap = new Map<new(id: number) => ItemEntry, number>();
+
+            this.addItemToItemList(Items.OreCopperItem);
+            this.addItemToItemList(Items.WoodBirchItem);
+            this.addItemToItemList(Items.MeatBoarItem);
         }
 
-        getName(): string {
-            return this.name;
+        private addItemToItemList<T extends ItemEntry>(ctor: new(id: number) => T): void {
+            const index: number = this.itemList.length;
+
+            this.itemMap.set(ctor, index);
+            this.itemList.push(new ctor(index));
         }
-        
-        getId(): number {
-            return this.id;
-        }
-    }
+    }  
 
     const itemData: ItemData = new ItemData()
 
     export function listAllItems() : ItemEntry[] {
         return itemData.itemList;
+    }
+
+    export function getEntryFromId(id: number) : ItemEntry {
+        if (id < 0 || id >= itemData.itemList.length) {
+            console.error("Could not find item with ID: " + id);
+            return new ItemEntry(-1, "Error Item", "");
+        }
+
+        return itemData.itemList[id];
+    }
+
+    export function getEntryFromClass(ctor: new(id: number) => ItemEntry) : ItemEntry {
+        if (!itemData.itemMap.has(ctor)) {
+            console.error("Could not find item from class: " + ctor.toString());
+            return new ItemEntry(-1, "Error Item", "");
+        }
+
+        let id: number | undefined = itemData.itemMap.get(ctor);
+        if (id === undefined) {
+            id = -1;
+        }
+
+        return getEntryFromId(id);
     }
 }

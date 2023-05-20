@@ -1,19 +1,19 @@
 import { MessagingBus } from "../messagingBus";
-import { Items } from "./inventoryState";
+import { Inventory } from "./inventoryState";
 
 export class InventoryData {
-    private stackableResources: Map<Items.Item, number>;
+    private stackableResources: Map<number, number>;
 
     constructor() {
-        this.stackableResources = new Map<Items.Item, number>();
+        this.stackableResources = new Map<number, number>();
         MessagingBus.subscribeToResourceChange(this.addResource.bind(this));
     }
 
-    getInventoryState(): Items.InventoryState{
-        return Items.InventoryState.fromInventoryData(this);
+    getInventoryState(): Inventory.State{
+        return Inventory.State.fromInventoryData(this);
     }
 
-    addResource(resourceId: Items.Item, count: number): void {
+    addResource(resourceId: number, count: number): void {
         if (!this.stackableResources.has(resourceId)) {
             this.stackableResources.set(resourceId, count);
             return;
@@ -28,7 +28,7 @@ export class InventoryData {
         this.stackableResources.set(resourceId, currentCount + count);
     } 
 
-    getStackableResources(): Map<Items.Item, number> {
+    getStackableResources(): Map<number, number> {
         return this.stackableResources;
     }
 }

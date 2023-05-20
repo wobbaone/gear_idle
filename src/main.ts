@@ -1,4 +1,3 @@
-import { MessagingBus } from "./messagingBus";
 import { NavigationState } from "./navigation";
 import { Player } from "./player";
 import { IZone } from "./zones/zone";
@@ -41,7 +40,6 @@ export namespace Game {
             return this.navigation;
         }
     }
-
     
     const game = new GameState();
     game.start();

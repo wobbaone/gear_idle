@@ -1,3 +1,29 @@
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 define("utils", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -129,39 +155,87 @@ define("renderers/activeAdventuringRenderer", ["require", "exports", "player"], 
     }
     exports.ActiveAdventuringRenderer = ActiveAdventuringRenderer;
 });
-define("inventory/inventoryState", ["require", "exports"], function (require, exports) {
+define("inventory/itemEntry", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ItemEntry = void 0;
+    class ItemEntry {
+        constructor(id, name, imagePath) {
+            this.id = id;
+            this.name = name;
+            this.imagePath = imagePath;
+        }
+        getName() {
+            return this.name;
+        }
+        getId() {
+            return this.id;
+        }
+        getImagePath() {
+            return this.imagePath;
+        }
+    }
+    exports.ItemEntry = ItemEntry;
+});
+define("inventory/items/meatBoarItem", ["require", "exports", "inventory/itemEntry"], function (require, exports, itemEntry_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.MeatBoarItem = void 0;
+    class MeatBoarItem extends itemEntry_1.ItemEntry {
+        constructor(id) {
+            super(id, "Boar Meat", "");
+        }
+    }
+    exports.MeatBoarItem = MeatBoarItem;
+});
+define("inventory/items/oreCopperItem", ["require", "exports", "inventory/itemEntry"], function (require, exports, itemEntry_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.OreCopperItem = void 0;
+    class OreCopperItem extends itemEntry_2.ItemEntry {
+        constructor(id) {
+            super(id, "Copper Ore", "");
+        }
+    }
+    exports.OreCopperItem = OreCopperItem;
+});
+define("inventory/items/woodBirch", ["require", "exports", "inventory/itemEntry"], function (require, exports, itemEntry_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.WoodBirchItem = void 0;
+    class WoodBirchItem extends itemEntry_3.ItemEntry {
+        constructor(id) {
+            super(id, "Birch Wood", "");
+        }
+    }
+    exports.WoodBirchItem = WoodBirchItem;
+});
+define("inventory/items/itemIndex", ["require", "exports", "inventory/inventoryState", "inventory/items/meatBoarItem", "inventory/items/oreCopperItem", "inventory/items/woodBirch"], function (require, exports, inventoryState_1, meatBoarItem_1, oreCopperItem_1, woodBirch_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.getItem = void 0;
+    __exportStar(meatBoarItem_1, exports);
+    __exportStar(oreCopperItem_1, exports);
+    __exportStar(woodBirch_1, exports);
+    function getItem(item) {
+        return inventoryState_1.Inventory.getEntryFromClass(item);
+    }
+    exports.getItem = getItem;
+});
+define("inventory/items", ["require", "exports", "inventory/items/itemIndex"], function (require, exports, Items) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Items = void 0;
-    var Items;
-    (function (Items) {
-        let Item;
-        (function (Item) {
-            Item[Item["Ore"] = 0] = "Ore";
-            Item[Item["Wood"] = 1] = "Wood";
-            Item[Item["Meat"] = 2] = "Meat";
-        })(Item = Items.Item || (Items.Item = {}));
-        class ItemData {
-            constructor() {
-                this.itemList = ItemData.buildItemList();
-            }
-            static buildItemList() {
-                const list = [];
-                for (const itemEnumEntry in Item) {
-                    const id = Number(itemEnumEntry);
-                    if (isNaN(id)) {
-                        continue;
-                    }
-                    if (id !== list.length) {
-                        console.error("Item enum is out of order");
-                        return [];
-                    }
-                    list.push(new ItemEntry(id, Item[id]));
-                }
-                return list;
-            }
-        }
-        class InventoryState {
+    Items = __importStar(Items);
+    exports.Items = Items;
+});
+define("inventory/inventoryState", ["require", "exports", "inventory/itemEntry", "inventory/items"], function (require, exports, itemEntry_4, items_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Inventory = void 0;
+    var Inventory;
+    (function (Inventory) {
+        class State {
             constructor() {
                 this.items = [];
             }
@@ -169,7 +243,7 @@ define("inventory/inventoryState", ["require", "exports"], function (require, ex
                 return this.items;
             }
             static fromInventoryData(data) {
-                const state = new InventoryState();
+                const state = new State();
                 const stackableResources = data.getStackableResources();
                 stackableResources.forEach((count, id) => {
                     state.items.push(new ItemState(itemData.itemList[id], count));
@@ -177,7 +251,7 @@ define("inventory/inventoryState", ["require", "exports"], function (require, ex
                 return state;
             }
         }
-        Items.InventoryState = InventoryState;
+        Inventory.State = State;
         class ItemState {
             constructor(item, count) {
                 this.item = item;
@@ -190,28 +264,49 @@ define("inventory/inventoryState", ["require", "exports"], function (require, ex
                 return this.count;
             }
         }
-        Items.ItemState = ItemState;
-        class ItemEntry {
-            constructor(id, name) {
-                this.id = id;
-                this.name = name;
+        Inventory.ItemState = ItemState;
+        class ItemData {
+            constructor() {
+                this.itemList = [];
+                this.itemMap = new Map();
+                this.addItemToItemList(items_1.Items.OreCopperItem);
+                this.addItemToItemList(items_1.Items.WoodBirchItem);
+                this.addItemToItemList(items_1.Items.MeatBoarItem);
             }
-            getName() {
-                return this.name;
-            }
-            getId() {
-                return this.id;
+            addItemToItemList(ctor) {
+                const index = this.itemList.length;
+                this.itemMap.set(ctor, index);
+                this.itemList.push(new ctor(index));
             }
         }
-        Items.ItemEntry = ItemEntry;
         const itemData = new ItemData();
         function listAllItems() {
             return itemData.itemList;
         }
-        Items.listAllItems = listAllItems;
-    })(Items = exports.Items || (exports.Items = {}));
+        Inventory.listAllItems = listAllItems;
+        function getEntryFromId(id) {
+            if (id < 0 || id >= itemData.itemList.length) {
+                console.error("Could not find item with ID: " + id);
+                return new itemEntry_4.ItemEntry(-1, "Error Item", "");
+            }
+            return itemData.itemList[id];
+        }
+        Inventory.getEntryFromId = getEntryFromId;
+        function getEntryFromClass(ctor) {
+            if (!itemData.itemMap.has(ctor)) {
+                console.error("Could not find item from class: " + ctor.toString());
+                return new itemEntry_4.ItemEntry(-1, "Error Item", "");
+            }
+            let id = itemData.itemMap.get(ctor);
+            if (id === undefined) {
+                id = -1;
+            }
+            return getEntryFromId(id);
+        }
+        Inventory.getEntryFromClass = getEntryFromClass;
+    })(Inventory = exports.Inventory || (exports.Inventory = {}));
 });
-define("zones/woodsZone", ["require", "exports", "activities/adventureActivity", "utils", "messagingBus", "inventory/inventoryState"], function (require, exports, adventureActivity_1, utils_1, messagingBus_2, inventoryState_1) {
+define("zones/woodsZone", ["require", "exports", "activities/adventureActivity", "utils", "messagingBus", "inventory/items"], function (require, exports, adventureActivity_1, utils_1, messagingBus_2, items_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.WoodsZone = void 0;
@@ -251,12 +346,12 @@ define("zones/woodsZone", ["require", "exports", "activities/adventureActivity",
         }
         onGameTick() {
             const woodPerTick = utils_1.Utils.randomIntBetween(1, 2);
-            messagingBus_2.MessagingBus.publishToResourceChange(inventoryState_1.Items.Item.Wood, woodPerTick);
+            messagingBus_2.MessagingBus.publishToResourceChange(items_2.Items.getItem(items_2.Items.WoodBirchItem).getId(), woodPerTick);
         }
     }
     exports.WoodsZone = WoodsZone;
 });
-define("zones/caveZone", ["require", "exports", "activities/adventureActivity", "inventory/inventoryState", "messagingBus", "utils"], function (require, exports, adventureActivity_2, inventoryState_2, messagingBus_3, utils_2) {
+define("zones/caveZone", ["require", "exports", "activities/adventureActivity", "inventory/items", "messagingBus", "utils"], function (require, exports, adventureActivity_2, items_3, messagingBus_3, utils_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CavesZone = void 0;
@@ -296,7 +391,7 @@ define("zones/caveZone", ["require", "exports", "activities/adventureActivity", 
         }
         onGameTick() {
             const orePerTick = utils_2.Utils.randomIntBetween(1, 2);
-            messagingBus_3.MessagingBus.publishToResourceChange(inventoryState_2.Items.Item.Ore, orePerTick);
+            messagingBus_3.MessagingBus.publishToResourceChange(items_3.Items.getItem(items_3.Items.OreCopperItem).getId(), orePerTick);
         }
     }
     exports.CavesZone = CavesZone;
@@ -496,7 +591,7 @@ define("messagingBus", ["require", "exports"], function (require, exports) {
         MessagingBus.publishToResourceChange = publishToResourceChange;
     })(MessagingBus = exports.MessagingBus || (exports.MessagingBus = {}));
 });
-define("inventory/inventoryData", ["require", "exports", "messagingBus", "inventory/inventoryState"], function (require, exports, messagingBus_6, inventoryState_3) {
+define("inventory/inventoryData", ["require", "exports", "messagingBus", "inventory/inventoryState"], function (require, exports, messagingBus_6, inventoryState_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.InventoryData = void 0;
@@ -506,7 +601,7 @@ define("inventory/inventoryData", ["require", "exports", "messagingBus", "invent
             messagingBus_6.MessagingBus.subscribeToResourceChange(this.addResource.bind(this));
         }
         getInventoryState() {
-            return inventoryState_3.Items.InventoryState.fromInventoryData(this);
+            return inventoryState_2.Inventory.State.fromInventoryData(this);
         }
         addResource(resourceId, count) {
             if (!this.stackableResources.has(resourceId)) {
@@ -526,7 +621,15 @@ define("inventory/inventoryData", ["require", "exports", "messagingBus", "invent
     }
     exports.InventoryData = InventoryData;
 });
-define("characterData", ["require", "exports", "inventory/inventoryData", "zones/zoneActivityStatus"], function (require, exports, inventoryData_1, zoneActivityStatus_1) {
+define("equipment/equipmentData", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.EquipmentData = void 0;
+    class EquipmentData {
+    }
+    exports.EquipmentData = EquipmentData;
+});
+define("characterData", ["require", "exports", "inventory/inventoryData", "zones/zoneActivityStatus", "equipment/equipmentData"], function (require, exports, inventoryData_1, zoneActivityStatus_1, equipmentData_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CharacterData = void 0;
@@ -534,9 +637,13 @@ define("characterData", ["require", "exports", "inventory/inventoryData", "zones
         constructor() {
             this.inventory = new inventoryData_1.InventoryData();
             this.currentZoneActivity = new zoneActivityStatus_1.ZoneActivityStatus();
+            this.equipment = new equipmentData_1.EquipmentData();
         }
         getInventory() {
             return this.inventory;
+        }
+        getEquipment() {
+            return this.equipment;
         }
         getCurrentZoneActivity() {
             return this.currentZoneActivity;
