@@ -2,6 +2,7 @@ import { AdventureActivityType } from "../activities/adventureActivity";
 import { Utils } from "../utils";
 import { IZone } from "./zone";
 import { MessagingBus } from "../messagingBus";
+import { Items } from "../inventory/inventoryState";
 
 export class WoodsZone implements IZone {
     buildDOM(): void {
@@ -46,6 +47,6 @@ export class WoodsZone implements IZone {
     onGameTick(): void {
         const woodPerTick: number = Utils.randomIntBetween(1, 2);
         
-        MessagingBus.publishToResourceChange(0, woodPerTick);
+        MessagingBus.publishToResourceChange(Items.Item.Wood, woodPerTick);
     }
 }

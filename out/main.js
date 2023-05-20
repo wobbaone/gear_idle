@@ -129,7 +129,89 @@ define("renderers/activeAdventuringRenderer", ["require", "exports", "player"], 
     }
     exports.ActiveAdventuringRenderer = ActiveAdventuringRenderer;
 });
-define("zones/woodsZone", ["require", "exports", "activities/adventureActivity", "utils", "messagingBus"], function (require, exports, adventureActivity_1, utils_1, messagingBus_2) {
+define("inventory/inventoryState", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Items = void 0;
+    var Items;
+    (function (Items) {
+        let Item;
+        (function (Item) {
+            Item[Item["Ore"] = 0] = "Ore";
+            Item[Item["Wood"] = 1] = "Wood";
+            Item[Item["Meat"] = 2] = "Meat";
+        })(Item = Items.Item || (Items.Item = {}));
+        class ItemData {
+            constructor() {
+                this.itemList = ItemData.buildItemList();
+            }
+            static buildItemList() {
+                const list = [];
+                for (const itemEnumEntry in Item) {
+                    const id = Number(itemEnumEntry);
+                    if (isNaN(id)) {
+                        continue;
+                    }
+                    if (id !== list.length) {
+                        console.error("Item enum is out of order");
+                        return [];
+                    }
+                    list.push(new ItemEntry(id, Item[id]));
+                }
+                return list;
+            }
+        }
+        class InventoryState {
+            constructor() {
+                this.items = [];
+            }
+            getItems() {
+                return this.items;
+            }
+            static fromInventoryData(data) {
+                const state = new InventoryState();
+                const stackableResources = data.getStackableResources();
+                stackableResources.forEach((count, id) => {
+                    state.items.push(new ItemState(itemData.itemList[id], count));
+                });
+                return state;
+            }
+        }
+        Items.InventoryState = InventoryState;
+        class ItemState {
+            constructor(item, count) {
+                this.item = item;
+                this.count = count;
+            }
+            getItem() {
+                return this.item;
+            }
+            getCount() {
+                return this.count;
+            }
+        }
+        Items.ItemState = ItemState;
+        class ItemEntry {
+            constructor(id, name) {
+                this.id = id;
+                this.name = name;
+            }
+            getName() {
+                return this.name;
+            }
+            getId() {
+                return this.id;
+            }
+        }
+        Items.ItemEntry = ItemEntry;
+        const itemData = new ItemData();
+        function listAllItems() {
+            return itemData.itemList;
+        }
+        Items.listAllItems = listAllItems;
+    })(Items = exports.Items || (exports.Items = {}));
+});
+define("zones/woodsZone", ["require", "exports", "activities/adventureActivity", "utils", "messagingBus", "inventory/inventoryState"], function (require, exports, adventureActivity_1, utils_1, messagingBus_2, inventoryState_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.WoodsZone = void 0;
@@ -169,12 +251,12 @@ define("zones/woodsZone", ["require", "exports", "activities/adventureActivity",
         }
         onGameTick() {
             const woodPerTick = utils_1.Utils.randomIntBetween(1, 2);
-            messagingBus_2.MessagingBus.publishToResourceChange(0, woodPerTick);
+            messagingBus_2.MessagingBus.publishToResourceChange(inventoryState_1.Items.Item.Wood, woodPerTick);
         }
     }
     exports.WoodsZone = WoodsZone;
 });
-define("zones/caveZone", ["require", "exports", "activities/adventureActivity", "messagingBus", "utils"], function (require, exports, adventureActivity_2, messagingBus_3, utils_2) {
+define("zones/caveZone", ["require", "exports", "activities/adventureActivity", "inventory/inventoryState", "messagingBus", "utils"], function (require, exports, adventureActivity_2, inventoryState_2, messagingBus_3, utils_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CavesZone = void 0;
@@ -214,7 +296,7 @@ define("zones/caveZone", ["require", "exports", "activities/adventureActivity", 
         }
         onGameTick() {
             const orePerTick = utils_2.Utils.randomIntBetween(1, 2);
-            messagingBus_3.MessagingBus.publishToResourceChange(0, orePerTick);
+            messagingBus_3.MessagingBus.publishToResourceChange(inventoryState_2.Items.Item.Ore, orePerTick);
         }
     }
     exports.CavesZone = CavesZone;
@@ -414,7 +496,7 @@ define("messagingBus", ["require", "exports"], function (require, exports) {
         MessagingBus.publishToResourceChange = publishToResourceChange;
     })(MessagingBus = exports.MessagingBus || (exports.MessagingBus = {}));
 });
-define("inventory/inventoryData", ["require", "exports", "messagingBus"], function (require, exports, messagingBus_6) {
+define("inventory/inventoryData", ["require", "exports", "messagingBus", "inventory/inventoryState"], function (require, exports, messagingBus_6, inventoryState_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.InventoryData = void 0;
@@ -422,6 +504,9 @@ define("inventory/inventoryData", ["require", "exports", "messagingBus"], functi
         constructor() {
             this.stackableResources = new Map();
             messagingBus_6.MessagingBus.subscribeToResourceChange(this.addResource.bind(this));
+        }
+        getInventoryState() {
+            return inventoryState_3.Items.InventoryState.fromInventoryData(this);
         }
         addResource(resourceId, count) {
             if (!this.stackableResources.has(resourceId)) {
@@ -434,6 +519,9 @@ define("inventory/inventoryData", ["require", "exports", "messagingBus"], functi
                 return;
             }
             this.stackableResources.set(resourceId, currentCount + count);
+        }
+        getStackableResources() {
+            return this.stackableResources;
         }
     }
     exports.InventoryData = InventoryData;
@@ -472,15 +560,51 @@ define("activities/clanActivity", ["require", "exports", "utils", "activities/ac
     }
     exports.ClanActivity = ClanActivity;
 });
-define("activities/inventoryActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_6, activity_3) {
+define("activities/inventoryActivity", ["require", "exports", "messagingBus", "player", "utils", "activities/activity"], function (require, exports, messagingBus_7, player_3, utils_6, activity_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.InventoryActivity = void 0;
     class InventoryActivity extends activity_3.AActivity {
+        constructor() {
+            super();
+            this.resourceChangeCallback = messagingBus_7.MessagingBus.subscribeToResourceChange((resourceId, amount) => {
+                this.buildDOM();
+            });
+        }
         buildDOM() {
+            this.clearDOM();
+            const header = utils_6.Utils.getHeaderDiv();
+            const headerText = document.createElement("div");
+            headerText.innerHTML = "Inventory";
+            header.appendChild(headerText);
+            const body = utils_6.Utils.getContentDiv();
+            const inventoryContainer = this.drawInventoryBox();
+            body.appendChild(inventoryContainer);
+            const inventoryState = player_3.Player.getCharacterData().getInventory().getInventoryState();
+            const items = inventoryState.getItems();
+            for (let i = 0; i < items.length; i++) {
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "item-element";
+                const nameSpan = document.createElement("span");
+                nameSpan.innerHTML = items[i].getItem().getName();
+                itemDiv.appendChild(nameSpan);
+                const countSpan = document.createElement("span");
+                countSpan.innerHTML = items[i].getCount().toString();
+                itemDiv.appendChild(countSpan);
+                inventoryContainer.appendChild(itemDiv);
+            }
         }
         clearDOM() {
             utils_6.Utils.clearAllDOM();
+        }
+        drawInventoryBox() {
+            const zoneBoxDiv = document.createElement("div");
+            zoneBoxDiv.className = "inventory-items";
+            return zoneBoxDiv;
+        }
+        delete() {
+            super.delete();
+            this.resourceChangeCallback.unsubscribe();
         }
     }
     exports.InventoryActivity = InventoryActivity;
@@ -597,36 +721,44 @@ define("navigation", ["require", "exports", "activities/adventureActivity", "act
     NavigationState.Screen = Screen;
     exports.NavigationState = NavigationState;
 });
-define("main", ["require", "exports", "navigation", "player"], function (require, exports, navigation_1, player_3) {
+define("main", ["require", "exports", "navigation", "player"], function (require, exports, navigation_1, player_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class GameState {
-        constructor() {
-            this.navigation = new navigation_1.NavigationState();
-            this.gameLoopThread = null;
-        }
-        start() {
-            stop();
-            this.gameLoopThread = setInterval(this.gameLoop, 1000);
-        }
-        stop() {
-            if (this.gameLoopThread === null) {
-                return;
+    exports.Game = void 0;
+    var Game;
+    (function (Game) {
+        class GameState {
+            constructor() {
+                this.navigation = new navigation_1.NavigationState();
+                this.gameLoopThread = null;
             }
-            clearInterval(this.gameLoopThread);
-        }
-        gameLoop() {
-            console.log("In game loop");
-            const zone = player_3.Player.getCurrentZoneActivity().getCurrentZone();
-            if (zone !== null) {
-                zone.onGameTick();
+            start() {
+                stop();
+                this.gameLoopThread = setInterval(this.gameLoop, 1000);
+            }
+            stop() {
+                if (this.gameLoopThread === null) {
+                    return;
+                }
+                clearInterval(this.gameLoopThread);
+            }
+            gameLoop() {
+                console.log("In game loop");
+                const zone = player_4.Player.getCurrentZoneActivity().getCurrentZone();
+                if (zone !== null) {
+                    zone.onGameTick();
+                }
+            }
+            getNavigationState() {
+                return this.navigation;
             }
         }
-        getNavigationState() {
-            return this.navigation;
+        const game = new GameState();
+        game.start();
+        function getNavigationState() {
+            return game.getNavigationState();
         }
-    }
-    const game = new GameState();
-    game.start();
+        Game.getNavigationState = getNavigationState;
+    })(Game = exports.Game || (exports.Game = {}));
 });
 //# sourceMappingURL=main.js.map

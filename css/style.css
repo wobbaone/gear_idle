@@ -105,4 +105,22 @@
     border:var(--border-px) solid black;
     background-color: #026E7A;
 }
-  
+.inventory-items {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    border:var(--border-px) solid black;
+    gap: 4px;
+    overflow-y:auto;
+    width: 100%;
+}
+.item-element {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border:var(--border-px) solid black;
+}
