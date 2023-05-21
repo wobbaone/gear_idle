@@ -61,7 +61,7 @@ export class WildernessZone implements IZone {
     }  
     
     getName(): string {
-        return "WildernessZone";
+        return "Wilds";
     }
 
     onGameTick(): void {

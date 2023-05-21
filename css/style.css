@@ -81,9 +81,18 @@
 
 .adventuring-zone-element-Woods {
     background-image: url("../images/woods_cave_story.png");
-    background-size: cover;
+    background-size: 100% 100%;
 }
 
+.adventuring-zone-element-Caves {
+    background-image: url("../images/caves_cave_story.png");
+    background-size: 100% 100%;
+}
+
+.adventuring-zone-element-Wilds {
+    background-image: url("../images/wilds_cave_story.png");
+    background-size: 100% 100%;
+}
 
 .adventuring-activities {
     display: flex;

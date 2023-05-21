@@ -541,7 +541,7 @@ define("zones/wildernessZone", ["require", "exports", "activities/adventureActiv
             return this.activityTypes;
         }
         getName() {
-            return "WildernessZone";
+            return "Wilds";
         }
         onGameTick() {
         }
