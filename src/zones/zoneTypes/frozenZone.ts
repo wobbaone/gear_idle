@@ -14,6 +14,7 @@ export class FrozenZone implements IZone {
         header.appendChild(headerText);
 
         const body: HTMLElement = Utils.getContentDiv();
+        body.className = "adventuring-zone-"+this.getName();
         const profileText: HTMLDivElement = document.createElement("div");
         profileText.innerHTML = "Woodcutting in " + this.getName();
         body.appendChild(profileText);
@@ -22,6 +23,7 @@ export class FrozenZone implements IZone {
         backButton.innerHTML = "Leave " + this.getName() ;
         backButton.className = "back-button";
         backButton.onclick = () => {
+            body.className = "";
             MessagingBus.publishToZoneChange(null); 
         }
         body.appendChild(backButton);

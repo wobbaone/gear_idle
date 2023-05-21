@@ -22,6 +22,7 @@ export class WildernessZone implements IZone {
         header.appendChild(headerText);
 
         const body: HTMLElement = Utils.getContentDiv();
+        body.className = "adventuring-zone-"+this.getName();
         const profileText: HTMLDivElement = document.createElement("div");
         profileText.innerHTML = "Fighting in the wilderness";
         body.appendChild(profileText);
@@ -41,6 +42,7 @@ export class WildernessZone implements IZone {
         backButton.innerHTML = "Leave Wild";
         backButton.className = "back-button";
         backButton.onclick = () => {
+            body.className = "";
             MessagingBus.publishToZoneChange(null); 
         }
         body.appendChild(backButton);

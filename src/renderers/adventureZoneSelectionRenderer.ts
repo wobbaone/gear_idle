@@ -45,8 +45,7 @@ export class AdventureZoneSelectionRenderer implements IRenderer {
 
     private drawZoneButton(zone: Zones.IZone): HTMLElement {
         const zoneDiv: HTMLDivElement = document.createElement("div");
-        zoneDiv.className = "adventuring-zone-element";
-        zoneDiv.id = "adventuring-zone-element-" + zone.getName();
+        zoneDiv.className = "adventuring-zone-element adventuring-zone-" + zone.getName();
 
         zoneDiv.onclick = ()=> { 
             MessagingBus.publishToZoneChange(zone); 
