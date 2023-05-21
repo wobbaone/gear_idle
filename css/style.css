@@ -1,6 +1,5 @@
 :root {
     --grid-spacing-px: 8px;
-    --border-px: 1px;
     background-color: #015656;
     color: #DDECEC;
 }
@@ -68,8 +67,8 @@
     width: 100%; 
 }
 .adventuring-zone-element {
-    width: 200px;
-    height: 150px;
+    width: 250px;
+    height: 250px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -91,6 +90,36 @@
 
 .adventuring-zone-element-Wilds {
     background-image: url("../images/wilds_cave_story.png");
+    background-size: 100% 100%;
+}
+
+.adventuring-zone-element-WarforgeCitadel {
+    background-image: url("../images/warforge_citadel_cave_story.png");
+    background-size: 100% 100%;
+}
+
+.adventuring-zone-element-Jungle {
+    background-image: url("../images/jungle_cave_story.png");
+    background-size: 100% 100%;
+}
+.adventuring-zone-element-Volcano {
+    background-image: url("../images/volcano_cave_story.png");
+    background-size: 100% 100%;
+}
+.adventuring-zone-element-Desert {
+    background-image: url("../images/desert_cave_story.png");
+    background-size: 100% 100%;
+}
+.adventuring-zone-element-Graveyard {
+    background-image: url("../images/desert_cave_story.png");
+    background-size: 100% 100%;
+}
+.adventuring-zone-element-DarkForest {
+    background-image: url("../images/dark_forest_cave_story.png");
+    background-size: 100% 100%;
+}
+.adventuring-zone-element-Frozen {
+    background-image: url("../images/frozen_cave_story.png");
     background-size: 100% 100%;
 }
 

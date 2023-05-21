@@ -559,7 +559,322 @@ define("zones/wildernessZone", ["require", "exports", "activities/adventureActiv
     }
     exports.WildernessZone = WildernessZone;
 });
-define("renderers/adventureZoneSelectionRenderer", ["require", "exports", "activities/adventureActivity", "utils", "zones/woodsZone", "zones/caveZone", "zones/wildernessZone", "messagingBus"], function (require, exports, adventureActivity_4, utils_4, woodsZone_1, caveZone_1, wildernessZone_1, messagingBus_5) {
+define("zones/warforgeZone", ["require", "exports", "activities/adventureActivity", "utils", "messagingBus", "inventory/items"], function (require, exports, adventureActivity_4, utils_4, messagingBus_5, items_5) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.WarforgeCitadelZone = void 0;
+    class WarforgeCitadelZone {
+        constructor() {
+            this.activityTypes = [
+                adventureActivity_4.AdventureActivityType.WoodCutting,
+                adventureActivity_4.AdventureActivityType.Combat
+            ].sort();
+        }
+        buildDOM() {
+            this.clearDOM();
+            const header = utils_4.Utils.getHeaderDiv();
+            const headerText = document.createElement("div");
+            headerText.innerHTML = "Warforge Citadel";
+            header.appendChild(headerText);
+            const body = utils_4.Utils.getContentDiv();
+            const profileText = document.createElement("div");
+            profileText.innerHTML = "Woodcutting in Warforge Citadel";
+            body.appendChild(profileText);
+            const backButton = document.createElement("div");
+            backButton.innerHTML = "Leave Warforge Citadel";
+            backButton.className = "back-button";
+            backButton.onclick = () => {
+                messagingBus_5.MessagingBus.publishToZoneChange(null);
+            };
+            body.appendChild(backButton);
+        }
+        clearDOM() {
+            utils_4.Utils.clearAllDOM();
+        }
+        getActivityTypes() {
+            return this.activityTypes;
+        }
+        getName() {
+            return "WarforgeCitadel";
+        }
+        onGameTick() {
+            const woodPerTick = utils_4.Utils.randomIntBetween(1, 2);
+            messagingBus_5.MessagingBus.publishToResourceChange(items_5.Items.getItem(items_5.Items.WoodBirchItem).getId(), woodPerTick);
+        }
+    }
+    exports.WarforgeCitadelZone = WarforgeCitadelZone;
+});
+define("zones/jungleZone", ["require", "exports", "activities/adventureActivity", "utils", "messagingBus", "inventory/items"], function (require, exports, adventureActivity_5, utils_5, messagingBus_6, items_6) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.JungleZone = void 0;
+    class JungleZone {
+        constructor() {
+            this.activityTypes = [
+                adventureActivity_5.AdventureActivityType.WoodCutting,
+                adventureActivity_5.AdventureActivityType.Combat
+            ].sort();
+        }
+        buildDOM() {
+            this.clearDOM();
+            const header = utils_5.Utils.getHeaderDiv();
+            const headerText = document.createElement("div");
+            headerText.innerHTML = this.getName();
+            header.appendChild(headerText);
+            const body = utils_5.Utils.getContentDiv();
+            const profileText = document.createElement("div");
+            profileText.innerHTML = "Woodcutting in " + this.getName();
+            body.appendChild(profileText);
+            const backButton = document.createElement("div");
+            backButton.innerHTML = "Leave " + this.getName();
+            backButton.className = "back-button";
+            backButton.onclick = () => {
+                messagingBus_6.MessagingBus.publishToZoneChange(null);
+            };
+            body.appendChild(backButton);
+        }
+        clearDOM() {
+            utils_5.Utils.clearAllDOM();
+        }
+        getActivityTypes() {
+            return this.activityTypes;
+        }
+        getName() {
+            return "Jungle";
+        }
+        onGameTick() {
+            const woodPerTick = utils_5.Utils.randomIntBetween(1, 2);
+            messagingBus_6.MessagingBus.publishToResourceChange(items_6.Items.getItem(items_6.Items.WoodBirchItem).getId(), woodPerTick);
+        }
+    }
+    exports.JungleZone = JungleZone;
+});
+define("zones/desertZone", ["require", "exports", "activities/adventureActivity", "utils", "messagingBus", "inventory/items"], function (require, exports, adventureActivity_6, utils_6, messagingBus_7, items_7) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.DesertZone = void 0;
+    class DesertZone {
+        constructor() {
+            this.activityTypes = [
+                adventureActivity_6.AdventureActivityType.WoodCutting,
+                adventureActivity_6.AdventureActivityType.Combat
+            ].sort();
+        }
+        buildDOM() {
+            this.clearDOM();
+            const header = utils_6.Utils.getHeaderDiv();
+            const headerText = document.createElement("div");
+            headerText.innerHTML = this.getName();
+            header.appendChild(headerText);
+            const body = utils_6.Utils.getContentDiv();
+            const profileText = document.createElement("div");
+            profileText.innerHTML = "Woodcutting in " + this.getName();
+            body.appendChild(profileText);
+            const backButton = document.createElement("div");
+            backButton.innerHTML = "Leave " + this.getName();
+            backButton.className = "back-button";
+            backButton.onclick = () => {
+                messagingBus_7.MessagingBus.publishToZoneChange(null);
+            };
+            body.appendChild(backButton);
+        }
+        clearDOM() {
+            utils_6.Utils.clearAllDOM();
+        }
+        getActivityTypes() {
+            return this.activityTypes;
+        }
+        getName() {
+            return "Desert";
+        }
+        onGameTick() {
+            const woodPerTick = utils_6.Utils.randomIntBetween(1, 2);
+            messagingBus_7.MessagingBus.publishToResourceChange(items_7.Items.getItem(items_7.Items.WoodBirchItem).getId(), woodPerTick);
+        }
+    }
+    exports.DesertZone = DesertZone;
+});
+define("zones/volcanoZone", ["require", "exports", "activities/adventureActivity", "utils", "messagingBus", "inventory/items"], function (require, exports, adventureActivity_7, utils_7, messagingBus_8, items_8) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.VolcanoZone = void 0;
+    class VolcanoZone {
+        constructor() {
+            this.activityTypes = [
+                adventureActivity_7.AdventureActivityType.WoodCutting,
+                adventureActivity_7.AdventureActivityType.Combat
+            ].sort();
+        }
+        buildDOM() {
+            this.clearDOM();
+            const header = utils_7.Utils.getHeaderDiv();
+            const headerText = document.createElement("div");
+            headerText.innerHTML = this.getName();
+            header.appendChild(headerText);
+            const body = utils_7.Utils.getContentDiv();
+            const profileText = document.createElement("div");
+            profileText.innerHTML = "Woodcutting in " + this.getName();
+            body.appendChild(profileText);
+            const backButton = document.createElement("div");
+            backButton.innerHTML = "Leave " + this.getName();
+            backButton.className = "back-button";
+            backButton.onclick = () => {
+                messagingBus_8.MessagingBus.publishToZoneChange(null);
+            };
+            body.appendChild(backButton);
+        }
+        clearDOM() {
+            utils_7.Utils.clearAllDOM();
+        }
+        getActivityTypes() {
+            return this.activityTypes;
+        }
+        getName() {
+            return "Volcano";
+        }
+        onGameTick() {
+            const woodPerTick = utils_7.Utils.randomIntBetween(1, 2);
+            messagingBus_8.MessagingBus.publishToResourceChange(items_8.Items.getItem(items_8.Items.WoodBirchItem).getId(), woodPerTick);
+        }
+    }
+    exports.VolcanoZone = VolcanoZone;
+});
+define("zones/frozenZone", ["require", "exports", "activities/adventureActivity", "utils", "messagingBus", "inventory/items"], function (require, exports, adventureActivity_8, utils_8, messagingBus_9, items_9) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.FrozenZone = void 0;
+    class FrozenZone {
+        constructor() {
+            this.activityTypes = [
+                adventureActivity_8.AdventureActivityType.WoodCutting,
+                adventureActivity_8.AdventureActivityType.Combat
+            ].sort();
+        }
+        buildDOM() {
+            this.clearDOM();
+            const header = utils_8.Utils.getHeaderDiv();
+            const headerText = document.createElement("div");
+            headerText.innerHTML = this.getName();
+            header.appendChild(headerText);
+            const body = utils_8.Utils.getContentDiv();
+            const profileText = document.createElement("div");
+            profileText.innerHTML = "Woodcutting in " + this.getName();
+            body.appendChild(profileText);
+            const backButton = document.createElement("div");
+            backButton.innerHTML = "Leave " + this.getName();
+            backButton.className = "back-button";
+            backButton.onclick = () => {
+                messagingBus_9.MessagingBus.publishToZoneChange(null);
+            };
+            body.appendChild(backButton);
+        }
+        clearDOM() {
+            utils_8.Utils.clearAllDOM();
+        }
+        getActivityTypes() {
+            return this.activityTypes;
+        }
+        getName() {
+            return "Frozen";
+        }
+        onGameTick() {
+            const woodPerTick = utils_8.Utils.randomIntBetween(1, 2);
+            messagingBus_9.MessagingBus.publishToResourceChange(items_9.Items.getItem(items_9.Items.WoodBirchItem).getId(), woodPerTick);
+        }
+    }
+    exports.FrozenZone = FrozenZone;
+});
+define("zones/graveyardZone", ["require", "exports", "activities/adventureActivity", "utils", "messagingBus", "inventory/items"], function (require, exports, adventureActivity_9, utils_9, messagingBus_10, items_10) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.GraveyardZone = void 0;
+    class GraveyardZone {
+        constructor() {
+            this.activityTypes = [
+                adventureActivity_9.AdventureActivityType.WoodCutting,
+                adventureActivity_9.AdventureActivityType.Combat
+            ].sort();
+        }
+        buildDOM() {
+            this.clearDOM();
+            const header = utils_9.Utils.getHeaderDiv();
+            const headerText = document.createElement("div");
+            headerText.innerHTML = this.getName();
+            header.appendChild(headerText);
+            const body = utils_9.Utils.getContentDiv();
+            const profileText = document.createElement("div");
+            profileText.innerHTML = "Woodcutting in " + this.getName();
+            body.appendChild(profileText);
+            const backButton = document.createElement("div");
+            backButton.innerHTML = "Leave " + this.getName();
+            backButton.className = "back-button";
+            backButton.onclick = () => {
+                messagingBus_10.MessagingBus.publishToZoneChange(null);
+            };
+            body.appendChild(backButton);
+        }
+        clearDOM() {
+            utils_9.Utils.clearAllDOM();
+        }
+        getActivityTypes() {
+            return this.activityTypes;
+        }
+        getName() {
+            return "Graveyard";
+        }
+        onGameTick() {
+            const woodPerTick = utils_9.Utils.randomIntBetween(1, 2);
+            messagingBus_10.MessagingBus.publishToResourceChange(items_10.Items.getItem(items_10.Items.WoodBirchItem).getId(), woodPerTick);
+        }
+    }
+    exports.GraveyardZone = GraveyardZone;
+});
+define("zones/darkForestZone", ["require", "exports", "activities/adventureActivity", "utils", "messagingBus", "inventory/items"], function (require, exports, adventureActivity_10, utils_10, messagingBus_11, items_11) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.DarkForestZone = void 0;
+    class DarkForestZone {
+        constructor() {
+            this.activityTypes = [
+                adventureActivity_10.AdventureActivityType.WoodCutting,
+                adventureActivity_10.AdventureActivityType.Combat
+            ].sort();
+        }
+        buildDOM() {
+            this.clearDOM();
+            const header = utils_10.Utils.getHeaderDiv();
+            const headerText = document.createElement("div");
+            headerText.innerHTML = this.getName();
+            header.appendChild(headerText);
+            const body = utils_10.Utils.getContentDiv();
+            const profileText = document.createElement("div");
+            profileText.innerHTML = "Woodcutting in " + this.getName();
+            body.appendChild(profileText);
+            const backButton = document.createElement("div");
+            backButton.innerHTML = "Leave " + this.getName();
+            backButton.className = "back-button";
+            backButton.onclick = () => {
+                messagingBus_11.MessagingBus.publishToZoneChange(null);
+            };
+            body.appendChild(backButton);
+        }
+        clearDOM() {
+            utils_10.Utils.clearAllDOM();
+        }
+        getActivityTypes() {
+            return this.activityTypes;
+        }
+        getName() {
+            return "DarkForest";
+        }
+        onGameTick() {
+            const woodPerTick = utils_10.Utils.randomIntBetween(1, 2);
+            messagingBus_11.MessagingBus.publishToResourceChange(items_11.Items.getItem(items_11.Items.WoodBirchItem).getId(), woodPerTick);
+        }
+    }
+    exports.DarkForestZone = DarkForestZone;
+});
+define("renderers/adventureZoneSelectionRenderer", ["require", "exports", "activities/adventureActivity", "utils", "zones/woodsZone", "zones/caveZone", "zones/wildernessZone", "messagingBus", "zones/warforgeZone", "zones/jungleZone", "zones/desertZone", "zones/volcanoZone", "zones/frozenZone", "zones/graveyardZone", "zones/darkForestZone"], function (require, exports, adventureActivity_11, utils_11, woodsZone_1, caveZone_1, wildernessZone_1, messagingBus_12, warforgeZone_1, jungleZone_1, desertZone_1, volcanoZone_1, frozenZone_1, graveyardZone_1, darkForestZone_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.AdventureZoneSelectionRenderer = void 0;
@@ -568,16 +883,23 @@ define("renderers/adventureZoneSelectionRenderer", ["require", "exports", "activ
             this.parent = adventureActivity;
         }
         buildDOM() {
-            const header = utils_4.Utils.getHeaderDiv();
+            const header = utils_11.Utils.getHeaderDiv();
             const headerText = document.createElement("div");
             headerText.innerHTML = "Select Zone";
             header.appendChild(headerText);
-            const body = utils_4.Utils.getContentDiv();
+            const body = utils_11.Utils.getContentDiv();
             const zoneContainer = this.drawZoneBox();
             body.appendChild(zoneContainer);
+            zoneContainer.appendChild(this.drawZoneButton(new wildernessZone_1.WildernessZone()));
             zoneContainer.appendChild(this.drawZoneButton(new woodsZone_1.WoodsZone()));
             zoneContainer.appendChild(this.drawZoneButton(new caveZone_1.CavesZone()));
-            zoneContainer.appendChild(this.drawZoneButton(new wildernessZone_1.WildernessZone()));
+            zoneContainer.appendChild(this.drawZoneButton(new jungleZone_1.JungleZone()));
+            zoneContainer.appendChild(this.drawZoneButton(new desertZone_1.DesertZone()));
+            zoneContainer.appendChild(this.drawZoneButton(new warforgeZone_1.WarforgeCitadelZone()));
+            zoneContainer.appendChild(this.drawZoneButton(new darkForestZone_1.DarkForestZone()));
+            zoneContainer.appendChild(this.drawZoneButton(new graveyardZone_1.GraveyardZone));
+            zoneContainer.appendChild(this.drawZoneButton(new frozenZone_1.FrozenZone()));
+            zoneContainer.appendChild(this.drawZoneButton(new volcanoZone_1.VolcanoZone()));
         }
         clearDOM() { }
         drawZoneBox() {
@@ -590,7 +912,7 @@ define("renderers/adventureZoneSelectionRenderer", ["require", "exports", "activ
             zone.getName();
             zoneDiv.className = "adventuring-zone-element adventuring-zone-element-" + zone.getName();
             zoneDiv.onclick = () => {
-                messagingBus_5.MessagingBus.publishToZoneChange(zone);
+                messagingBus_12.MessagingBus.publishToZoneChange(zone);
                 this.parent.buildDOM();
             };
             const nameSpan = document.createElement("div");
@@ -610,13 +932,13 @@ define("renderers/adventureZoneSelectionRenderer", ["require", "exports", "activ
         createActivityElement(activityType) {
             const activityDiv = document.createElement("div");
             activityDiv.className = "adventure-activity-element";
-            activityDiv.innerHTML = adventureActivity_4.AdventureActivityType[activityType];
+            activityDiv.innerHTML = adventureActivity_11.AdventureActivityType[activityType];
             return activityDiv;
         }
     }
     exports.AdventureZoneSelectionRenderer = AdventureZoneSelectionRenderer;
 });
-define("activities/adventureActivity", ["require", "exports", "activities/activity", "renderers/activeAdventuringRenderer", "renderers/adventureZoneSelectionRenderer", "player", "messagingBus", "utils"], function (require, exports, activity_1, activeAdventuringRenderer_1, adventureZoneSelectionRenderer_1, player_3, messagingBus_6, utils_5) {
+define("activities/adventureActivity", ["require", "exports", "activities/activity", "renderers/activeAdventuringRenderer", "renderers/adventureZoneSelectionRenderer", "player", "messagingBus", "utils"], function (require, exports, activity_1, activeAdventuringRenderer_1, adventureZoneSelectionRenderer_1, player_3, messagingBus_13, utils_12) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.AdventureActivity = exports.AdventureActivityType = void 0;
@@ -629,7 +951,7 @@ define("activities/adventureActivity", ["require", "exports", "activities/activi
     class AdventureActivity extends activity_1.AActivity {
         constructor() {
             super();
-            this.zoneChangeCallback = messagingBus_6.MessagingBus.subscribeToZoneChange(() => {
+            this.zoneChangeCallback = messagingBus_13.MessagingBus.subscribeToZoneChange(() => {
                 this.buildDOM();
             }, 1000);
         }
@@ -643,7 +965,7 @@ define("activities/adventureActivity", ["require", "exports", "activities/activi
             }
         }
         clearDOM() {
-            utils_5.Utils.clearAllDOM();
+            utils_12.Utils.clearAllDOM();
         }
         delete() {
             super.delete();
@@ -730,14 +1052,14 @@ define("messagingBus", ["require", "exports"], function (require, exports) {
         MessagingBus.publishToResourceChange = publishToResourceChange;
     })(MessagingBus = exports.MessagingBus || (exports.MessagingBus = {}));
 });
-define("inventory/inventoryData", ["require", "exports", "messagingBus", "inventory/inventoryState"], function (require, exports, messagingBus_7, inventoryState_2) {
+define("inventory/inventoryData", ["require", "exports", "messagingBus", "inventory/inventoryState"], function (require, exports, messagingBus_14, inventoryState_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.InventoryData = void 0;
     class InventoryData {
         constructor() {
             this.stackableResources = new Map();
-            messagingBus_7.MessagingBus.subscribeToResourceChange(this.addResource.bind(this));
+            messagingBus_14.MessagingBus.subscribeToResourceChange(this.addResource.bind(this));
         }
         getInventoryState() {
             return inventoryState_2.Inventory.State.fromInventoryData(this);
@@ -838,7 +1160,7 @@ define("characterData", ["require", "exports", "inventory/inventoryData", "zones
     CharacterHealthData.DEFAULT_MAX_HEALTH = 10;
     exports.CharacterHealthData = CharacterHealthData;
 });
-define("activities/clanActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_6, activity_2) {
+define("activities/clanActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_13, activity_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ClanActivity = void 0;
@@ -846,29 +1168,29 @@ define("activities/clanActivity", ["require", "exports", "utils", "activities/ac
         buildDOM() {
         }
         clearDOM() {
-            utils_6.Utils.clearAllDOM();
+            utils_13.Utils.clearAllDOM();
         }
     }
     exports.ClanActivity = ClanActivity;
 });
-define("activities/inventoryActivity", ["require", "exports", "messagingBus", "player", "utils", "activities/activity"], function (require, exports, messagingBus_8, player_4, utils_7, activity_3) {
+define("activities/inventoryActivity", ["require", "exports", "messagingBus", "player", "utils", "activities/activity"], function (require, exports, messagingBus_15, player_4, utils_14, activity_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.InventoryActivity = void 0;
     class InventoryActivity extends activity_3.AActivity {
         constructor() {
             super();
-            this.resourceChangeCallback = messagingBus_8.MessagingBus.subscribeToResourceChange((resourceId, amount) => {
+            this.resourceChangeCallback = messagingBus_15.MessagingBus.subscribeToResourceChange((resourceId, amount) => {
                 this.buildDOM();
             });
         }
         buildDOM() {
             this.clearDOM();
-            const header = utils_7.Utils.getHeaderDiv();
+            const header = utils_14.Utils.getHeaderDiv();
             const headerText = document.createElement("div");
             headerText.innerHTML = "Inventory";
             header.appendChild(headerText);
-            const body = utils_7.Utils.getContentDiv();
+            const body = utils_14.Utils.getContentDiv();
             const inventoryContainer = this.drawInventoryBox();
             body.appendChild(inventoryContainer);
             const inventoryState = player_4.Player.getCharacterData().getInventory().getInventoryState();
@@ -886,7 +1208,7 @@ define("activities/inventoryActivity", ["require", "exports", "messagingBus", "p
             }
         }
         clearDOM() {
-            utils_7.Utils.clearAllDOM();
+            utils_14.Utils.clearAllDOM();
         }
         drawInventoryBox() {
             const zoneBoxDiv = document.createElement("div");
@@ -900,7 +1222,7 @@ define("activities/inventoryActivity", ["require", "exports", "messagingBus", "p
     }
     exports.InventoryActivity = InventoryActivity;
 });
-define("activities/partyActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_8, activity_4) {
+define("activities/partyActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_15, activity_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.PartyActivity = void 0;
@@ -908,34 +1230,34 @@ define("activities/partyActivity", ["require", "exports", "utils", "activities/a
         buildDOM() {
         }
         clearDOM() {
-            utils_8.Utils.clearAllDOM();
+            utils_15.Utils.clearAllDOM();
         }
     }
     exports.PartyActivity = PartyActivity;
 });
-define("activities/profileActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_9, activity_5) {
+define("activities/profileActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_16, activity_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ProfileActivity = void 0;
     class ProfileActivity extends activity_5.AActivity {
         buildDOM() {
             this.clearDOM();
-            const header = utils_9.Utils.getHeaderDiv();
+            const header = utils_16.Utils.getHeaderDiv();
             const headerText = document.createElement("div");
             headerText.innerHTML = "Profile";
             header.appendChild(headerText);
-            const body = utils_9.Utils.getContentDiv();
+            const body = utils_16.Utils.getContentDiv();
             const profileText = document.createElement("div");
             profileText.innerHTML = "Profile information goes here";
             body.appendChild(profileText);
         }
         clearDOM() {
-            utils_9.Utils.clearAllDOM();
+            utils_16.Utils.clearAllDOM();
         }
     }
     exports.ProfileActivity = ProfileActivity;
 });
-define("activities/townActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_10, activity_6) {
+define("activities/townActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_17, activity_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TownActivity = void 0;
@@ -943,12 +1265,12 @@ define("activities/townActivity", ["require", "exports", "utils", "activities/ac
         buildDOM() {
         }
         clearDOM() {
-            utils_10.Utils.clearAllDOM();
+            utils_17.Utils.clearAllDOM();
         }
     }
     exports.TownActivity = TownActivity;
 });
-define("navigation", ["require", "exports", "activities/adventureActivity", "activities/clanActivity", "activities/inventoryActivity", "activities/partyActivity", "activities/profileActivity", "activities/townActivity", "utils"], function (require, exports, adventureActivity_5, clanActivity_1, inventoryActivity_1, partyActivity_1, profileActivity_1, townActivity_1, utils_11) {
+define("navigation", ["require", "exports", "activities/adventureActivity", "activities/clanActivity", "activities/inventoryActivity", "activities/partyActivity", "activities/profileActivity", "activities/townActivity", "utils"], function (require, exports, adventureActivity_12, clanActivity_1, inventoryActivity_1, partyActivity_1, profileActivity_1, townActivity_1, utils_18) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NavigationState = void 0;
@@ -966,12 +1288,12 @@ define("navigation", ["require", "exports", "activities/adventureActivity", "act
             this.currentScreen = Screen.Profile;
             this.currentActivity = new profileActivity_1.ProfileActivity();
             this.setScreen(Screen.Profile);
-            utils_11.Utils.addOnClickToElement("profile-nav", () => this.setScreen(Screen.Profile));
-            utils_11.Utils.addOnClickToElement("inventory-nav", () => this.setScreen(Screen.Inventory));
-            utils_11.Utils.addOnClickToElement("clan-nav", () => this.setScreen(Screen.Clan));
-            utils_11.Utils.addOnClickToElement("towns-nav", () => this.setScreen(Screen.Town));
-            utils_11.Utils.addOnClickToElement("party-nav", () => this.setScreen(Screen.Party));
-            utils_11.Utils.addOnClickToElement("adventure-nav", () => this.setScreen(Screen.Adventure));
+            utils_18.Utils.addOnClickToElement("profile-nav", () => this.setScreen(Screen.Profile));
+            utils_18.Utils.addOnClickToElement("inventory-nav", () => this.setScreen(Screen.Inventory));
+            utils_18.Utils.addOnClickToElement("clan-nav", () => this.setScreen(Screen.Clan));
+            utils_18.Utils.addOnClickToElement("towns-nav", () => this.setScreen(Screen.Town));
+            utils_18.Utils.addOnClickToElement("party-nav", () => this.setScreen(Screen.Party));
+            utils_18.Utils.addOnClickToElement("adventure-nav", () => this.setScreen(Screen.Adventure));
         }
         getCurrentScreen() {
             return this.currentScreen;
@@ -1000,7 +1322,7 @@ define("navigation", ["require", "exports", "activities/adventureActivity", "act
                     this.currentActivity = new partyActivity_1.PartyActivity();
                     break;
                 case Screen.Adventure:
-                    this.currentActivity = new adventureActivity_5.AdventureActivity();
+                    this.currentActivity = new adventureActivity_12.AdventureActivity();
                     break;
                 default:
                     console.error("Unimplemented activity (" + Screen[this.currentScreen] + ") when setting screen");
