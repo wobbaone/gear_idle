@@ -1,4 +1,4 @@
-import { IZone } from "./zone";
+import { IZone } from "./zoneTypes/zone";
 
 export class ZoneActivityStatus {
     private currentZone: IZone | null;

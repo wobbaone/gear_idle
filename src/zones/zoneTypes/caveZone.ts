@@ -1,25 +1,26 @@
-import { AdventureActivityType } from "../activities/adventureActivity";
-import { Utils } from "../utils";
+import { AdventureActivityType } from "../../activities/adventureActivity";
+import { Inventory } from "../../inventory/inventoryState";
+import { Items } from "../../inventory/items";
+import { MessagingBus } from "../../messagingBus";
+import { Utils } from "../../utils";
 import { IZone } from "./zone";
-import { MessagingBus } from "../messagingBus";
-import { Items } from "../inventory/items";
 
-export class VolcanoZone implements IZone {
+export class CavesZone implements IZone {
     buildDOM(): void {
         this.clearDOM();
 
         const header: HTMLElement = Utils.getHeaderDiv();
         const headerText: HTMLDivElement = document.createElement("div");
-        headerText.innerHTML = this.getName();
+        headerText.innerHTML = "Caves";
         header.appendChild(headerText);
 
         const body: HTMLElement = Utils.getContentDiv();
         const profileText: HTMLDivElement = document.createElement("div");
-        profileText.innerHTML = "Woodcutting in " + this.getName();
+        profileText.innerHTML = "Mining in caves";
         body.appendChild(profileText);
 
         const backButton: HTMLDivElement = document.createElement("div");
-        backButton.innerHTML = "Leave " + this.getName() ;
+        backButton.innerHTML = "Leave caves";
         backButton.className = "back-button";
         backButton.onclick = () => {
             MessagingBus.publishToZoneChange(null); 
@@ -32,21 +33,21 @@ export class VolcanoZone implements IZone {
     }
 
     private activityTypes: ReadonlyArray<AdventureActivityType> = [
-        AdventureActivityType.WoodCutting,
+        AdventureActivityType.Mining,
         AdventureActivityType.Combat
     ].sort();
 
     getActivityTypes(): ReadonlyArray<AdventureActivityType> {
         return this.activityTypes;
-    }
-    
+    }   
+
     getName(): string {
-        return "Volcano";
+        return "Caves";
     }
 
     onGameTick(): void {
-        const woodPerTick: number = Utils.randomIntBetween(1, 2);
+        const orePerTick: number = Utils.randomIntBetween(1, 2);
         
-        MessagingBus.publishToResourceChange(Items.getItem(Items.WoodBirchItem).getId(), woodPerTick);
+        MessagingBus.publishToResourceChange(Items.getItem(Items.OreCopperItem).getId(), orePerTick);
     }
 }

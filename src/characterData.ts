@@ -1,6 +1,6 @@
 import { InventoryData } from "./inventory/inventoryData";
 import { ZoneActivityStatus } from "./zones/zoneActivityStatus";
-import { IZone } from "./zones/zone";
+import { Zones } from "./zones/zones";
 import { EquipmentData } from "./equipment/equipmentData";
 
 export class CharacterData {
@@ -32,7 +32,7 @@ export class CharacterData {
         return this.currentZoneActivity;
     }
 
-    setCurrentZone(zone: IZone | null): void {
+    setCurrentZone(zone: Zones.IZone | null): void {
         this.currentZoneActivity = new ZoneActivityStatus(zone);
     }
 }

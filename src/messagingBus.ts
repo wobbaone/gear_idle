@@ -1,4 +1,4 @@
-import { IZone } from "./zones/zone";
+import { Zones } from "./zones/zones";
 
 export namespace MessagingBus {
     export class Subscription<T> {
@@ -62,7 +62,7 @@ export namespace MessagingBus {
         }
     }
 
-    export type ZoneChangeEvent = IZone | null;
+    export type ZoneChangeEvent = Zones.IZone | null;
     export type ResourceChangeEvent = readonly [resourceId: number, amount: number];
 
     const changeZoneBus: MessagingBusData<ZoneChangeEvent> = new MessagingBusData<ZoneChangeEvent>();

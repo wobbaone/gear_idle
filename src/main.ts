@@ -1,6 +1,6 @@
 import { NavigationState } from "./navigation";
 import { Player } from "./player";
-import { IZone } from "./zones/zone";
+import { Zones } from "./zones/zones";
 
 export namespace Game {
     class GameState {
@@ -30,7 +30,7 @@ export namespace Game {
         gameLoop(): void {
             console.log("In game loop");
             
-            const zone: IZone | null = Player.getCurrentZoneActivity().getCurrentZone();
+            const zone: Zones.IZone | null = Player.getCurrentZoneActivity().getCurrentZone();
             if (zone !== null) {
                 zone.onGameTick();
             }

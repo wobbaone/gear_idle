@@ -1,7 +1,6 @@
 import { AdventureActivity } from "../activities/adventureActivity";
 import { Player } from "../player";
-import { Utils } from "../utils"
-import { IZone } from "../zones/zone";
+import { Zones } from "../zones/zones";
 import { IRenderer } from "./renderer";
 
 export class ActiveAdventuringRenderer implements IRenderer {  
@@ -12,7 +11,7 @@ export class ActiveAdventuringRenderer implements IRenderer {
     }
 
     buildDOM(): void {
-        const zone: IZone | null = Player.getCurrentZoneActivity().getCurrentZone();
+        const zone: Zones.IZone | null = Player.getCurrentZoneActivity().getCurrentZone();
         if (zone === null) {
             return;
         }
@@ -21,7 +20,7 @@ export class ActiveAdventuringRenderer implements IRenderer {
     }
 
     clearDOM(): void {
-        const zone: IZone | null = Player.getCurrentZoneActivity().getCurrentZone();
+        const zone: Zones.IZone | null = Player.getCurrentZoneActivity().getCurrentZone();
         if (zone === null) {
             return;
         }

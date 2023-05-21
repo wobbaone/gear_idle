@@ -1,9 +1,9 @@
-import { AdventureActivityType } from "../activities/adventureActivity";
-import { HealthData } from "../characterData";
-import { Enemies } from "../enemies/enemies";
-import { MessagingBus } from "../messagingBus";
-import { Player } from "../player";
-import { Utils } from "../utils";
+import { AdventureActivityType } from "../../activities/adventureActivity";
+import { HealthData } from "../../characterData";
+import { Enemies } from "../../enemies/enemies";
+import { MessagingBus } from "../../messagingBus";
+import { Player } from "../../player";
+import { Utils } from "../../utils";
 import { IZone } from "./zone";
 
 export class WildernessZone implements IZone {

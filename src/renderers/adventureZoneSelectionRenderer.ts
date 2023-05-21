@@ -1,18 +1,8 @@
 import { AdventureActivityType, AdventureActivity } from "../activities/adventureActivity";
 import { Utils } from "../utils"
-import { IZone } from "../zones/zone";
-import { WoodsZone } from "../zones/woodsZone";
-import { CavesZone } from "../zones/caveZone";
-import { WildernessZone } from "../zones/wildernessZone";
+import { Zones } from "../zones/zones";
 import { IRenderer } from "./renderer";
 import { MessagingBus } from "../messagingBus";
-import { WarforgeCitadelZone } from "../zones/warforgeZone";
-import { JungleZone } from "../zones/jungleZone";
-import { DesertZone } from "../zones/desertZone";
-import { VolcanoZone } from "../zones/volcanoZone";
-import { FrozenZone } from "../zones/frozenZone";
-import { GraveyardZone } from "../zones/graveyardZone";
-import { DarkForestZone } from "../zones/darkForestZone";
 
 export class AdventureZoneSelectionRenderer implements IRenderer {
     private parent: AdventureActivity;
@@ -32,16 +22,16 @@ export class AdventureZoneSelectionRenderer implements IRenderer {
         body.appendChild(zoneContainer);
 
         
-        zoneContainer.appendChild(this.drawZoneButton(new WildernessZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new WoodsZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new CavesZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new JungleZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new DesertZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new WarforgeCitadelZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new DarkForestZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new GraveyardZone));
-        zoneContainer.appendChild(this.drawZoneButton(new FrozenZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new VolcanoZone()));
+        zoneContainer.appendChild(this.drawZoneButton(new Zones.WildernessZone()));
+        zoneContainer.appendChild(this.drawZoneButton(new Zones.WoodsZone()));
+        zoneContainer.appendChild(this.drawZoneButton(new Zones.CavesZone()));
+        zoneContainer.appendChild(this.drawZoneButton(new Zones.JungleZone()));
+        zoneContainer.appendChild(this.drawZoneButton(new Zones.DesertZone()));
+        zoneContainer.appendChild(this.drawZoneButton(new Zones.WarforgeCitadelZone()));
+        zoneContainer.appendChild(this.drawZoneButton(new Zones.DarkForestZone()));
+        zoneContainer.appendChild(this.drawZoneButton(new Zones.GraveyardZone()));
+        zoneContainer.appendChild(this.drawZoneButton(new Zones.FrozenZone()));
+        zoneContainer.appendChild(this.drawZoneButton(new Zones.VolcanoZone()));
 
     }
 
@@ -54,7 +44,7 @@ export class AdventureZoneSelectionRenderer implements IRenderer {
         return zoneBoxDiv;
     }
 
-    private drawZoneButton(zone: IZone): HTMLElement {
+    private drawZoneButton(zone: Zones.IZone): HTMLElement {
         const zoneDiv: HTMLDivElement = document.createElement("div");
         zone.getName()
         zoneDiv.className = "adventuring-zone-element adventuring-zone-element-"+zone.getName();

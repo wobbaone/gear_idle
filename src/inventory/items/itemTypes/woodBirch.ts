@@ -1,4 +1,4 @@
-import { Entry } from "./itemEntry";
+import { Entry } from "./../itemEntry";
 
 export class WoodBirchItem extends Entry {
     constructor(id: number) {

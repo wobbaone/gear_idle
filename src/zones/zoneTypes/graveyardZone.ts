@@ -1,10 +1,10 @@
-import { AdventureActivityType } from "../activities/adventureActivity";
-import { Utils } from "../utils";
+import { AdventureActivityType } from "../../activities/adventureActivity";
+import { Utils } from "../../utils";
 import { IZone } from "./zone";
-import { MessagingBus } from "../messagingBus";
-import { Items } from "../inventory/items";
+import { MessagingBus } from "../../messagingBus";
+import { Items } from "../../inventory/items";
 
-export class DarkForestZone implements IZone {
+export class GraveyardZone implements IZone {
     buildDOM(): void {
         this.clearDOM();
 
@@ -41,7 +41,7 @@ export class DarkForestZone implements IZone {
     }
     
     getName(): string {
-        return "DarkForest";
+        return "Graveyard";
     }
 
     onGameTick(): void {

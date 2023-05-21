@@ -1,5 +1,4 @@
 import { InventoryData } from "./inventoryData";
-import { Entry } from "./items/itemEntry";
 import { Items } from "./items";
 
 export namespace Inventory {
@@ -27,15 +26,15 @@ export namespace Inventory {
     }
 
     export class ItemState {
-        private item: Entry;
+        private item: Items.Entry;
         private count: number;
 
-        constructor(item: Entry, count: number) {
+        constructor(item: Items.Entry, count: number) {
             this.item = item;
             this.count = count;
         }
 
-        getItem(): Entry {
+        getItem(): Items.Entry {
             return this.item;
         }
 
@@ -45,7 +44,7 @@ export namespace Inventory {
     }
 
     class ItemData {
-        itemList: Entry[];
+        itemList: Items.Entry[];
         itemMap: Map<string, number>;
 
         constructor() {
@@ -57,7 +56,7 @@ export namespace Inventory {
             this.addItemToItemList(Items.MeatBoarItem);
         }
 
-        private addItemToItemList<T extends Entry>(ctor: new(id: number) => T): void {
+        private addItemToItemList<T extends Items.Entry>(ctor: new(id: number) => T): void {
             const index: number = this.itemList.length;
 
             this.itemMap.set(ctor.name, index);
@@ -67,11 +66,11 @@ export namespace Inventory {
 
     const itemData: ItemData = new ItemData()
 
-    export function listAllItems() : Entry[] {
+    export function listAllItems() : Items.Entry[] {
         return itemData.itemList;
     }
 
-    export function getEntryFromId(id: number) : Entry | null {
+    export function getEntryFromId(id: number) : Items.Entry | null {
         if (id < 0 || id >= itemData.itemList.length) {
             console.error("Could not find item with ID: " + id);
             return null;
@@ -80,13 +79,17 @@ export namespace Inventory {
         return itemData.itemList[id];
     }
 
-    export function getEntryFromClass(ctor: new(id: number) => Entry) : Entry | null {
-        if (!itemData.itemMap.has(ctor.name)) {
-            console.error("Could not find item from class: " + ctor.toString());
+    export function getEntryFromClass(ctor: new(id: number) => Items.Entry) : Items.Entry | null {
+        return getEntryFromClassName(ctor.name);
+    }
+
+    export function getEntryFromClassName(className: string) : Items.Entry | null {
+        if (!itemData.itemMap.has(className)) {
+            console.error("Could not find item from class: " + className);
             return null;
         }
 
-        let id: number | undefined = itemData.itemMap.get(ctor.name);
+        let id: number | undefined = itemData.itemMap.get(className);
         if (id === undefined) {
             id = -1;
         }

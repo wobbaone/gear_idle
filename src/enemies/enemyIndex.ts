@@ -1,2 +1,2 @@
-export * from "./boar"
+export * from "./enemyTypes/boar"
 export * from "./enemy"

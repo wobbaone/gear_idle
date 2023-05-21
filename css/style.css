@@ -1,5 +1,6 @@
 :root {
     --grid-spacing-px: 8px;
+    /*--border-px: 1px;*/
     background-color: #015656;
     color: #DDECEC;
 }
