@@ -155,11 +155,11 @@ define("renderers/activeAdventuringRenderer", ["require", "exports", "player"], 
     }
     exports.ActiveAdventuringRenderer = ActiveAdventuringRenderer;
 });
-define("inventory/itemEntry", ["require", "exports"], function (require, exports) {
+define("inventory/items/itemEntry", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ItemEntry = void 0;
-    class ItemEntry {
+    exports.Entry = void 0;
+    class Entry {
         constructor(id, name, imagePath) {
             this.id = id;
             this.name = name;
@@ -175,61 +175,9 @@ define("inventory/itemEntry", ["require", "exports"], function (require, exports
             return this.imagePath;
         }
     }
-    exports.ItemEntry = ItemEntry;
+    exports.Entry = Entry;
 });
-define("inventory/items/meatBoarItem", ["require", "exports", "inventory/itemEntry"], function (require, exports, itemEntry_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.MeatBoarItem = void 0;
-    class MeatBoarItem extends itemEntry_1.ItemEntry {
-        constructor(id) {
-            super(id, "Boar Meat", "");
-        }
-    }
-    exports.MeatBoarItem = MeatBoarItem;
-});
-define("inventory/items/oreCopperItem", ["require", "exports", "inventory/itemEntry"], function (require, exports, itemEntry_2) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.OreCopperItem = void 0;
-    class OreCopperItem extends itemEntry_2.ItemEntry {
-        constructor(id) {
-            super(id, "Copper Ore", "");
-        }
-    }
-    exports.OreCopperItem = OreCopperItem;
-});
-define("inventory/items/woodBirch", ["require", "exports", "inventory/itemEntry"], function (require, exports, itemEntry_3) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.WoodBirchItem = void 0;
-    class WoodBirchItem extends itemEntry_3.ItemEntry {
-        constructor(id) {
-            super(id, "Birch Wood", "");
-        }
-    }
-    exports.WoodBirchItem = WoodBirchItem;
-});
-define("inventory/items/itemIndex", ["require", "exports", "inventory/inventoryState", "inventory/items/meatBoarItem", "inventory/items/oreCopperItem", "inventory/items/woodBirch"], function (require, exports, inventoryState_1, meatBoarItem_1, oreCopperItem_1, woodBirch_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.getItem = void 0;
-    __exportStar(meatBoarItem_1, exports);
-    __exportStar(oreCopperItem_1, exports);
-    __exportStar(woodBirch_1, exports);
-    function getItem(item) {
-        return inventoryState_1.Inventory.getEntryFromClass(item);
-    }
-    exports.getItem = getItem;
-});
-define("inventory/items", ["require", "exports", "inventory/items/itemIndex"], function (require, exports, Items) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Items = void 0;
-    Items = __importStar(Items);
-    exports.Items = Items;
-});
-define("inventory/inventoryState", ["require", "exports", "inventory/itemEntry", "inventory/items"], function (require, exports, itemEntry_4, items_1) {
+define("inventory/inventoryState", ["require", "exports", "inventory/items"], function (require, exports, items_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Inventory = void 0;
@@ -275,7 +223,7 @@ define("inventory/inventoryState", ["require", "exports", "inventory/itemEntry",
             }
             addItemToItemList(ctor) {
                 const index = this.itemList.length;
-                this.itemMap.set(ctor, index);
+                this.itemMap.set(ctor.name, index);
                 this.itemList.push(new ctor(index));
             }
         }
@@ -287,17 +235,17 @@ define("inventory/inventoryState", ["require", "exports", "inventory/itemEntry",
         function getEntryFromId(id) {
             if (id < 0 || id >= itemData.itemList.length) {
                 console.error("Could not find item with ID: " + id);
-                return new itemEntry_4.ItemEntry(-1, "Error Item", "");
+                return null;
             }
             return itemData.itemList[id];
         }
         Inventory.getEntryFromId = getEntryFromId;
         function getEntryFromClass(ctor) {
-            if (!itemData.itemMap.has(ctor)) {
+            if (!itemData.itemMap.has(ctor.name)) {
                 console.error("Could not find item from class: " + ctor.toString());
-                return new itemEntry_4.ItemEntry(-1, "Error Item", "");
+                return null;
             }
-            let id = itemData.itemMap.get(ctor);
+            let id = itemData.itemMap.get(ctor.name);
             if (id === undefined) {
                 id = -1;
             }
@@ -305,6 +253,75 @@ define("inventory/inventoryState", ["require", "exports", "inventory/itemEntry",
         }
         Inventory.getEntryFromClass = getEntryFromClass;
     })(Inventory = exports.Inventory || (exports.Inventory = {}));
+});
+define("inventory/items/meatBoarItem", ["require", "exports", "inventory/items/itemEntry"], function (require, exports, itemEntry_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.MeatBoarItem = void 0;
+    class MeatBoarItem extends itemEntry_1.Entry {
+        constructor(id) {
+            super(id, "Boar Meat", "");
+        }
+    }
+    exports.MeatBoarItem = MeatBoarItem;
+});
+define("inventory/items/oreCopperItem", ["require", "exports", "inventory/items/itemEntry"], function (require, exports, itemEntry_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.OreCopperItem = void 0;
+    class OreCopperItem extends itemEntry_2.Entry {
+        constructor(id) {
+            super(id, "Copper Ore", "");
+        }
+    }
+    exports.OreCopperItem = OreCopperItem;
+});
+define("inventory/items/woodBirch", ["require", "exports", "inventory/items/itemEntry"], function (require, exports, itemEntry_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.WoodBirchItem = void 0;
+    class WoodBirchItem extends itemEntry_3.Entry {
+        constructor(id) {
+            super(id, "Birch Wood", "");
+        }
+    }
+    exports.WoodBirchItem = WoodBirchItem;
+});
+define("inventory/items/weapon", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("inventory/items/armor", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("inventory/items/itemIndex", ["require", "exports", "inventory/inventoryState", "inventory/items/itemEntry", "inventory/items/meatBoarItem", "inventory/items/oreCopperItem", "inventory/items/woodBirch", "inventory/items/weapon", "inventory/items/armor", "inventory/items/itemEntry"], function (require, exports, inventoryState_1, itemEntry_4, meatBoarItem_1, oreCopperItem_1, woodBirch_1, weapon_1, armor_1, itemEntry_5) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.getItem = void 0;
+    __exportStar(meatBoarItem_1, exports);
+    __exportStar(oreCopperItem_1, exports);
+    __exportStar(woodBirch_1, exports);
+    __exportStar(weapon_1, exports);
+    __exportStar(armor_1, exports);
+    __exportStar(itemEntry_5, exports);
+    function getItem(item) {
+        const entry = inventoryState_1.Inventory.getEntryFromClass(item);
+        if (entry === null) {
+            console.log("Could not get an item with class: " + item.toString());
+            return new class extends itemEntry_4.Entry {
+            }(-1, "Error item", "");
+        }
+        return entry;
+    }
+    exports.getItem = getItem;
+});
+define("inventory/items", ["require", "exports", "inventory/items/itemIndex"], function (require, exports, Items) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Items = void 0;
+    Items = __importStar(Items);
+    exports.Items = Items;
 });
 define("zones/woodsZone", ["require", "exports", "activities/adventureActivity", "utils", "messagingBus", "inventory/items"], function (require, exports, adventureActivity_1, utils_1, messagingBus_2, items_2) {
     "use strict";
@@ -396,7 +413,90 @@ define("zones/caveZone", ["require", "exports", "activities/adventureActivity", 
     }
     exports.CavesZone = CavesZone;
 });
-define("zones/wildernessZone", ["require", "exports", "activities/adventureActivity"], function (require, exports, adventureActivity_3) {
+define("enemies/enemy", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.DropEntry = exports.AEnemy = void 0;
+    class AEnemy {
+        constructor(name, healthData, attackDamage, dropTable) {
+            this.name = name;
+            this.healthData = healthData;
+            this.attackDamage = attackDamage;
+            this.dropTable = dropTable.sort((a, b) => {
+                return a.getWeight() - b.getWeight();
+            });
+        }
+        getName() {
+            return this.name;
+        }
+        getHealth() {
+            return this.healthData;
+        }
+        getAttackDamage() {
+            return this.attackDamage;
+        }
+        getRandomDropItem() {
+            let dropRoll = Math.random() * this.getMaxWeight();
+            for (let i = 0; i < this.dropTable.length; i++) {
+                const drop = this.dropTable[i];
+                if (dropRoll < drop.getWeight()) {
+                    return drop.getItem();
+                }
+                dropRoll -= drop.getWeight();
+            }
+            return null;
+        }
+        getMaxWeight() {
+            let weight = 0;
+            for (let i = 0; i < this.dropTable.length; i++) {
+                weight += this.dropTable[i].getWeight();
+            }
+            return weight;
+        }
+    }
+    exports.AEnemy = AEnemy;
+    class DropEntry {
+        constructor(item, weight) {
+            this.item = item;
+            this.weight = weight;
+        }
+        getItem() {
+            return this.item;
+        }
+        getWeight() {
+            return this.weight;
+        }
+    }
+    exports.DropEntry = DropEntry;
+});
+define("enemies/boar", ["require", "exports", "characterData", "inventory/items", "inventory/items/meatBoarItem", "enemies/enemy"], function (require, exports, characterData_2, items_4, meatBoarItem_2, enemy_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Boar = void 0;
+    class Boar extends enemy_1.AEnemy {
+        constructor() {
+            super("Boar", new characterData_2.HealthData(3), 1, [
+                new enemy_1.DropEntry(null, 3),
+                new enemy_1.DropEntry(items_4.Items.getItem(meatBoarItem_2.MeatBoarItem), 2),
+            ]);
+        }
+    }
+    exports.Boar = Boar;
+});
+define("enemies/enemyIndex", ["require", "exports", "enemies/boar", "enemies/enemy"], function (require, exports, boar_1, enemy_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    __exportStar(boar_1, exports);
+    __exportStar(enemy_2, exports);
+});
+define("enemies/enemies", ["require", "exports", "enemies/enemyIndex"], function (require, exports, Enemies) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Enemies = void 0;
+    Enemies = __importStar(Enemies);
+    exports.Enemies = Enemies;
+});
+define("zones/wildernessZone", ["require", "exports", "activities/adventureActivity", "enemies/enemies", "messagingBus", "player", "utils"], function (require, exports, adventureActivity_3, enemies_1, messagingBus_4, player_2, utils_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.WildernessZone = void 0;
@@ -407,10 +507,35 @@ define("zones/wildernessZone", ["require", "exports", "activities/adventureActiv
                 adventureActivity_3.AdventureActivityType.WoodCutting,
                 adventureActivity_3.AdventureActivityType.Combat
             ].sort();
+            this.enemy = new enemies_1.Enemies.Boar();
         }
         buildDOM() {
+            this.clearDOM();
+            const header = utils_3.Utils.getHeaderDiv();
+            const headerText = document.createElement("div");
+            headerText.innerHTML = "Wilderness";
+            header.appendChild(headerText);
+            const body = utils_3.Utils.getContentDiv();
+            const profileText = document.createElement("div");
+            profileText.innerHTML = "Fighting in the wilderness";
+            body.appendChild(profileText);
+            const fightElement = document.createElement("div");
+            fightElement.className = "fight-content";
+            const playerDiv = this.drawFighter("Player", player_2.Player.getCharacterData().getHealth());
+            fightElement.appendChild(playerDiv);
+            const enemyDiv = this.drawFighter(this.enemy.getName(), this.enemy.getHealth());
+            fightElement.appendChild(enemyDiv);
+            body.appendChild(fightElement);
+            const backButton = document.createElement("div");
+            backButton.innerHTML = "Leave Wild";
+            backButton.className = "back-button";
+            backButton.onclick = () => {
+                messagingBus_4.MessagingBus.publishToZoneChange(null);
+            };
+            body.appendChild(backButton);
         }
         clearDOM() {
+            utils_3.Utils.clearAllDOM();
         }
         getActivityTypes() {
             return this.activityTypes;
@@ -418,11 +543,23 @@ define("zones/wildernessZone", ["require", "exports", "activities/adventureActiv
         getName() {
             return "WildernessZone";
         }
-        onGameTick() { }
+        onGameTick() {
+        }
+        drawFighter(name, health) {
+            const playerDiv = document.createElement("div");
+            playerDiv.className = "fighter-element";
+            const nameSpan = document.createElement("span");
+            nameSpan.innerHTML = name;
+            playerDiv.appendChild(nameSpan);
+            const healthspan = document.createElement("span");
+            healthspan.innerHTML = health.getCurrentHealth() + "/" + health.getMaxHealth();
+            playerDiv.appendChild(healthspan);
+            return playerDiv;
+        }
     }
     exports.WildernessZone = WildernessZone;
 });
-define("renderers/adventureZoneSelectionRenderer", ["require", "exports", "activities/adventureActivity", "utils", "zones/woodsZone", "zones/caveZone", "zones/wildernessZone", "messagingBus"], function (require, exports, adventureActivity_4, utils_3, woodsZone_1, caveZone_1, wildernessZone_1, messagingBus_4) {
+define("renderers/adventureZoneSelectionRenderer", ["require", "exports", "activities/adventureActivity", "utils", "zones/woodsZone", "zones/caveZone", "zones/wildernessZone", "messagingBus"], function (require, exports, adventureActivity_4, utils_4, woodsZone_1, caveZone_1, wildernessZone_1, messagingBus_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.AdventureZoneSelectionRenderer = void 0;
@@ -431,11 +568,11 @@ define("renderers/adventureZoneSelectionRenderer", ["require", "exports", "activ
             this.parent = adventureActivity;
         }
         buildDOM() {
-            const header = utils_3.Utils.getHeaderDiv();
+            const header = utils_4.Utils.getHeaderDiv();
             const headerText = document.createElement("div");
             headerText.innerHTML = "Select Zone";
             header.appendChild(headerText);
-            const body = utils_3.Utils.getContentDiv();
+            const body = utils_4.Utils.getContentDiv();
             const zoneContainer = this.drawZoneBox();
             body.appendChild(zoneContainer);
             zoneContainer.appendChild(this.drawZoneButton(new woodsZone_1.WoodsZone()));
@@ -453,7 +590,7 @@ define("renderers/adventureZoneSelectionRenderer", ["require", "exports", "activ
             zone.getName();
             zoneDiv.className = "adventuring-zone-element adventuring-zone-element-" + zone.getName();
             zoneDiv.onclick = () => {
-                messagingBus_4.MessagingBus.publishToZoneChange(zone);
+                messagingBus_5.MessagingBus.publishToZoneChange(zone);
                 this.parent.buildDOM();
             };
             const nameSpan = document.createElement("div");
@@ -479,7 +616,7 @@ define("renderers/adventureZoneSelectionRenderer", ["require", "exports", "activ
     }
     exports.AdventureZoneSelectionRenderer = AdventureZoneSelectionRenderer;
 });
-define("activities/adventureActivity", ["require", "exports", "activities/activity", "renderers/activeAdventuringRenderer", "renderers/adventureZoneSelectionRenderer", "player", "messagingBus", "utils"], function (require, exports, activity_1, activeAdventuringRenderer_1, adventureZoneSelectionRenderer_1, player_2, messagingBus_5, utils_4) {
+define("activities/adventureActivity", ["require", "exports", "activities/activity", "renderers/activeAdventuringRenderer", "renderers/adventureZoneSelectionRenderer", "player", "messagingBus", "utils"], function (require, exports, activity_1, activeAdventuringRenderer_1, adventureZoneSelectionRenderer_1, player_3, messagingBus_6, utils_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.AdventureActivity = exports.AdventureActivityType = void 0;
@@ -492,13 +629,13 @@ define("activities/adventureActivity", ["require", "exports", "activities/activi
     class AdventureActivity extends activity_1.AActivity {
         constructor() {
             super();
-            this.zoneChangeCallback = messagingBus_5.MessagingBus.subscribeToZoneChange(() => {
+            this.zoneChangeCallback = messagingBus_6.MessagingBus.subscribeToZoneChange(() => {
                 this.buildDOM();
             }, 1000);
         }
         buildDOM() {
             this.clearDOM();
-            if (player_2.Player.getCurrentZoneActivity().getCurrentZone() === null) {
+            if (player_3.Player.getCurrentZoneActivity().getCurrentZone() === null) {
                 new adventureZoneSelectionRenderer_1.AdventureZoneSelectionRenderer(this).buildDOM();
             }
             else {
@@ -506,7 +643,7 @@ define("activities/adventureActivity", ["require", "exports", "activities/activi
             }
         }
         clearDOM() {
-            utils_4.Utils.clearAllDOM();
+            utils_5.Utils.clearAllDOM();
         }
         delete() {
             super.delete();
@@ -593,14 +730,14 @@ define("messagingBus", ["require", "exports"], function (require, exports) {
         MessagingBus.publishToResourceChange = publishToResourceChange;
     })(MessagingBus = exports.MessagingBus || (exports.MessagingBus = {}));
 });
-define("inventory/inventoryData", ["require", "exports", "messagingBus", "inventory/inventoryState"], function (require, exports, messagingBus_6, inventoryState_2) {
+define("inventory/inventoryData", ["require", "exports", "messagingBus", "inventory/inventoryState"], function (require, exports, messagingBus_7, inventoryState_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.InventoryData = void 0;
     class InventoryData {
         constructor() {
             this.stackableResources = new Map();
-            messagingBus_6.MessagingBus.subscribeToResourceChange(this.addResource.bind(this));
+            messagingBus_7.MessagingBus.subscribeToResourceChange(this.addResource.bind(this));
         }
         getInventoryState() {
             return inventoryState_2.Inventory.State.fromInventoryData(this);
@@ -628,24 +765,45 @@ define("equipment/equipmentData", ["require", "exports"], function (require, exp
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.EquipmentData = void 0;
     class EquipmentData {
+        constructor() {
+            this.weapon = null;
+            this.armor = null;
+        }
+        getAttackDamage() {
+            if (this.weapon === null) {
+                return EquipmentData.DEFAULT_DAMAGE;
+            }
+            return this.weapon.attackDamage();
+        }
+        getAddedHealth() {
+            if (this.armor === null) {
+                return 0;
+            }
+            return this.armor.getAddedHealth();
+        }
     }
+    EquipmentData.DEFAULT_DAMAGE = 1;
     exports.EquipmentData = EquipmentData;
 });
 define("characterData", ["require", "exports", "inventory/inventoryData", "zones/zoneActivityStatus", "equipment/equipmentData"], function (require, exports, inventoryData_1, zoneActivityStatus_1, equipmentData_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.CharacterData = void 0;
+    exports.CharacterHealthData = exports.HealthData = exports.CharacterData = void 0;
     class CharacterData {
         constructor() {
             this.inventory = new inventoryData_1.InventoryData();
             this.currentZoneActivity = new zoneActivityStatus_1.ZoneActivityStatus();
             this.equipment = new equipmentData_1.EquipmentData();
+            this.health = new CharacterHealthData(this);
         }
         getInventory() {
             return this.inventory;
         }
         getEquipment() {
             return this.equipment;
+        }
+        getHealth() {
+            return this.health;
         }
         getCurrentZoneActivity() {
             return this.currentZoneActivity;
@@ -655,8 +813,32 @@ define("characterData", ["require", "exports", "inventory/inventoryData", "zones
         }
     }
     exports.CharacterData = CharacterData;
+    class HealthData {
+        constructor(maxHealth) {
+            this.maxHealth = maxHealth;
+            this.currentHealth = maxHealth;
+        }
+        getCurrentHealth() {
+            return this.currentHealth;
+        }
+        getMaxHealth() {
+            return this.maxHealth;
+        }
+    }
+    exports.HealthData = HealthData;
+    class CharacterHealthData extends HealthData {
+        constructor(parent) {
+            super(CharacterHealthData.DEFAULT_MAX_HEALTH);
+            this.parent = parent;
+        }
+        getMaxHealth() {
+            return this.maxHealth + this.parent.getEquipment().getAddedHealth();
+        }
+    }
+    CharacterHealthData.DEFAULT_MAX_HEALTH = 10;
+    exports.CharacterHealthData = CharacterHealthData;
 });
-define("activities/clanActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_5, activity_2) {
+define("activities/clanActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_6, activity_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ClanActivity = void 0;
@@ -664,32 +846,32 @@ define("activities/clanActivity", ["require", "exports", "utils", "activities/ac
         buildDOM() {
         }
         clearDOM() {
-            utils_5.Utils.clearAllDOM();
+            utils_6.Utils.clearAllDOM();
         }
     }
     exports.ClanActivity = ClanActivity;
 });
-define("activities/inventoryActivity", ["require", "exports", "messagingBus", "player", "utils", "activities/activity"], function (require, exports, messagingBus_7, player_3, utils_6, activity_3) {
+define("activities/inventoryActivity", ["require", "exports", "messagingBus", "player", "utils", "activities/activity"], function (require, exports, messagingBus_8, player_4, utils_7, activity_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.InventoryActivity = void 0;
     class InventoryActivity extends activity_3.AActivity {
         constructor() {
             super();
-            this.resourceChangeCallback = messagingBus_7.MessagingBus.subscribeToResourceChange((resourceId, amount) => {
+            this.resourceChangeCallback = messagingBus_8.MessagingBus.subscribeToResourceChange((resourceId, amount) => {
                 this.buildDOM();
             });
         }
         buildDOM() {
             this.clearDOM();
-            const header = utils_6.Utils.getHeaderDiv();
+            const header = utils_7.Utils.getHeaderDiv();
             const headerText = document.createElement("div");
             headerText.innerHTML = "Inventory";
             header.appendChild(headerText);
-            const body = utils_6.Utils.getContentDiv();
+            const body = utils_7.Utils.getContentDiv();
             const inventoryContainer = this.drawInventoryBox();
             body.appendChild(inventoryContainer);
-            const inventoryState = player_3.Player.getCharacterData().getInventory().getInventoryState();
+            const inventoryState = player_4.Player.getCharacterData().getInventory().getInventoryState();
             const items = inventoryState.getItems();
             for (let i = 0; i < items.length; i++) {
                 const itemDiv = document.createElement("div");
@@ -704,7 +886,7 @@ define("activities/inventoryActivity", ["require", "exports", "messagingBus", "p
             }
         }
         clearDOM() {
-            utils_6.Utils.clearAllDOM();
+            utils_7.Utils.clearAllDOM();
         }
         drawInventoryBox() {
             const zoneBoxDiv = document.createElement("div");
@@ -718,7 +900,7 @@ define("activities/inventoryActivity", ["require", "exports", "messagingBus", "p
     }
     exports.InventoryActivity = InventoryActivity;
 });
-define("activities/partyActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_7, activity_4) {
+define("activities/partyActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_8, activity_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.PartyActivity = void 0;
@@ -726,34 +908,34 @@ define("activities/partyActivity", ["require", "exports", "utils", "activities/a
         buildDOM() {
         }
         clearDOM() {
-            utils_7.Utils.clearAllDOM();
+            utils_8.Utils.clearAllDOM();
         }
     }
     exports.PartyActivity = PartyActivity;
 });
-define("activities/profileActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_8, activity_5) {
+define("activities/profileActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_9, activity_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ProfileActivity = void 0;
     class ProfileActivity extends activity_5.AActivity {
         buildDOM() {
             this.clearDOM();
-            const header = utils_8.Utils.getHeaderDiv();
+            const header = utils_9.Utils.getHeaderDiv();
             const headerText = document.createElement("div");
             headerText.innerHTML = "Profile";
             header.appendChild(headerText);
-            const body = utils_8.Utils.getContentDiv();
+            const body = utils_9.Utils.getContentDiv();
             const profileText = document.createElement("div");
             profileText.innerHTML = "Profile information goes here";
             body.appendChild(profileText);
         }
         clearDOM() {
-            utils_8.Utils.clearAllDOM();
+            utils_9.Utils.clearAllDOM();
         }
     }
     exports.ProfileActivity = ProfileActivity;
 });
-define("activities/townActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_9, activity_6) {
+define("activities/townActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_10, activity_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TownActivity = void 0;
@@ -761,12 +943,12 @@ define("activities/townActivity", ["require", "exports", "utils", "activities/ac
         buildDOM() {
         }
         clearDOM() {
-            utils_9.Utils.clearAllDOM();
+            utils_10.Utils.clearAllDOM();
         }
     }
     exports.TownActivity = TownActivity;
 });
-define("navigation", ["require", "exports", "activities/adventureActivity", "activities/clanActivity", "activities/inventoryActivity", "activities/partyActivity", "activities/profileActivity", "activities/townActivity", "utils"], function (require, exports, adventureActivity_5, clanActivity_1, inventoryActivity_1, partyActivity_1, profileActivity_1, townActivity_1, utils_10) {
+define("navigation", ["require", "exports", "activities/adventureActivity", "activities/clanActivity", "activities/inventoryActivity", "activities/partyActivity", "activities/profileActivity", "activities/townActivity", "utils"], function (require, exports, adventureActivity_5, clanActivity_1, inventoryActivity_1, partyActivity_1, profileActivity_1, townActivity_1, utils_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NavigationState = void 0;
@@ -784,12 +966,12 @@ define("navigation", ["require", "exports", "activities/adventureActivity", "act
             this.currentScreen = Screen.Profile;
             this.currentActivity = new profileActivity_1.ProfileActivity();
             this.setScreen(Screen.Profile);
-            utils_10.Utils.addOnClickToElement("profile-nav", () => this.setScreen(Screen.Profile));
-            utils_10.Utils.addOnClickToElement("inventory-nav", () => this.setScreen(Screen.Inventory));
-            utils_10.Utils.addOnClickToElement("clan-nav", () => this.setScreen(Screen.Clan));
-            utils_10.Utils.addOnClickToElement("towns-nav", () => this.setScreen(Screen.Town));
-            utils_10.Utils.addOnClickToElement("party-nav", () => this.setScreen(Screen.Party));
-            utils_10.Utils.addOnClickToElement("adventure-nav", () => this.setScreen(Screen.Adventure));
+            utils_11.Utils.addOnClickToElement("profile-nav", () => this.setScreen(Screen.Profile));
+            utils_11.Utils.addOnClickToElement("inventory-nav", () => this.setScreen(Screen.Inventory));
+            utils_11.Utils.addOnClickToElement("clan-nav", () => this.setScreen(Screen.Clan));
+            utils_11.Utils.addOnClickToElement("towns-nav", () => this.setScreen(Screen.Town));
+            utils_11.Utils.addOnClickToElement("party-nav", () => this.setScreen(Screen.Party));
+            utils_11.Utils.addOnClickToElement("adventure-nav", () => this.setScreen(Screen.Adventure));
         }
         getCurrentScreen() {
             return this.currentScreen;
@@ -830,7 +1012,7 @@ define("navigation", ["require", "exports", "activities/adventureActivity", "act
     NavigationState.Screen = Screen;
     exports.NavigationState = NavigationState;
 });
-define("main", ["require", "exports", "navigation", "player"], function (require, exports, navigation_1, player_4) {
+define("main", ["require", "exports", "navigation", "player"], function (require, exports, navigation_1, player_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Game = void 0;
@@ -853,7 +1035,7 @@ define("main", ["require", "exports", "navigation", "player"], function (require
             }
             gameLoop() {
                 console.log("In game loop");
-                const zone = player_4.Player.getCurrentZoneActivity().getCurrentZone();
+                const zone = player_5.Player.getCurrentZoneActivity().getCurrentZone();
                 if (zone !== null) {
                     zone.onGameTick();
                 }

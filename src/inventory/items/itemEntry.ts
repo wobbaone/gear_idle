@@ -1,4 +1,5 @@
-export class ItemEntry {
+
+export abstract class Entry {
     private name: string;
     private id: number;
     private imagePath: string;

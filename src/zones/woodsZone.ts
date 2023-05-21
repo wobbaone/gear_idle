@@ -2,7 +2,6 @@ import { AdventureActivityType } from "../activities/adventureActivity";
 import { Utils } from "../utils";
 import { IZone } from "./zone";
 import { MessagingBus } from "../messagingBus";
-import { Inventory } from "../inventory/inventoryState";
 import { Items } from "../inventory/items";
 
 export class WoodsZone implements IZone {

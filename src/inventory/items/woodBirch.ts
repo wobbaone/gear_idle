@@ -1,6 +1,6 @@
-import { ItemEntry } from "../itemEntry";
+import { Entry } from "./itemEntry";
 
-export class WoodBirchItem extends ItemEntry {
+export class WoodBirchItem extends Entry {
     constructor(id: number) {
         super(id, "Birch Wood", "");
     }

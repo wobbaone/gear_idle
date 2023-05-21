@@ -1,6 +1,6 @@
-import { ItemEntry } from "../itemEntry";
+import { Entry } from "./itemEntry";
 
-export class OreCopperItem extends ItemEntry {
+export class OreCopperItem extends Entry {
     constructor(id: number) {
         super(id, "Copper Ore", "");
     }

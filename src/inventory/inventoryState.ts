@@ -1,5 +1,5 @@
 import { InventoryData } from "./inventoryData";
-import { ItemEntry } from "./itemEntry";
+import { Entry } from "./items/itemEntry";
 import { Items } from "./items";
 
 export namespace Inventory {
@@ -27,15 +27,15 @@ export namespace Inventory {
     }
 
     export class ItemState {
-        private item: ItemEntry;
+        private item: Entry;
         private count: number;
 
-        constructor(item: ItemEntry, count: number) {
+        constructor(item: Entry, count: number) {
             this.item = item;
             this.count = count;
         }
 
-        getItem(): ItemEntry {
+        getItem(): Entry {
             return this.item;
         }
 
@@ -45,48 +45,48 @@ export namespace Inventory {
     }
 
     class ItemData {
-        itemList: ItemEntry[];
-        itemMap: Map<new(id: number) => ItemEntry, number>;
+        itemList: Entry[];
+        itemMap: Map<string, number>;
 
         constructor() {
             this.itemList = [];
-            this.itemMap = new Map<new(id: number) => ItemEntry, number>();
+            this.itemMap = new Map<string, number>();
 
             this.addItemToItemList(Items.OreCopperItem);
             this.addItemToItemList(Items.WoodBirchItem);
             this.addItemToItemList(Items.MeatBoarItem);
         }
 
-        private addItemToItemList<T extends ItemEntry>(ctor: new(id: number) => T): void {
+        private addItemToItemList<T extends Entry>(ctor: new(id: number) => T): void {
             const index: number = this.itemList.length;
 
-            this.itemMap.set(ctor, index);
+            this.itemMap.set(ctor.name, index);
             this.itemList.push(new ctor(index));
         }
     }  
 
     const itemData: ItemData = new ItemData()
 
-    export function listAllItems() : ItemEntry[] {
+    export function listAllItems() : Entry[] {
         return itemData.itemList;
     }
 
-    export function getEntryFromId(id: number) : ItemEntry {
+    export function getEntryFromId(id: number) : Entry | null {
         if (id < 0 || id >= itemData.itemList.length) {
             console.error("Could not find item with ID: " + id);
-            return new ItemEntry(-1, "Error Item", "");
+            return null;
         }
 
         return itemData.itemList[id];
     }
 
-    export function getEntryFromClass(ctor: new(id: number) => ItemEntry) : ItemEntry {
-        if (!itemData.itemMap.has(ctor)) {
+    export function getEntryFromClass(ctor: new(id: number) => Entry) : Entry | null {
+        if (!itemData.itemMap.has(ctor.name)) {
             console.error("Could not find item from class: " + ctor.toString());
-            return new ItemEntry(-1, "Error Item", "");
+            return null;
         }
 
-        let id: number | undefined = itemData.itemMap.get(ctor);
+        let id: number | undefined = itemData.itemMap.get(ctor.name);
         if (id === undefined) {
             id = -1;
         }
