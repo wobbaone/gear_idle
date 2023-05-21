@@ -194,8 +194,8 @@ define("renderers/adventureZoneSelectionRenderer", ["require", "exports", "activ
         }
         drawZoneButton(zone) {
             const zoneDiv = document.createElement("div");
-            zone.getName();
-            zoneDiv.className = "adventuring-zone-element adventuring-zone-element-" + zone.getName();
+            zoneDiv.className = "adventuring-zone-element";
+            zoneDiv.id = "adventuring-zone-element-" + zone.getName();
             zoneDiv.onclick = () => {
                 messagingBus_2.MessagingBus.publishToZoneChange(zone);
                 this.parent.buildDOM();
