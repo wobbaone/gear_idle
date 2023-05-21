@@ -448,18 +448,22 @@ define("zones/zoneTypes/caveZone", ["require", "exports", "activities/adventureA
             headerText.innerHTML = "Caves";
             header.appendChild(headerText);
             const body = utils_3.Utils.getContentDiv();
-            body.className = "adventuring-zone-" + this.getName();
+            const adContainer = document.createElement("div");
+            adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            body.appendChild(adContainer);
+            const content = document.createElement("div");
+            content.className = "adventuring-zone-content";
+            adContainer.appendChild(content);
             const profileText = document.createElement("div");
-            profileText.innerHTML = "Mining in caves";
-            body.appendChild(profileText);
+            profileText.innerHTML = "Mining in " + this.getName();
+            content.appendChild(profileText);
             const backButton = document.createElement("div");
-            backButton.innerHTML = "Leave caves";
+            backButton.innerHTML = "Leave " + this.getName();
             backButton.className = "back-button";
             backButton.onclick = () => {
-                body.className = "";
                 messagingBus_4.MessagingBus.publishToZoneChange(null);
             };
-            body.appendChild(backButton);
+            content.appendChild(backButton);
         }
         clearDOM() {
             utils_3.Utils.clearAllDOM();
@@ -495,18 +499,22 @@ define("zones/zoneTypes/darkForestZone", ["require", "exports", "activities/adve
             headerText.innerHTML = this.getName();
             header.appendChild(headerText);
             const body = utils_4.Utils.getContentDiv();
-            body.className = "adventuring-zone-" + this.getName();
+            const adContainer = document.createElement("div");
+            adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            body.appendChild(adContainer);
+            const content = document.createElement("div");
+            content.className = "adventuring-zone-content";
+            adContainer.appendChild(content);
             const profileText = document.createElement("div");
             profileText.innerHTML = "Woodcutting in " + this.getName();
-            body.appendChild(profileText);
+            content.appendChild(profileText);
             const backButton = document.createElement("div");
             backButton.innerHTML = "Leave " + this.getName();
             backButton.className = "back-button";
             backButton.onclick = () => {
-                body.className = "";
                 messagingBus_5.MessagingBus.publishToZoneChange(null);
             };
-            body.appendChild(backButton);
+            content.appendChild(backButton);
         }
         clearDOM() {
             utils_4.Utils.clearAllDOM();
@@ -542,18 +550,22 @@ define("zones/zoneTypes/desertZone", ["require", "exports", "activities/adventur
             headerText.innerHTML = this.getName();
             header.appendChild(headerText);
             const body = utils_5.Utils.getContentDiv();
-            body.className = "adventuring-zone-" + this.getName();
+            const adContainer = document.createElement("div");
+            adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            body.appendChild(adContainer);
+            const content = document.createElement("div");
+            content.className = "adventuring-zone-content";
+            adContainer.appendChild(content);
             const profileText = document.createElement("div");
-            profileText.innerHTML = "Woodcutting in " + this.getName();
-            body.appendChild(profileText);
+            profileText.innerHTML = "Mining in " + this.getName();
+            content.appendChild(profileText);
             const backButton = document.createElement("div");
             backButton.innerHTML = "Leave " + this.getName();
             backButton.className = "back-button";
             backButton.onclick = () => {
-                body.className = "";
                 messagingBus_6.MessagingBus.publishToZoneChange(null);
             };
-            body.appendChild(backButton);
+            content.appendChild(backButton);
         }
         clearDOM() {
             utils_5.Utils.clearAllDOM();
@@ -589,18 +601,22 @@ define("zones/zoneTypes/frozenZone", ["require", "exports", "activities/adventur
             headerText.innerHTML = this.getName();
             header.appendChild(headerText);
             const body = utils_6.Utils.getContentDiv();
-            body.className = "adventuring-zone-" + this.getName();
+            const adContainer = document.createElement("div");
+            adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            body.appendChild(adContainer);
+            const content = document.createElement("div");
+            content.className = "adventuring-zone-content";
+            adContainer.appendChild(content);
             const profileText = document.createElement("div");
-            profileText.innerHTML = "Woodcutting in " + this.getName();
-            body.appendChild(profileText);
+            profileText.innerHTML = "Mining in " + this.getName();
+            content.appendChild(profileText);
             const backButton = document.createElement("div");
             backButton.innerHTML = "Leave " + this.getName();
             backButton.className = "back-button";
             backButton.onclick = () => {
-                body.className = "";
                 messagingBus_7.MessagingBus.publishToZoneChange(null);
             };
-            body.appendChild(backButton);
+            content.appendChild(backButton);
         }
         clearDOM() {
             utils_6.Utils.clearAllDOM();
@@ -636,18 +652,22 @@ define("zones/zoneTypes/graveyardZone", ["require", "exports", "activities/adven
             headerText.innerHTML = this.getName();
             header.appendChild(headerText);
             const body = utils_7.Utils.getContentDiv();
-            body.className = "adventuring-zone-" + this.getName();
+            const adContainer = document.createElement("div");
+            adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            body.appendChild(adContainer);
+            const content = document.createElement("div");
+            content.className = "adventuring-zone-content";
+            adContainer.appendChild(content);
             const profileText = document.createElement("div");
-            profileText.innerHTML = "Woodcutting in " + this.getName();
-            body.appendChild(profileText);
+            profileText.innerHTML = "Mining in " + this.getName();
+            content.appendChild(profileText);
             const backButton = document.createElement("div");
             backButton.innerHTML = "Leave " + this.getName();
             backButton.className = "back-button";
             backButton.onclick = () => {
-                body.className = "";
                 messagingBus_8.MessagingBus.publishToZoneChange(null);
             };
-            body.appendChild(backButton);
+            content.appendChild(backButton);
         }
         clearDOM() {
             utils_7.Utils.clearAllDOM();
@@ -683,18 +703,22 @@ define("zones/zoneTypes/jungleZone", ["require", "exports", "activities/adventur
             headerText.innerHTML = this.getName();
             header.appendChild(headerText);
             const body = utils_8.Utils.getContentDiv();
-            body.className = "adventuring-zone-" + this.getName();
+            const adContainer = document.createElement("div");
+            adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            body.appendChild(adContainer);
+            const content = document.createElement("div");
+            content.className = "adventuring-zone-content";
+            adContainer.appendChild(content);
             const profileText = document.createElement("div");
-            profileText.innerHTML = "Woodcutting in " + this.getName();
-            body.appendChild(profileText);
+            profileText.innerHTML = "Mining in " + this.getName();
+            content.appendChild(profileText);
             const backButton = document.createElement("div");
             backButton.innerHTML = "Leave " + this.getName();
             backButton.className = "back-button";
             backButton.onclick = () => {
-                body.className = "";
                 messagingBus_9.MessagingBus.publishToZoneChange(null);
             };
-            body.appendChild(backButton);
+            content.appendChild(backButton);
         }
         clearDOM() {
             utils_8.Utils.clearAllDOM();
@@ -730,18 +754,22 @@ define("zones/zoneTypes/volcanoZone", ["require", "exports", "activities/adventu
             headerText.innerHTML = this.getName();
             header.appendChild(headerText);
             const body = utils_9.Utils.getContentDiv();
-            body.className = "adventuring-zone-" + this.getName();
+            const adContainer = document.createElement("div");
+            adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            body.appendChild(adContainer);
+            const content = document.createElement("div");
+            content.className = "adventuring-zone-content";
+            adContainer.appendChild(content);
             const profileText = document.createElement("div");
-            profileText.innerHTML = "Woodcutting in " + this.getName();
-            body.appendChild(profileText);
+            profileText.innerHTML = "Mining in " + this.getName();
+            content.appendChild(profileText);
             const backButton = document.createElement("div");
             backButton.innerHTML = "Leave " + this.getName();
             backButton.className = "back-button";
             backButton.onclick = () => {
-                body.className = "";
                 messagingBus_10.MessagingBus.publishToZoneChange(null);
             };
-            body.appendChild(backButton);
+            content.appendChild(backButton);
         }
         clearDOM() {
             utils_9.Utils.clearAllDOM();
@@ -777,18 +805,22 @@ define("zones/zoneTypes/warforgeZone", ["require", "exports", "activities/advent
             headerText.innerHTML = "Warforge Citadel";
             header.appendChild(headerText);
             const body = utils_10.Utils.getContentDiv();
-            body.className = "adventuring-zone-" + this.getName();
+            const adContainer = document.createElement("div");
+            adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            body.appendChild(adContainer);
+            const content = document.createElement("div");
+            content.className = "adventuring-zone-content";
+            adContainer.appendChild(content);
             const profileText = document.createElement("div");
             profileText.innerHTML = "Woodcutting in Warforge Citadel";
-            body.appendChild(profileText);
+            content.appendChild(profileText);
             const backButton = document.createElement("div");
             backButton.innerHTML = "Leave Warforge Citadel";
             backButton.className = "back-button";
             backButton.onclick = () => {
-                body.className = "";
                 messagingBus_11.MessagingBus.publishToZoneChange(null);
             };
-            body.appendChild(backButton);
+            content.appendChild(backButton);
         }
         clearDOM() {
             utils_10.Utils.clearAllDOM();
@@ -909,25 +941,29 @@ define("zones/zoneTypes/wildernessZone", ["require", "exports", "activities/adve
             headerText.innerHTML = "Wilderness";
             header.appendChild(headerText);
             const body = utils_11.Utils.getContentDiv();
-            body.className = "adventuring-zone-" + this.getName();
+            const adContainer = document.createElement("div");
+            adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            body.appendChild(adContainer);
+            const content = document.createElement("div");
+            content.className = "adventuring-zone-content";
+            adContainer.appendChild(content);
             const profileText = document.createElement("div");
             profileText.innerHTML = "Fighting in the wilderness";
-            body.appendChild(profileText);
+            content.appendChild(profileText);
             const fightElement = document.createElement("div");
             fightElement.className = "fight-content";
             const playerDiv = this.drawFighter("Player", player_3.Player.getCharacterData().getHealth());
             fightElement.appendChild(playerDiv);
             const enemyDiv = this.drawFighter(this.enemy.getName(), this.enemy.getHealth());
             fightElement.appendChild(enemyDiv);
-            body.appendChild(fightElement);
+            content.appendChild(fightElement);
             const backButton = document.createElement("div");
             backButton.innerHTML = "Leave Wild";
             backButton.className = "back-button";
             backButton.onclick = () => {
-                body.className = "";
                 messagingBus_12.MessagingBus.publishToZoneChange(null);
             };
-            body.appendChild(backButton);
+            content.appendChild(backButton);
         }
         clearDOM() {
             utils_11.Utils.clearAllDOM();
@@ -972,18 +1008,22 @@ define("zones/zoneTypes/woodsZone", ["require", "exports", "activities/adventure
             headerText.innerHTML = "Woods";
             header.appendChild(headerText);
             const body = utils_12.Utils.getContentDiv();
-            body.className = "adventuring-zone-" + this.getName();
+            const adContainer = document.createElement("div");
+            adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            body.appendChild(adContainer);
+            const content = document.createElement("div");
+            content.className = "adventuring-zone-content";
+            adContainer.appendChild(content);
             const profileText = document.createElement("div");
             profileText.innerHTML = "Woodcutting in woods";
-            body.appendChild(profileText);
+            content.appendChild(profileText);
             const backButton = document.createElement("div");
             backButton.innerHTML = "Leave woods";
             backButton.className = "back-button";
             backButton.onclick = () => {
-                body.className = "";
                 messagingBus_13.MessagingBus.publishToZoneChange(null);
             };
-            body.appendChild(backButton);
+            content.appendChild(backButton);
         }
         clearDOM() {
             utils_12.Utils.clearAllDOM();

@@ -14,19 +14,25 @@ export class VolcanoZone implements IZone {
         header.appendChild(headerText);
 
         const body: HTMLElement = Utils.getContentDiv();
-        body.className = "adventuring-zone-"+this.getName();
+        const adContainer: HTMLDivElement = document.createElement("div");
+        adContainer.className = "adventuring-zone-container adventuring-zone-"+this.getName();
+        body.appendChild(adContainer);
+
+        const content: HTMLDivElement = document.createElement("div");
+        content.className = "adventuring-zone-content";
+        adContainer.appendChild(content);
+
         const profileText: HTMLDivElement = document.createElement("div");
-        profileText.innerHTML = "Woodcutting in " + this.getName();
-        body.appendChild(profileText);
+        profileText.innerHTML = "Mining in " + this.getName();
+        content.appendChild(profileText);
 
         const backButton: HTMLDivElement = document.createElement("div");
         backButton.innerHTML = "Leave " + this.getName() ;
         backButton.className = "back-button";
         backButton.onclick = () => {
-            body.className = "";
             MessagingBus.publishToZoneChange(null); 
         }
-        body.appendChild(backButton);
+        content.appendChild(backButton);
     }
 
     clearDOM(): void {
