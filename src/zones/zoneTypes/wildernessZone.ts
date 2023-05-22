@@ -24,8 +24,6 @@ export class WildernessZone implements IZone {
         const body: HTMLElement = Utils.getContentDiv();
         const adContainer: HTMLDivElement = document.createElement("div");
         adContainer.className = "adventuring-zone-container adventuring-zone-"+this.getName();
-        adContainer.style.backgroundSize = 'contain';
-        adContainer.style.backgroundPosition = 'center';
         body.appendChild(adContainer);
 
         const content: HTMLDivElement = document.createElement("div");
