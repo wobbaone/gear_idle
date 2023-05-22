@@ -69,7 +69,8 @@
     border:var(--border-px) solid black;
     gap: 4px;
     overflow-y:auto;
-    width: 100%; 
+    width: 100%;
+    
 }
 .adventuring-zone-element {
     width: 250px;

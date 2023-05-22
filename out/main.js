@@ -450,6 +450,8 @@ define("zones/zoneTypes/caveZone", ["require", "exports", "activities/adventureA
             const body = utils_3.Utils.getContentDiv();
             const adContainer = document.createElement("div");
             adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            adContainer.style.backgroundSize = 'contain';
+            adContainer.style.backgroundPosition = 'center';
             body.appendChild(adContainer);
             const content = document.createElement("div");
             content.className = "adventuring-zone-content";
@@ -501,6 +503,8 @@ define("zones/zoneTypes/darkForestZone", ["require", "exports", "activities/adve
             const body = utils_4.Utils.getContentDiv();
             const adContainer = document.createElement("div");
             adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            adContainer.style.backgroundSize = 'contain';
+            adContainer.style.backgroundPosition = 'center';
             body.appendChild(adContainer);
             const content = document.createElement("div");
             content.className = "adventuring-zone-content";
@@ -552,6 +556,8 @@ define("zones/zoneTypes/desertZone", ["require", "exports", "activities/adventur
             const body = utils_5.Utils.getContentDiv();
             const adContainer = document.createElement("div");
             adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            adContainer.style.backgroundSize = 'contain';
+            adContainer.style.backgroundPosition = 'center';
             body.appendChild(adContainer);
             const content = document.createElement("div");
             content.className = "adventuring-zone-content";
@@ -603,6 +609,8 @@ define("zones/zoneTypes/frozenZone", ["require", "exports", "activities/adventur
             const body = utils_6.Utils.getContentDiv();
             const adContainer = document.createElement("div");
             adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            adContainer.style.backgroundSize = 'contain';
+            adContainer.style.backgroundPosition = 'center';
             body.appendChild(adContainer);
             const content = document.createElement("div");
             content.className = "adventuring-zone-content";
@@ -654,6 +662,8 @@ define("zones/zoneTypes/graveyardZone", ["require", "exports", "activities/adven
             const body = utils_7.Utils.getContentDiv();
             const adContainer = document.createElement("div");
             adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            adContainer.style.backgroundSize = 'contain';
+            adContainer.style.backgroundPosition = 'center';
             body.appendChild(adContainer);
             const content = document.createElement("div");
             content.className = "adventuring-zone-content";
@@ -705,6 +715,8 @@ define("zones/zoneTypes/jungleZone", ["require", "exports", "activities/adventur
             const body = utils_8.Utils.getContentDiv();
             const adContainer = document.createElement("div");
             adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            adContainer.style.backgroundSize = 'contain';
+            adContainer.style.backgroundPosition = 'center';
             body.appendChild(adContainer);
             const content = document.createElement("div");
             content.className = "adventuring-zone-content";
@@ -756,6 +768,8 @@ define("zones/zoneTypes/volcanoZone", ["require", "exports", "activities/adventu
             const body = utils_9.Utils.getContentDiv();
             const adContainer = document.createElement("div");
             adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            adContainer.style.backgroundSize = 'contain';
+            adContainer.style.backgroundPosition = 'center';
             body.appendChild(adContainer);
             const content = document.createElement("div");
             content.className = "adventuring-zone-content";
@@ -807,6 +821,8 @@ define("zones/zoneTypes/warforgeZone", ["require", "exports", "activities/advent
             const body = utils_10.Utils.getContentDiv();
             const adContainer = document.createElement("div");
             adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            adContainer.style.backgroundSize = 'contain';
+            adContainer.style.backgroundPosition = 'center';
             body.appendChild(adContainer);
             const content = document.createElement("div");
             content.className = "adventuring-zone-content";
@@ -943,7 +959,9 @@ define("zones/zoneTypes/wildernessZone", ["require", "exports", "activities/adve
             const body = utils_11.Utils.getContentDiv();
             const adContainer = document.createElement("div");
             adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
-            body.appendChild(adContainer);
+            adContainer.style.backgroundSize = 'contain';
+            adContainer.style.backgroundPosition = 'center';
+            body.appendChild(adContainer);           
             const content = document.createElement("div");
             content.className = "adventuring-zone-content";
             adContainer.appendChild(content);
@@ -1010,6 +1028,8 @@ define("zones/zoneTypes/woodsZone", ["require", "exports", "activities/adventure
             const body = utils_12.Utils.getContentDiv();
             const adContainer = document.createElement("div");
             adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
+            adContainer.style.backgroundSize = 'contain';
+            adContainer.style.backgroundPosition = 'center';
             body.appendChild(adContainer);
             const content = document.createElement("div");
             content.className = "adventuring-zone-content";
