@@ -961,7 +961,7 @@ define("zones/zoneTypes/wildernessZone", ["require", "exports", "activities/adve
             adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
             adContainer.style.backgroundSize = 'contain';
             adContainer.style.backgroundPosition = 'center';
-            body.appendChild(adContainer);           
+            body.appendChild(adContainer);
             const content = document.createElement("div");
             content.className = "adventuring-zone-content";
             adContainer.appendChild(content);
