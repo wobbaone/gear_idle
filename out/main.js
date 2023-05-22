@@ -987,6 +987,10 @@ define("zones/zoneTypes/wildernessZone", ["require", "exports", "activities/adve
             const healthspan = document.createElement("span");
             healthspan.innerHTML = health.getCurrentHealth() + "/" + health.getMaxHealth();
             playerDiv.appendChild(healthspan);
+            const imageElement = document.createElement("img");
+            imageElement.src = "./images/boar.png";
+            imageElement.className = "monster";
+            playerDiv.appendChild(imageElement);
             return playerDiv;
         }
     }

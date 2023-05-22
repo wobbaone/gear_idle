@@ -40,8 +40,10 @@ export class WildernessZone implements IZone {
         const playerDiv: HTMLDivElement = this.drawFighter("Player", Player.getCharacterData().getHealth());
         fightElement.appendChild(playerDiv);
 
+        //const enemiesDiv HTMLDivElement = document.createElement("div");
         const enemyDiv: HTMLDivElement = this.drawFighter(this.enemy.getName(), this.enemy.getHealth());
         fightElement.appendChild(enemyDiv);
+
 
         content.appendChild(fightElement);
 
@@ -87,6 +89,11 @@ export class WildernessZone implements IZone {
         const healthspan: HTMLSpanElement = document.createElement("span");
         healthspan.innerHTML = health.getCurrentHealth() + "/" + health.getMaxHealth();
         playerDiv.appendChild(healthspan);
+
+        const imageElement: HTMLImageElement = document.createElement("img");
+        imageElement.src = "./images/boar.png";
+        imageElement.className = "monster"
+        playerDiv.appendChild(imageElement);
 
         return playerDiv;
     }
