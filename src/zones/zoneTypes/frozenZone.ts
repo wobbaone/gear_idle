@@ -27,7 +27,7 @@ export class FrozenZone implements IZone {
         content.appendChild(profileText);
 
         const backButton: HTMLDivElement = document.createElement("div");
-        backButton.innerHTML = "Leave " + this.getName() ;
+        backButton.innerHTML = "Leave " + this.getName();
         backButton.className = "back-button";
         backButton.onclick = () => {
             MessagingBus.publishToZoneChange(null); 

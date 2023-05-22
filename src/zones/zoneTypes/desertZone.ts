@@ -13,8 +13,7 @@ export class DesertZone implements IZone {
         headerText.innerHTML = this.getName();
         header.appendChild(headerText);
 
-        const body: HTMLElement = Utils.getContentDiv();
-        
+        const body: HTMLElement = Utils.getContentDiv();       
         const adContainer: HTMLDivElement = document.createElement("div");
         adContainer.className = "adventuring-zone-container adventuring-zone-"+this.getName();
         body.appendChild(adContainer);
