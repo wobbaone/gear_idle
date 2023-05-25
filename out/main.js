@@ -24,6 +24,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 define("utils", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1249,24 +1252,64 @@ define("characterData", ["require", "exports", "inventory/inventoryData", "zones
     CharacterHealthData.DEFAULT_MAX_HEALTH = 10;
     exports.CharacterHealthData = CharacterHealthData;
 });
-define("activities/clanActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_13, activity_2) {
+define("story/chapter1", [], {
+    "intro_text": {
+        "strings": ["^1000 As your ship nears the shores of the enchanting continent of Mystoria, a seasoned sailor steps forward, his voice filled with excitement and anticipation. With a wide smile, he addresses the crew and passengers gathered on the deck, \"Welcome, one and all, to the enchanting continent of Mystoria! Behold the shimmering shores of this wondrous land, where adventure awaits at every turn!\"\n"]
+    }
+});
+define("activities/storyActivity", ["require", "exports", "activities/activity", "utils", "story/chapter1", "../../imports/typed_2.0.16"], function (require, exports, activity_2, utils_13, chapter1, typed_2_0_16_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ClanActivity = void 0;
-    class ClanActivity extends activity_2.AActivity {
+    exports.StoryActivity = exports.StoryActivityType = void 0;
+    chapter1 = __importStar(chapter1);
+    typed_2_0_16_1 = __importDefault(typed_2_0_16_1);
+    var StoryActivityType;
+    (function (StoryActivityType) {
+        StoryActivityType[StoryActivityType["Intro"] = 0] = "Intro";
+        StoryActivityType[StoryActivityType["Guide"] = 1] = "Guide";
+    })(StoryActivityType = exports.StoryActivityType || (exports.StoryActivityType = {}));
+    class StoryActivity extends activity_2.AActivity {
+        constructor() {
+            super();
+        }
         buildDOM() {
+            this.clearDOM();
+            const body = utils_13.Utils.getContentDiv();
+            const storyContainer = document.createElement("div");
+            storyContainer.className = "story";
+            storyContainer.id = "typed";
+            body.appendChild(storyContainer);
+            const scriptTag = document.createElement("script");
+            const t = new typed_2_0_16_1.default(storyContainer, chapter1.intro_text);
+            t.start();
         }
         clearDOM() {
             utils_13.Utils.clearAllDOM();
         }
+        delete() {
+            super.delete();
+        }
+    }
+    exports.StoryActivity = StoryActivity;
+});
+define("activities/clanActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_14, activity_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ClanActivity = void 0;
+    class ClanActivity extends activity_3.AActivity {
+        buildDOM() {
+        }
+        clearDOM() {
+            utils_14.Utils.clearAllDOM();
+        }
     }
     exports.ClanActivity = ClanActivity;
 });
-define("activities/inventoryActivity", ["require", "exports", "messagingBus", "player", "utils", "activities/activity"], function (require, exports, messagingBus_15, player_4, utils_14, activity_3) {
+define("activities/inventoryActivity", ["require", "exports", "messagingBus", "player", "utils", "activities/activity"], function (require, exports, messagingBus_15, player_4, utils_15, activity_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.InventoryActivity = void 0;
-    class InventoryActivity extends activity_3.AActivity {
+    class InventoryActivity extends activity_4.AActivity {
         constructor() {
             super();
             this.resourceChangeCallback = messagingBus_15.MessagingBus.subscribeToResourceChange((resourceId, amount) => {
@@ -1275,11 +1318,11 @@ define("activities/inventoryActivity", ["require", "exports", "messagingBus", "p
         }
         buildDOM() {
             this.clearDOM();
-            const header = utils_14.Utils.getHeaderDiv();
+            const header = utils_15.Utils.getHeaderDiv();
             const headerText = document.createElement("div");
             headerText.innerHTML = "Inventory";
             header.appendChild(headerText);
-            const body = utils_14.Utils.getContentDiv();
+            const body = utils_15.Utils.getContentDiv();
             const inventoryContainer = this.drawInventoryBox();
             body.appendChild(inventoryContainer);
             const inventoryState = player_4.Player.getCharacterData().getInventory().getInventoryState();
@@ -1297,7 +1340,7 @@ define("activities/inventoryActivity", ["require", "exports", "messagingBus", "p
             }
         }
         clearDOM() {
-            utils_14.Utils.clearAllDOM();
+            utils_15.Utils.clearAllDOM();
         }
         drawInventoryBox() {
             const zoneBoxDiv = document.createElement("div");
@@ -1311,78 +1354,79 @@ define("activities/inventoryActivity", ["require", "exports", "messagingBus", "p
     }
     exports.InventoryActivity = InventoryActivity;
 });
-define("activities/partyActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_15, activity_4) {
+define("activities/partyActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_16, activity_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.PartyActivity = void 0;
-    class PartyActivity extends activity_4.AActivity {
+    class PartyActivity extends activity_5.AActivity {
         buildDOM() {
-        }
-        clearDOM() {
-            utils_15.Utils.clearAllDOM();
-        }
-    }
-    exports.PartyActivity = PartyActivity;
-});
-define("activities/profileActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_16, activity_5) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ProfileActivity = void 0;
-    class ProfileActivity extends activity_5.AActivity {
-        buildDOM() {
-            this.clearDOM();
-            const header = utils_16.Utils.getHeaderDiv();
-            const headerText = document.createElement("div");
-            headerText.innerHTML = "Profile";
-            header.appendChild(headerText);
-            const body = utils_16.Utils.getContentDiv();
-            const profileText = document.createElement("div");
-            profileText.innerHTML = "Profile information goes here";
-            body.appendChild(profileText);
         }
         clearDOM() {
             utils_16.Utils.clearAllDOM();
         }
     }
-    exports.ProfileActivity = ProfileActivity;
+    exports.PartyActivity = PartyActivity;
 });
-define("activities/townActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_17, activity_6) {
+define("activities/profileActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_17, activity_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.TownActivity = void 0;
-    class TownActivity extends activity_6.AActivity {
+    exports.ProfileActivity = void 0;
+    class ProfileActivity extends activity_6.AActivity {
         buildDOM() {
+            this.clearDOM();
+            const header = utils_17.Utils.getHeaderDiv();
+            const headerText = document.createElement("div");
+            headerText.innerHTML = "Profile";
+            header.appendChild(headerText);
+            const body = utils_17.Utils.getContentDiv();
+            const profileText = document.createElement("div");
+            profileText.innerHTML = "Profile information goes here";
+            body.appendChild(profileText);
         }
         clearDOM() {
             utils_17.Utils.clearAllDOM();
         }
     }
+    exports.ProfileActivity = ProfileActivity;
+});
+define("activities/townActivity", ["require", "exports", "utils", "activities/activity"], function (require, exports, utils_18, activity_7) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.TownActivity = void 0;
+    class TownActivity extends activity_7.AActivity {
+        buildDOM() {
+        }
+        clearDOM() {
+            utils_18.Utils.clearAllDOM();
+        }
+    }
     exports.TownActivity = TownActivity;
 });
-define("navigation", ["require", "exports", "activities/adventureActivity", "activities/clanActivity", "activities/inventoryActivity", "activities/partyActivity", "activities/profileActivity", "activities/townActivity", "utils"], function (require, exports, adventureActivity_12, clanActivity_1, inventoryActivity_1, partyActivity_1, profileActivity_1, townActivity_1, utils_18) {
+define("navigation", ["require", "exports", "activities/storyActivity", "activities/adventureActivity", "activities/clanActivity", "activities/inventoryActivity", "activities/partyActivity", "activities/profileActivity", "activities/townActivity", "utils"], function (require, exports, storyActivity_1, adventureActivity_12, clanActivity_1, inventoryActivity_1, partyActivity_1, profileActivity_1, townActivity_1, utils_19) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NavigationState = void 0;
     var Screen;
     (function (Screen) {
-        Screen[Screen["Profile"] = 0] = "Profile";
-        Screen[Screen["Inventory"] = 1] = "Inventory";
-        Screen[Screen["Clan"] = 2] = "Clan";
-        Screen[Screen["Town"] = 3] = "Town";
-        Screen[Screen["Party"] = 4] = "Party";
-        Screen[Screen["Adventure"] = 5] = "Adventure";
+        Screen[Screen["Story"] = 0] = "Story";
+        Screen[Screen["Profile"] = 1] = "Profile";
+        Screen[Screen["Inventory"] = 2] = "Inventory";
+        Screen[Screen["Clan"] = 3] = "Clan";
+        Screen[Screen["Town"] = 4] = "Town";
+        Screen[Screen["Party"] = 5] = "Party";
+        Screen[Screen["Adventure"] = 6] = "Adventure";
     })(Screen || (Screen = {}));
     class NavigationState {
         constructor() {
-            this.currentScreen = Screen.Profile;
+            this.currentScreen = Screen.Story;
             this.currentActivity = new profileActivity_1.ProfileActivity();
-            this.setScreen(Screen.Profile);
-            utils_18.Utils.addOnClickToElement("profile-nav", () => this.setScreen(Screen.Profile));
-            utils_18.Utils.addOnClickToElement("inventory-nav", () => this.setScreen(Screen.Inventory));
-            utils_18.Utils.addOnClickToElement("clan-nav", () => this.setScreen(Screen.Clan));
-            utils_18.Utils.addOnClickToElement("towns-nav", () => this.setScreen(Screen.Town));
-            utils_18.Utils.addOnClickToElement("party-nav", () => this.setScreen(Screen.Party));
-            utils_18.Utils.addOnClickToElement("adventure-nav", () => this.setScreen(Screen.Adventure));
+            this.setScreen(Screen.Story);
+            utils_19.Utils.addOnClickToElement("profile-nav", () => this.setScreen(Screen.Profile));
+            utils_19.Utils.addOnClickToElement("inventory-nav", () => this.setScreen(Screen.Inventory));
+            utils_19.Utils.addOnClickToElement("clan-nav", () => this.setScreen(Screen.Clan));
+            utils_19.Utils.addOnClickToElement("towns-nav", () => this.setScreen(Screen.Town));
+            utils_19.Utils.addOnClickToElement("party-nav", () => this.setScreen(Screen.Party));
+            utils_19.Utils.addOnClickToElement("adventure-nav", () => this.setScreen(Screen.Adventure));
         }
         getCurrentScreen() {
             return this.currentScreen;
@@ -1395,6 +1439,9 @@ define("navigation", ["require", "exports", "activities/adventureActivity", "act
             this.currentActivity.delete();
             this.currentScreen = screen;
             switch (screen) {
+                case Screen.Story:
+                    this.currentActivity = new storyActivity_1.StoryActivity();
+                    break;
                 case Screen.Profile:
                     this.currentActivity = new profileActivity_1.ProfileActivity();
                     break;
@@ -1462,5 +1509,23 @@ define("main", ["require", "exports", "navigation", "player"], function (require
         }
         Game.getNavigationState = getNavigationState;
     })(Game = exports.Game || (exports.Game = {}));
+});
+define("story/story", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("story/introStory", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.IntroStory = void 0;
+    class IntroStory {
+        getStory() {
+            return "";
+        }
+        onGameTick() {
+            return;
+        }
+    }
+    exports.IntroStory = IntroStory;
 });
 //# sourceMappingURL=main.js.map

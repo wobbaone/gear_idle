@@ -5,6 +5,10 @@
     color: #DDECEC;
 }
 
+.hidden {
+    display: none !important;
+}
+
 .layout {
     width: 100%;
     
@@ -22,6 +26,15 @@
     gap: var(--grid-spacing-px);
 
     border:var(--border-px) solid black;
+}
+
+.story {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    font-size:x-large;
+    font-weight: 200;
 }
   
 .header { 

@@ -1,4 +1,5 @@
 import { AActivity } from "./activities/activity";
+import { StoryActivity } from "./activities/storyActivity";
 import { AdventureActivity } from "./activities/adventureActivity";
 import { ClanActivity } from "./activities/clanActivity";
 import { InventoryActivity } from "./activities/inventoryActivity";
@@ -8,22 +9,23 @@ import { TownActivity } from "./activities/townActivity";
 import { Utils } from "./utils";
 
 enum Screen  {
-    Profile = 0,
-    Inventory = 1,
+    Story = 0,
+    Profile = 1,
+    Inventory = 2,
     Clan,
     Town,
     Party,
-    Adventure
+    Adventure,
 }
 
 export class NavigationState {
     static readonly Screen = Screen;
 
-    private currentScreen: Screen = Screen.Profile;
+    private currentScreen: Screen = Screen.Story;
     private currentActivity: AActivity = new ProfileActivity();
 
     constructor() {
-        this.setScreen(Screen.Profile);
+        this.setScreen(Screen.Story);
 
         Utils.addOnClickToElement("profile-nav", () => this.setScreen(Screen.Profile));
         Utils.addOnClickToElement("inventory-nav", () => this.setScreen(Screen.Inventory));
@@ -48,6 +50,9 @@ export class NavigationState {
         this.currentScreen = screen;
 
         switch (screen) {
+            case Screen.Story:
+                this.currentActivity = new StoryActivity();
+                break;
             case Screen.Profile:
                 this.currentActivity = new ProfileActivity();
                 break;
