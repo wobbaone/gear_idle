@@ -654,8 +654,6 @@ define("zones/zoneTypes/graveyardZone", ["require", "exports", "activities/adven
             const body = utils_7.Utils.getContentDiv();
             const adContainer = document.createElement("div");
             adContainer.className = "adventuring-zone-container adventuring-zone-" + this.getName();
-            adContainer.style.backgroundSize = 'contain';
-            adContainer.style.backgroundPosition = 'center';
             body.appendChild(adContainer);
             const content = document.createElement("div");
             content.className = "adventuring-zone-content";

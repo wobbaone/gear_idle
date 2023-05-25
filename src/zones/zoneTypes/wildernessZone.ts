@@ -40,7 +40,6 @@ export class WildernessZone implements IZone {
         const playerDiv: HTMLDivElement = this.drawFighter("Player", Player.getCharacterData().getHealth());
         fightElement.appendChild(playerDiv);
 
-        //const enemiesDiv HTMLDivElement = document.createElement("div");
         const enemyDiv: HTMLDivElement = this.drawFighter(this.enemy.getName(), this.enemy.getHealth());
         fightElement.appendChild(enemyDiv);
 
