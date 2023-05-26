@@ -1254,13 +1254,12 @@ define("characterData", ["require", "exports", "inventory/inventoryData", "zones
 });
 define("story/chapter1", [], {
     "login": {
-        "strings": ["A sense of haziness engulfs your thoughts.", "You find yourself struggling to recall the details of your identity.", "It's as if your memories have been scattered and lost, leaving you with fragments of who you once were."],
-        "startDelay": 2000,
+        "strings": ["A sense of haziness engulfs your senses, dulling the vibrant colors, muting the sounds, and leaving the world around you in a muted, indistinct state..", "A sense of haziness engulfs your surroundings, blurring the edges of reality into a surreal and uncertain landscape.", "A sense of haziness engulfs your thoughts, making it challenging to grasp onto coherent ideas and causing a constant mental fog.", "A sense of haziness engulfs your identity, causing a disconnection between who you once were and who you perceive yourself to be now.", "You find yourself struggling to recall the details of your past achievements, the triumphs and milestones that once defined you.", "You find yourself struggling to recall the details of your dreams and aspirations, leaving you adrift in a sea of emptiness.", "You find yourself struggling to recall the details of your own voice, the essence of your thoughts and opinions fading into whispers of uncertainty.", "You find yourself struggling to recall the details of your purpose, grappling with a sense of existential confusion and a longing for direction.", "You find yourself struggling to recall the details of your favorite places, unable to summon the vivid imagery of home.", "You grasp at fleeting glimpses of familiar faces and places, but they slip through your fingers like grains of sand.", "It's as if your memories have been scattered and lost, leaving you with fragments of who you once were.", "Each attempt to retrieve a memory only adds to the disorientation that clouds your mind.", "Each moment is filled with a sense of unease, as if there is a hidden truth just beyond your reach, waiting to be uncovered.", "The remnants of your past flicker like distant stars in the night sky, teasing you with their presence but eluding your grasp.", "The world around you feels both foreign and familiar, a paradox that intensifies the confusion within.", "As you navigate this labyrinth of forgotten recollections, you can't help but wonder if you will ever regain a firm grip on your own identity."],
+        "startDelay": 500,
         "showCursor": false,
-        "typeSpeed": 50,
-        "backSpeed": 50,
-        "loop": true,
-        "shuffle": true
+        "typeSpeed": 25,
+        "backSpeed": 25,
+        "loop": true
     },
     "page1": {
         "paragraph1": "As your ship approaches the harbor, a seasoned sailor steps forward, his voice filled with excitement and anticipation. With a wide smile, he addresses the crew and passengers gathered on the deck, \"Welcome, everyone, to the captivating continent of Mystoria! Witness the shimmering shores of this extraordinary land, where adventure awaits at every turn!\"",
