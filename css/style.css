@@ -35,6 +35,21 @@
     font-size:large;
     width: auto;
 }
+
+.login-story {
+    padding: 10px;
+    color: #fff;
+    align-items: center;
+    justify-content: left;
+    font-size:large;
+    width: 400px;
+    height: 100px;
+    z-index: 2;
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    background-color: rgba(0,0,0,0.4);
+}
   
 .header { 
     grid-area: header;
@@ -142,6 +157,12 @@
 }
 .adventuring-zone-Frozen {
     background-image: url("../images/frozen_cave_story.png");
+}
+
+.login {
+    background-image: url("../images/login_background_misty_dock.png");
+    filter: blur(2px) grayscale(80%);
+    height: 100vh;
 }
 
 .adventuring-activities {
