@@ -30,11 +30,10 @@
 
 .story {
     color: #fff;
-    display: flex;
     align-items: center;
     justify-content: left;
-    font-size:x-large;
-    font-weight: 200;
+    font-size:large;
+    width: auto;
 }
   
 .header { 

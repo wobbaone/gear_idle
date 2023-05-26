@@ -1254,7 +1254,9 @@ define("characterData", ["require", "exports", "inventory/inventoryData", "zones
 });
 define("story/chapter1", [], {
     "intro_text": {
-        "strings": ["^1000 As your ship nears the shores of the enchanting continent of Mystoria, a seasoned sailor steps forward, his voice filled with excitement and anticipation. With a wide smile, he addresses the crew and passengers gathered on the deck, \"Welcome, one and all, to the enchanting continent of Mystoria! Behold the shimmering shores of this wondrous land, where adventure awaits at every turn!\"\n"]
+        "strings": ["<p>As your ship nears the harbor, a seasoned sailor steps forward, his voice filled with excitement and anticipation. With a wide smile, he addresses the crew and passengers gathered on the deck, \"Welcome, one and all, to the enchanting continent of Mystoria! Behold the shimmering shores of this wondrous land, where adventure awaits at every turn!\"</p><p>As you step off the vessel onto the bustling dock, the sailor's words still echo in your ears. The air is tinged with a sense of wonder and possibility as you take in the breathtaking view of the vibrant port town of Haven's Reach before you. It feels like stepping into a realm of dreams come to life, where fantastical tales intertwine with reality.</p><p>With a lively wave of his hand, the sailor gestures towards the town, inviting you to explore its charm and embrace the opportunities it holds. \"Haven's Reach, the gateway to Mystoria! Here, you'll find a haven for adventurers like yourselves, teeming with bustling markets, formidable guilds, and the promise of untold riches.\"</p><p>As you make your way through the dock, a cacophony of sounds fills the air. Merchants hawking their exotic goods, the clattering of crates being unloaded, and the cheerful banter of fellow adventurers create an atmosphere brimming with excitement and possibility. The spirit of camaraderie and adventure is palpable, drawing you further into this captivating world.</p><p>With each step, you absorb the sights and sounds of Haven's Reach. Colorful banners dance in the breeze, proudly displaying the emblems of diverse adventurer companies that have made this town their base of operations. The tantalizing aroma of freshly baked pastries drifts from a nearby bakery, mingling with the briny scent of the sea.</p><p>Gazing towards the horizon, you catch glimpses of the sprawling landscape that lies beyond Haven's Reach. Towering mountains pierce the sky in the distance, shrouded in mist and mystery. Verdant forests beckon with the promise of hidden treasures, and winding rivers snake their way through the picturesque valleys.</p><p>The sailor's words linger in your mind, fueling your anticipation for the adventures that await. Mystoria, with its unexplored lands, hidden treasures, and mythical wonders, beckons you to chart your own destiny in this extraordinary realm. The voyage may have been long, but here, at the shores of Mystoria, a new chapter of your life is about to unfold.</p>"],
+        "startDelay": 1000,
+        "showCursor": false
     }
 });
 define("activities/storyActivity", ["require", "exports", "activities/activity", "utils", "story/chapter1", "../../imports/typed_2.0.16"], function (require, exports, activity_2, utils_13, chapter1, typed_2_0_16_1) {
@@ -1275,7 +1277,7 @@ define("activities/storyActivity", ["require", "exports", "activities/activity",
         buildDOM() {
             this.clearDOM();
             const body = utils_13.Utils.getContentDiv();
-            const storyContainer = document.createElement("div");
+            const storyContainer = document.createElement("span");
             storyContainer.className = "story";
             storyContainer.id = "typed";
             body.appendChild(storyContainer);
