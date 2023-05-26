@@ -30,6 +30,54 @@ export class Utils {
 
         return bodyNode;
     }
+
+    static showNavDiv(): void {
+        const navNode = document.getElementById("navigation");
+        if (navNode === null) {
+            console.error("Could not find the navigation html element to draw to");
+            return;
+        }
+
+        navNode.className = "navigation"
+
+        return;
+    }
+
+    static hideNavDiv(): void {
+        const navNode = document.getElementById("navigation");
+        if (navNode === null) {
+            console.error("Could not find the navigation html element to draw to");
+            return;
+        }
+
+        navNode.className = "hidden"
+
+        return;
+    }
+
+    static showHeader(): void {
+        const headerNode = document.getElementById("header");
+        if (headerNode === null) {
+            console.error("Could not find the navigation html element to draw to");
+            return;
+        }
+
+        headerNode.className = "header"
+
+        return;
+    }
+
+    static hideHeader(): void {
+        const headerNode = document.getElementById("header");
+        if (headerNode === null) {
+            console.error("Could not find the navigation html element to draw to");
+            return;
+        }
+
+        headerNode.className = ""
+
+        return;
+    }
     
     public static clearAllDOM(): void {
         const header: HTMLElement = Utils.getHeaderDiv();

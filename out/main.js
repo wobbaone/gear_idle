@@ -56,6 +56,42 @@ define("utils", ["require", "exports"], function (require, exports) {
             }
             return bodyNode;
         }
+        static showNavDiv() {
+            const navNode = document.getElementById("navigation");
+            if (navNode === null) {
+                console.error("Could not find the navigation html element to draw to");
+                return;
+            }
+            navNode.className = "navigation";
+            return;
+        }
+        static hideNavDiv() {
+            const navNode = document.getElementById("navigation");
+            if (navNode === null) {
+                console.error("Could not find the navigation html element to draw to");
+                return;
+            }
+            navNode.className = "hidden";
+            return;
+        }
+        static showHeader() {
+            const headerNode = document.getElementById("header");
+            if (headerNode === null) {
+                console.error("Could not find the navigation html element to draw to");
+                return;
+            }
+            headerNode.className = "header";
+            return;
+        }
+        static hideHeader() {
+            const headerNode = document.getElementById("header");
+            if (headerNode === null) {
+                console.error("Could not find the navigation html element to draw to");
+                return;
+            }
+            headerNode.className = "";
+            return;
+        }
         static clearAllDOM() {
             const header = Utils.getHeaderDiv();
             while (header.firstChild) {
@@ -1253,43 +1289,6 @@ define("characterData", ["require", "exports", "inventory/inventoryData", "zones
     exports.CharacterHealthData = CharacterHealthData;
 });
 define("story/chapter1", [], {
-    "login": {
-        "strings": [
-            "A sense of haziness engulfs your senses, dulling the vibrant colors",
-            "A sense of haziness engulfs your senses, muting the sounds",
-            "A sense of haziness engulfs your senses, leaving the world around you in an indistinct state.",
-            "A sense of haziness engulfs your surroundings, blurring the edges of reality into a surreal and uncertain landscape.",
-            "A sense of haziness engulfs your surroundings, giving rise to a disorienting sensation where distances seem distorted and proportions feel skewed.",
-            "A sense of haziness engulfs your surroundings, creating ambiance that shrouds everything in a soft, diffused light.",
-            "A sense of haziness engulfs your thoughts, making it challenging to grasp onto coherent ideas and causing a constant mental fog.",
-            "A sense of haziness engulfs your thoughts, eroding your focus and causing distractions to infiltrate your mind at every turn.            ",
-            "A sense of haziness engulfs your identity, causing a disconnection between who you once were and who you perceive yourself to be now.",
-            "You find yourself struggling to recall the details of your past achievements, the triumphs and milestones that once defined you.",
-            "You find yourself struggling to recall the details of your dreams and aspirations, leaving you adrift in a sea of emptiness.",
-            "You find yourself struggling to recall the details of your own voice, the essence of your thoughts and opinions fading into whispers of uncertainty.",
-            "You find yourself struggling to recall the details of your purpose, grappling with a sense of existential confusion and a longing for direction.",
-            "You find yourself struggling to recall the details of where you grew up, the streets and neighborhoods that once formed the backdrop of your childhood.",
-            "You find yourself struggling to recall the details of where you grew up, the specific landmarks and local hangouts that held a special place in your heart.",
-            "You find yourself struggling to recall the details of where you grew up,  the names and faces of the friends and neighbors who were once an integral part of your everyday life.",
-            "You grasp at fleeting glimpses of familiar faces and places, but they slip through your fingers like grains of sand.",
-            "It's as if your memories have been scattered and lost, leaving you with fragments of who you once were.",
-            "It's as if your memories have been scattered and lost, drifting away like leaves carried by an unforgiving wind.",
-            "Each attempt to retrieve a memory only adds to the disorientation that clouds your mind.",
-            "Each moment is filled with a sense of unease, as if there is a hidden truth just beyond your reach.",
-            "Each moment is filled with a sense of unease, as if a lurking presence watches from the shadows, unseen but deeply felt.",
-            "Each moment is filled with a sense of unease, as if an invisible weight presses upon your chest, making it harder to breathe.",
-            "The remnants of your past flicker like distant stars in the night sky, teasing you with their presence but eluding your grasp.",
-            "The world around you feels both foreign and familiar, a paradox that intensifies the confusion within.",
-            "The world around you feels both foreign and familiar, like a half-remembered dream that hints at forgotten truths and forgotten connections.",
-            "As you navigate this labyrinth of forgotten recollections, you can't help but wonder if you will ever regain a firm grip on your own identity.",
-            "As you navigate this labyrinth of forgotten recollections, you can't help but wonder if the gaps in your memory are a blessing or a curse, protecting you from painful truths or robbing you of essential knowledge."
-        ],
-        "startDelay": 500,
-        "showCursor": false,
-        "typeSpeed": 25,
-        "backSpeed": 25,
-        "loop": true
-    },
     "page1": {
         "paragraph1": "As your ship approaches the harbor, a seasoned sailor steps forward, his voice filled with excitement and anticipation. With a wide smile, he addresses the crew and passengers gathered on the deck, \"Welcome, everyone, to the captivating continent of Mystoria! Witness the shimmering shores of this extraordinary land, where adventure awaits at every turn!\"",
         "paragraph2": "Stepping off the vessel onto the bustling dock, the sailor's words still echo in your ears. The air carries a sense of wonder and possibility as you take in the breathtaking view of Haven's Reach, a vibrant port town, before you. It feels like entering a realm where dreams intertwine with reality, where enchanting tales come to life.",
@@ -1300,12 +1299,10 @@ define("story/chapter1", [], {
         "paragraph7": "The sailor's words linger in your mind, fueling your anticipation for the adventures that await. Mystoria, with its unexplored lands, hidden treasures, and mythical wonders, beckons you to chart your own destiny in this extraordinary realm. The voyage may have been long, but here, at the shores of Mystoria, a new chapter of your life is about to unfold."
     }
 });
-define("activities/storyActivity", ["require", "exports", "activities/activity", "utils", "story/chapter1", "../../imports/typed_2.0.16"], function (require, exports, activity_2, utils_13, chapter1_json_1, typed_2_0_16_1) {
+define("activities/storyActivity", ["require", "exports", "activities/activity", "utils"], function (require, exports, activity_2, utils_13) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.StoryActivity = exports.StoryActivityType = void 0;
-    chapter1_json_1 = __importDefault(chapter1_json_1);
-    typed_2_0_16_1 = __importDefault(typed_2_0_16_1);
     var StoryActivityType;
     (function (StoryActivityType) {
         StoryActivityType[StoryActivityType["Intro"] = 0] = "Intro";
@@ -1318,15 +1315,6 @@ define("activities/storyActivity", ["require", "exports", "activities/activity",
         buildDOM() {
             this.clearDOM();
             const body = utils_13.Utils.getContentDiv();
-            const loginContainer = document.createElement("div");
-            loginContainer.className = "login";
-            body.appendChild(loginContainer);
-            const storyContainer = document.createElement("span");
-            storyContainer.className = "login-story";
-            storyContainer.id = "typed";
-            body.appendChild(storyContainer);
-            const t = new typed_2_0_16_1.default(storyContainer, chapter1_json_1.default.login);
-            t.start();
         }
         clearDOM() {
             utils_13.Utils.clearAllDOM();
@@ -1447,31 +1435,121 @@ define("activities/townActivity", ["require", "exports", "utils", "activities/ac
     }
     exports.TownActivity = TownActivity;
 });
-define("navigation", ["require", "exports", "activities/storyActivity", "activities/adventureActivity", "activities/clanActivity", "activities/inventoryActivity", "activities/partyActivity", "activities/profileActivity", "activities/townActivity", "utils"], function (require, exports, storyActivity_1, adventureActivity_12, clanActivity_1, inventoryActivity_1, partyActivity_1, profileActivity_1, townActivity_1, utils_19) {
+define("story/chapterLogin", [], {
+    "login": {
+        "strings": [
+            "A sense of haziness engulfs your senses, dulling the vibrant colors",
+            "A sense of haziness engulfs your senses, muting the sounds",
+            "A sense of haziness engulfs your senses, leaving the world around you in an indistinct state.",
+            "A sense of haziness engulfs your surroundings, blurring the edges of reality into a surreal and uncertain landscape.",
+            "A sense of haziness engulfs your surroundings, giving rise to a disorienting sensation where distances seem distorted and proportions feel skewed.",
+            "A sense of haziness engulfs your surroundings, creating ambiance that shrouds everything in a soft, diffused light.",
+            "A sense of haziness engulfs your thoughts, making it challenging to grasp onto coherent ideas and causing a constant mental fog.",
+            "A sense of haziness engulfs your thoughts, eroding your focus and causing distractions to infiltrate your mind at every turn.",
+            "A sense of haziness engulfs your identity, causing a disconnection between who you once were and who you perceive yourself to be now.",
+            "You find yourself struggling to recall the details of your past achievements, the triumphs and milestones that once defined you.",
+            "You find yourself struggling to recall the details of your dreams and aspirations, leaving you adrift in a sea of emptiness.",
+            "You find yourself struggling to recall the details of your own voice, the essence of your thoughts and opinions fading into whispers of uncertainty.",
+            "You find yourself struggling to recall the details of your purpose, grappling with a sense of existential confusion and a longing for direction.",
+            "You find yourself struggling to recall the details of where you grew up, the streets and neighborhoods that once formed the backdrop of your childhood.",
+            "You find yourself struggling to recall the details of where you grew up, the specific landmarks and local hangouts that held a special place in your heart.",
+            "You find yourself struggling to recall the details of where you grew up,  the names and faces of the friends and neighbors who were once an integral part of your everyday life.",
+            "You grasp at fleeting glimpses of familiar faces and places, but they slip through your fingers like grains of sand.",
+            "It's as if your memories have been scattered and lost, leaving you with fragments of who you once were.",
+            "It's as if your memories have been scattered and lost, drifting away like leaves carried by an unforgiving wind.",
+            "Each attempt to retrieve a memory only adds to the disorientation that clouds your mind.",
+            "Each moment is filled with a sense of unease, as if there is a hidden truth just beyond your reach.",
+            "Each moment is filled with a sense of unease, as if a lurking presence watches from the shadows, unseen but deeply felt.",
+            "Each moment is filled with a sense of unease, as if an invisible weight presses upon your chest, making it harder to breathe.",
+            "The remnants of your past flicker like distant stars in the night sky, teasing you with their presence but eluding your grasp.",
+            "The world around you feels both foreign and familiar, a paradox that intensifies the confusion within.",
+            "The world around you feels both foreign and familiar, like a half-remembered dream that hints at forgotten truths and forgotten connections.",
+            "As you navigate this labyrinth of forgotten recollections, you can't help but wonder if you will ever regain a firm grip on your own identity.",
+            "As you navigate this labyrinth of forgotten recollections, you can't help but wonder if the gaps in your memory are a blessing or a curse, protecting you from painful truths or robbing you of essential knowledge."
+        ],
+        "startDelay": 500,
+        "showCursor": false,
+        "typeSpeed": 25,
+        "backSpeed": 25,
+        "loop": true
+    }
+});
+define("activities/loginActivity", ["require", "exports", "activities/activity", "utils", "story/chapterLogin", "../../imports/typed_2.0.16", "main", "navigation"], function (require, exports, activity_8, utils_19, chapterLogin_json_1, typed_2_0_16_1, main_1, navigation_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.NavigationState = void 0;
+    exports.LoginActivity = exports.LoginActivityType = void 0;
+    chapterLogin_json_1 = __importDefault(chapterLogin_json_1);
+    typed_2_0_16_1 = __importDefault(typed_2_0_16_1);
+    var LoginActivityType;
+    (function (LoginActivityType) {
+        LoginActivityType[LoginActivityType["Google"] = 0] = "Google";
+        LoginActivityType[LoginActivityType["Steam"] = 1] = "Steam";
+    })(LoginActivityType = exports.LoginActivityType || (exports.LoginActivityType = {}));
+    class LoginActivity extends activity_8.AActivity {
+        constructor() {
+            super();
+        }
+        buildDOM() {
+            this.clearDOM();
+            utils_19.Utils.hideNavDiv();
+            utils_19.Utils.hideHeader();
+            const body = utils_19.Utils.getContentDiv();
+            const loginContainer = document.createElement("div");
+            loginContainer.className = "login";
+            body.appendChild(loginContainer);
+            const storyContainer = document.createElement("span");
+            storyContainer.className = "login-story";
+            body.appendChild(storyContainer);
+            const loginButton = document.createElement("div");
+            loginButton.id = "login-button";
+            loginButton.onclick = () => {
+                utils_19.Utils.showNavDiv();
+                utils_19.Utils.showHeader();
+                main_1.Game.getNavigationState().setScreen(navigation_1.Screen.Profile);
+            };
+            storyContainer.appendChild(loginButton);
+            const textContainer = document.createElement("span");
+            textContainer.id = "typed";
+            const t = new typed_2_0_16_1.default(textContainer, chapterLogin_json_1.default.login);
+            t.start();
+            storyContainer.appendChild(textContainer);
+        }
+        clearDOM() {
+            utils_19.Utils.clearAllDOM();
+        }
+        delete() {
+            super.delete();
+        }
+    }
+    exports.LoginActivity = LoginActivity;
+});
+define("navigation", ["require", "exports", "activities/storyActivity", "activities/adventureActivity", "activities/clanActivity", "activities/inventoryActivity", "activities/partyActivity", "activities/profileActivity", "activities/townActivity", "activities/loginActivity", "utils"], function (require, exports, storyActivity_1, adventureActivity_12, clanActivity_1, inventoryActivity_1, partyActivity_1, profileActivity_1, townActivity_1, loginActivity_1, utils_20) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NavigationState = exports.Screen = void 0;
     var Screen;
     (function (Screen) {
-        Screen[Screen["Story"] = 0] = "Story";
-        Screen[Screen["Profile"] = 1] = "Profile";
-        Screen[Screen["Inventory"] = 2] = "Inventory";
-        Screen[Screen["Clan"] = 3] = "Clan";
-        Screen[Screen["Town"] = 4] = "Town";
-        Screen[Screen["Party"] = 5] = "Party";
-        Screen[Screen["Adventure"] = 6] = "Adventure";
-    })(Screen || (Screen = {}));
+        Screen[Screen["Login"] = 0] = "Login";
+        Screen[Screen["Story"] = 1] = "Story";
+        Screen[Screen["Profile"] = 2] = "Profile";
+        Screen[Screen["Inventory"] = 3] = "Inventory";
+        Screen[Screen["Clan"] = 4] = "Clan";
+        Screen[Screen["Town"] = 5] = "Town";
+        Screen[Screen["Party"] = 6] = "Party";
+        Screen[Screen["Adventure"] = 7] = "Adventure";
+    })(Screen = exports.Screen || (exports.Screen = {}));
     class NavigationState {
         constructor() {
-            this.currentScreen = Screen.Story;
-            this.currentActivity = new profileActivity_1.ProfileActivity();
-            this.setScreen(Screen.Story);
-            utils_19.Utils.addOnClickToElement("profile-nav", () => this.setScreen(Screen.Profile));
-            utils_19.Utils.addOnClickToElement("inventory-nav", () => this.setScreen(Screen.Inventory));
-            utils_19.Utils.addOnClickToElement("clan-nav", () => this.setScreen(Screen.Clan));
-            utils_19.Utils.addOnClickToElement("towns-nav", () => this.setScreen(Screen.Town));
-            utils_19.Utils.addOnClickToElement("party-nav", () => this.setScreen(Screen.Party));
-            utils_19.Utils.addOnClickToElement("adventure-nav", () => this.setScreen(Screen.Adventure));
+            this.currentScreen = Screen.Login;
+            this.currentActivity = new loginActivity_1.LoginActivity();
+            this.setScreen(Screen.Login);
+            this.currentActivity.buildDOM();
+            utils_20.Utils.addOnClickToElement("profile-nav", () => this.setScreen(Screen.Profile));
+            utils_20.Utils.addOnClickToElement("inventory-nav", () => this.setScreen(Screen.Inventory));
+            utils_20.Utils.addOnClickToElement("clan-nav", () => this.setScreen(Screen.Clan));
+            utils_20.Utils.addOnClickToElement("towns-nav", () => this.setScreen(Screen.Town));
+            utils_20.Utils.addOnClickToElement("party-nav", () => this.setScreen(Screen.Party));
+            utils_20.Utils.addOnClickToElement("adventure-nav", () => this.setScreen(Screen.Adventure));
         }
         getCurrentScreen() {
             return this.currentScreen;
@@ -1480,10 +1558,15 @@ define("navigation", ["require", "exports", "activities/storyActivity", "activit
             return this.currentActivity;
         }
         setScreen(screen) {
+            if (screen == this.getCurrentScreen())
+                return;
             this.currentActivity.clearDOM();
             this.currentActivity.delete();
             this.currentScreen = screen;
             switch (screen) {
+                case Screen.Login:
+                    this.currentActivity = new loginActivity_1.LoginActivity();
+                    break;
                 case Screen.Story:
                     this.currentActivity = new storyActivity_1.StoryActivity();
                     break;
@@ -1515,7 +1598,7 @@ define("navigation", ["require", "exports", "activities/storyActivity", "activit
     NavigationState.Screen = Screen;
     exports.NavigationState = NavigationState;
 });
-define("main", ["require", "exports", "navigation", "player"], function (require, exports, navigation_1, player_5) {
+define("main", ["require", "exports", "navigation", "player"], function (require, exports, navigation_2, player_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Game = void 0;
@@ -1523,7 +1606,7 @@ define("main", ["require", "exports", "navigation", "player"], function (require
     (function (Game) {
         class GameState {
             constructor() {
-                this.navigation = new navigation_1.NavigationState();
+                this.navigation = new navigation_2.NavigationState();
                 this.gameLoopThread = null;
             }
             start() {

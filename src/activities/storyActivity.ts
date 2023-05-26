@@ -19,20 +19,6 @@ export class StoryActivity extends AActivity {
         this.clearDOM();
         const body: HTMLElement = Utils.getContentDiv();
         
-        const loginContainer: HTMLSpanElement = document.createElement("div");
-        loginContainer.className = "login";
-        body.appendChild(loginContainer);
-
-
-        const storyContainer: HTMLSpanElement = document.createElement("span");
-        storyContainer.className = "login-story";
-
-        storyContainer.id = "typed";
-        body.appendChild(storyContainer);
-        
-        const t: Typed = new Typed(storyContainer, chapter1.login);
-        t.start();
-        
 /*
         const p1Container: HTMLParagraphElement = document.createElement("p");
         p1Container.textContent = chapter1.page1.paragraph1;
