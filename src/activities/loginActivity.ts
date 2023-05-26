@@ -5,6 +5,7 @@ import chapterLogin from '../story/chapterLogin.json';
 import  Typed  from "../../imports/typed_2.0.16";
 import { Game } from "../main";
 import {Screen} from "../navigation"
+import { IntroStory } from "../story/introStory";
 
 export enum LoginActivityType {
     Google = 0,
@@ -27,6 +28,8 @@ export class LoginActivity extends AActivity {
         
         const loginContainer: HTMLSpanElement = document.createElement("div");
         loginContainer.className = "login";
+        loginContainer.id = "login-container";
+
         body.appendChild(loginContainer);
 
 
@@ -40,12 +43,19 @@ export class LoginActivity extends AActivity {
         loginButton.onclick = ()=> { 
             //change navigation state
             // New user
-            //Game.getNavigationState().setScreen(Screen.Story);
+            /*
+            body.removeChild(storyContainer);
+            
+            const s: IntroStory = new IntroStory();
+            s.buildDOM();
+            */
 
+            // Existing user
             Utils.showNavDiv();
             Utils.showHeader();
-            // Existing user
-            Game.getNavigationState().setScreen(Screen.Profile)
+            Game.getNavigationState().setScreen(Screen.Profile);
+        
+
         };
 
         storyContainer.appendChild(loginButton);
@@ -57,8 +67,6 @@ export class LoginActivity extends AActivity {
         t.start();
 
         storyContainer.appendChild(textContainer);  
-
-
     }
 
     clearDOM(): void {

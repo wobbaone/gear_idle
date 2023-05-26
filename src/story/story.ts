@@ -1,6 +1,8 @@
+import { IRenderer } from "../renderers/renderer";
 
-export interface IStory {
-    getStory(): string;
+export abstract class AStory implements IRenderer {
+    abstract buildDOM(): void;
+    abstract clearDOM(): void;
 
-    onGameTick(): void;
+    delete(): void {}
 }

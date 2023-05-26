@@ -62,7 +62,7 @@ export class Utils {
             return;
         }
 
-        headerNode.className = "header"
+        headerNode.className = "header";
 
         return;
     }
@@ -74,7 +74,7 @@ export class Utils {
             return;
         }
 
-        headerNode.className = ""
+        headerNode.className = "";
 
         return;
     }

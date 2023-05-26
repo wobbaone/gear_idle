@@ -1438,22 +1438,22 @@ define("activities/townActivity", ["require", "exports", "utils", "activities/ac
 define("story/chapterLogin", [], {
     "login": {
         "strings": [
-            "A sense of haziness engulfs your senses, dulling the vibrant colors",
-            "A sense of haziness engulfs your senses, muting the sounds",
+            "A sense of haziness engulfs your senses, dulling the vibrant colors.",
+            "A sense of haziness engulfs your senses, muting the sounds.",
             "A sense of haziness engulfs your senses, leaving the world around you in an indistinct state.",
             "A sense of haziness engulfs your surroundings, blurring the edges of reality into a surreal and uncertain landscape.",
             "A sense of haziness engulfs your surroundings, giving rise to a disorienting sensation where distances seem distorted and proportions feel skewed.",
             "A sense of haziness engulfs your surroundings, creating ambiance that shrouds everything in a soft, diffused light.",
-            "A sense of haziness engulfs your thoughts, making it challenging to grasp onto coherent ideas and causing a constant mental fog.",
+            "A sense of haziness engulfs your thoughts, making it challenging to fathom coherent ideas and causing a constant mental fog.",
             "A sense of haziness engulfs your thoughts, eroding your focus and causing distractions to infiltrate your mind at every turn.",
-            "A sense of haziness engulfs your identity, causing a disconnection between who you once were and who you perceive yourself to be now.",
+            "A sense of haziness engulfs your identity, causing a disconnection between who you once were and who you perceive yourself to be.",
             "You find yourself struggling to recall the details of your past achievements, the triumphs and milestones that once defined you.",
             "You find yourself struggling to recall the details of your dreams and aspirations, leaving you adrift in a sea of emptiness.",
             "You find yourself struggling to recall the details of your own voice, the essence of your thoughts and opinions fading into whispers of uncertainty.",
             "You find yourself struggling to recall the details of your purpose, grappling with a sense of existential confusion and a longing for direction.",
             "You find yourself struggling to recall the details of where you grew up, the streets and neighborhoods that once formed the backdrop of your childhood.",
             "You find yourself struggling to recall the details of where you grew up, the specific landmarks and local hangouts that held a special place in your heart.",
-            "You find yourself struggling to recall the details of where you grew up,  the names and faces of the friends and neighbors who were once an integral part of your everyday life.",
+            "You find yourself struggling to recall the details of where you grew up, the names and faces of the friends and neighbors who were once an integral part of your life.",
             "You grasp at fleeting glimpses of familiar faces and places, but they slip through your fingers like grains of sand.",
             "It's as if your memories have been scattered and lost, leaving you with fragments of who you once were.",
             "It's as if your memories have been scattered and lost, drifting away like leaves carried by an unforgiving wind.",
@@ -1461,11 +1461,12 @@ define("story/chapterLogin", [], {
             "Each moment is filled with a sense of unease, as if there is a hidden truth just beyond your reach.",
             "Each moment is filled with a sense of unease, as if a lurking presence watches from the shadows, unseen but deeply felt.",
             "Each moment is filled with a sense of unease, as if an invisible weight presses upon your chest, making it harder to breathe.",
-            "The remnants of your past flicker like distant stars in the night sky, teasing you with their presence but eluding your grasp.",
+            "The remnants of your past flicker like distant stars in the night sky, teasing you with their presence.",
             "The world around you feels both foreign and familiar, a paradox that intensifies the confusion within.",
-            "The world around you feels both foreign and familiar, like a half-remembered dream that hints at forgotten truths and forgotten connections.",
+            "The world around you feels both foreign and familiar, like a dream that hints at half-truths.",
             "As you navigate this labyrinth of forgotten recollections, you can't help but wonder if you will ever regain a firm grip on your own identity.",
-            "As you navigate this labyrinth of forgotten recollections, you can't help but wonder if the gaps in your memory are a blessing or a curse, protecting you from painful truths or robbing you of essential knowledge."
+            "As you navigate this labyrinth of forgotten recollections, you can't help but wonder if the gaps in your memory are a blessing or a curse.",
+            "As you navigate this labyrinth of forgotten recollections, you can't help but wonder if the fleeting memories are protecting you from painful truths or robbing you of essential knowledge."
         ],
         "startDelay": 500,
         "showCursor": false,
@@ -1474,7 +1475,36 @@ define("story/chapterLogin", [], {
         "loop": true
     }
 });
-define("activities/loginActivity", ["require", "exports", "activities/activity", "utils", "story/chapterLogin", "../../imports/typed_2.0.16", "main", "navigation"], function (require, exports, activity_8, utils_19, chapterLogin_json_1, typed_2_0_16_1, main_1, navigation_1) {
+define("story/story", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.AStory = void 0;
+    class AStory {
+        delete() { }
+    }
+    exports.AStory = AStory;
+});
+define("story/introStory", ["require", "exports", "story/story", "utils"], function (require, exports, story_1, utils_19) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.IntroStory = void 0;
+    class IntroStory extends story_1.AStory {
+        buildDOM() {
+            const loginContainer = document.getElementById("login-container");
+            if (loginContainer != null) {
+                loginContainer.className = "login-intro";
+                const storyContainer = document.createElement("span");
+                storyContainer.className = "intro-story";
+                loginContainer.appendChild(storyContainer);
+            }
+        }
+        clearDOM() {
+            utils_19.Utils.clearAllDOM();
+        }
+    }
+    exports.IntroStory = IntroStory;
+});
+define("activities/loginActivity", ["require", "exports", "activities/activity", "utils", "story/chapterLogin", "../../imports/typed_2.0.16", "main", "navigation"], function (require, exports, activity_8, utils_20, chapterLogin_json_1, typed_2_0_16_1, main_1, navigation_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.LoginActivity = exports.LoginActivityType = void 0;
@@ -1491,11 +1521,12 @@ define("activities/loginActivity", ["require", "exports", "activities/activity",
         }
         buildDOM() {
             this.clearDOM();
-            utils_19.Utils.hideNavDiv();
-            utils_19.Utils.hideHeader();
-            const body = utils_19.Utils.getContentDiv();
+            utils_20.Utils.hideNavDiv();
+            utils_20.Utils.hideHeader();
+            const body = utils_20.Utils.getContentDiv();
             const loginContainer = document.createElement("div");
             loginContainer.className = "login";
+            loginContainer.id = "login-container";
             body.appendChild(loginContainer);
             const storyContainer = document.createElement("span");
             storyContainer.className = "login-story";
@@ -1503,8 +1534,8 @@ define("activities/loginActivity", ["require", "exports", "activities/activity",
             const loginButton = document.createElement("div");
             loginButton.id = "login-button";
             loginButton.onclick = () => {
-                utils_19.Utils.showNavDiv();
-                utils_19.Utils.showHeader();
+                utils_20.Utils.showNavDiv();
+                utils_20.Utils.showHeader();
                 main_1.Game.getNavigationState().setScreen(navigation_1.Screen.Profile);
             };
             storyContainer.appendChild(loginButton);
@@ -1515,7 +1546,7 @@ define("activities/loginActivity", ["require", "exports", "activities/activity",
             storyContainer.appendChild(textContainer);
         }
         clearDOM() {
-            utils_19.Utils.clearAllDOM();
+            utils_20.Utils.clearAllDOM();
         }
         delete() {
             super.delete();
@@ -1523,7 +1554,7 @@ define("activities/loginActivity", ["require", "exports", "activities/activity",
     }
     exports.LoginActivity = LoginActivity;
 });
-define("navigation", ["require", "exports", "activities/storyActivity", "activities/adventureActivity", "activities/clanActivity", "activities/inventoryActivity", "activities/partyActivity", "activities/profileActivity", "activities/townActivity", "activities/loginActivity", "utils"], function (require, exports, storyActivity_1, adventureActivity_12, clanActivity_1, inventoryActivity_1, partyActivity_1, profileActivity_1, townActivity_1, loginActivity_1, utils_20) {
+define("navigation", ["require", "exports", "activities/storyActivity", "activities/adventureActivity", "activities/clanActivity", "activities/inventoryActivity", "activities/partyActivity", "activities/profileActivity", "activities/townActivity", "activities/loginActivity", "utils"], function (require, exports, storyActivity_1, adventureActivity_12, clanActivity_1, inventoryActivity_1, partyActivity_1, profileActivity_1, townActivity_1, loginActivity_1, utils_21) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NavigationState = exports.Screen = void 0;
@@ -1544,12 +1575,12 @@ define("navigation", ["require", "exports", "activities/storyActivity", "activit
             this.currentActivity = new loginActivity_1.LoginActivity();
             this.setScreen(Screen.Login);
             this.currentActivity.buildDOM();
-            utils_20.Utils.addOnClickToElement("profile-nav", () => this.setScreen(Screen.Profile));
-            utils_20.Utils.addOnClickToElement("inventory-nav", () => this.setScreen(Screen.Inventory));
-            utils_20.Utils.addOnClickToElement("clan-nav", () => this.setScreen(Screen.Clan));
-            utils_20.Utils.addOnClickToElement("towns-nav", () => this.setScreen(Screen.Town));
-            utils_20.Utils.addOnClickToElement("party-nav", () => this.setScreen(Screen.Party));
-            utils_20.Utils.addOnClickToElement("adventure-nav", () => this.setScreen(Screen.Adventure));
+            utils_21.Utils.addOnClickToElement("profile-nav", () => this.setScreen(Screen.Profile));
+            utils_21.Utils.addOnClickToElement("inventory-nav", () => this.setScreen(Screen.Inventory));
+            utils_21.Utils.addOnClickToElement("clan-nav", () => this.setScreen(Screen.Clan));
+            utils_21.Utils.addOnClickToElement("towns-nav", () => this.setScreen(Screen.Town));
+            utils_21.Utils.addOnClickToElement("party-nav", () => this.setScreen(Screen.Party));
+            utils_21.Utils.addOnClickToElement("adventure-nav", () => this.setScreen(Screen.Adventure));
         }
         getCurrentScreen() {
             return this.currentScreen;
@@ -1637,23 +1668,5 @@ define("main", ["require", "exports", "navigation", "player"], function (require
         }
         Game.getNavigationState = getNavigationState;
     })(Game = exports.Game || (exports.Game = {}));
-});
-define("story/story", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("story/introStory", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.IntroStory = void 0;
-    class IntroStory {
-        getStory() {
-            return "";
-        }
-        onGameTick() {
-            return;
-        }
-    }
-    exports.IntroStory = IntroStory;
 });
 //# sourceMappingURL=main.js.map

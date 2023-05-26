@@ -52,9 +52,37 @@ body {
         left: 40%;
         background-color: rgba(0,0,0,0.4);
     }
+
+    .intro-story {
+        padding: 10px;
+        color: #fff;
+        align-items: center;
+        justify-content: left;
+        font-size:large;
+        width: 400px;
+        height: 200px;
+        z-index: 2;
+        position: absolute;
+        top: 40%;
+        left: 40%;
+        background-color: rgba(0,0,0,0.4);
+    }
 }
 
 @media screen and (max-width: 600px) {
+    .login-story {
+        padding: 10px;
+        color: #fff;
+        align-items: center;
+        justify-content: left;
+        font-size:large;
+        width: 100%;
+        z-index: 2;
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        background-color: rgba(0,0,0,0.4);
+    }
     .login-story {
         padding: 10px;
         color: #fff;
@@ -157,8 +185,16 @@ body {
 }
 
 .login {
-    background-image: url("../images/login_background_misty_dock.png");
     filter: blur(2px) grayscale(80%);
+}
+
+.login-intro{
+    filter: none;
+}
+
+#login-container {
+    background-image: url("../images/login_background_misty_dock.png");
+    transition: filter 4s;
     height: 100vh;
     background-repeat: no-repeat;
     background-size: cover;
