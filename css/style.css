@@ -60,10 +60,10 @@ body {
         justify-content: left;
         font-size:large;
         width: 400px;
-        height: 200px;
+        height: 300px;
         z-index: 2;
         position: absolute;
-        top: 40%;
+        top: 30%;
         left: 40%;
         background-color: rgba(0,0,0,0.4);
     }
@@ -83,7 +83,7 @@ body {
         left: 0%;
         background-color: rgba(0,0,0,0.4);
     }
-    .login-story {
+    .intro-story {
         padding: 10px;
         color: #fff;
         align-items: center;
@@ -98,14 +98,70 @@ body {
     }
 }
 
-#login-button {
-    background-image: url("../images/dummy_google.png");
-    width: 260px;
-    height: 64px;
+#login-button {  
+    width: 100px;
     background-repeat: no-repeat;
-    padding-bottom: 20px;
-    margin-left: 80px;
+    margin-bottom: 20px;
+    margin-left: 150px;
+    background-color: gray;
+    padding: 4px;
 }
+
+#login-button:hover{
+    background-color: rgb(154, 154, 154);
+}
+#wake-progress {
+    width: 100px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding: 4px;
+}
+
+#task-button {  
+    width: 150px;
+    background-repeat: no-repeat;
+    margin-top: 20px;
+    margin-left: 125px;
+    background-color: gray;
+    padding: 4px;
+}
+
+#task-button-a {  
+    width: 100px;
+    background-repeat: no-repeat;
+    margin-top: 20px;
+    margin-left: 25px;
+    background-color: gray;
+    padding: 4px;
+}
+
+#task-button-b {  
+    width: 100px;
+    background-repeat: no-repeat;
+    margin-top: 20px;
+    margin-left: 25px;
+    background-color: gray;
+    padding: 4px;
+}
+
+#task-button:hover, #task-button-a:hover, #task-button-b:hover{
+    background-color: rgb(154, 154, 154);
+}
+
+#task-progress {
+    width: 150px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding: 4px;
+}
+
+#task-progress-a, #task-progress-b {
+    width: 100px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding: 4px;
+}    
+
   
 .header { 
     grid-area: header;
