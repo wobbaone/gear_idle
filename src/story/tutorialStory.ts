@@ -17,11 +17,16 @@ export class TutorialStory extends AStory {
             const storyContainer: HTMLSpanElement = document.createElement("span");
             storyContainer.className = "intro-story";
 
-            const story1AContainer: HTMLParagraphElement = document.createElement("p");
+            const story1AContainer: HTMLDivElement = document.createElement("div");
             story1AContainer.textContent = page2.paragraph1;
             storyContainer.appendChild(story1AContainer);
 
-            const story1BContainer: HTMLParagraphElement = document.createElement("p");
+            const breakElement1: HTMLBRElement = document.createElement("br");
+            storyContainer.appendChild(breakElement1);
+
+            
+
+            const story1BContainer: HTMLDivElement = document.createElement("div");
             story1BContainer.textContent = page2.paragraph1_b;
             storyContainer.appendChild(story1BContainer);
 
@@ -74,11 +79,14 @@ export class TutorialStory extends AStory {
             const storyContainer: HTMLSpanElement = document.createElement("span");
             storyContainer.className = "intro-story";
 
-            const story2AContainer: HTMLParagraphElement = document.createElement("p");
+            const story2AContainer: HTMLDivElement = document.createElement("div");
             story2AContainer.textContent = page2.paragraph2;
             storyContainer.appendChild(story2AContainer);
 
-            const story2BContainer: HTMLParagraphElement = document.createElement("p");
+            const breakElement2: HTMLBRElement = document.createElement("br");
+            storyContainer.appendChild(breakElement2);
+
+            const story2BContainer: HTMLDivElement = document.createElement("div");
             story2BContainer.textContent = page2.paragraph2_b;
             storyContainer.appendChild(story2BContainer);
 
