@@ -78,13 +78,15 @@ body {
 
 @media screen and (max-width: 50rem) {
     .login-story {
+        margin: 0;
+        padding: 0;
         display: flex;
         flex-direction: column;
         color: #fff;
         align-items: center;
         justify-content: left;
         font-size:large;
-        width: 100%;
+        width: auto;
         z-index: 2;
         position: absolute;
         top: 0%;
