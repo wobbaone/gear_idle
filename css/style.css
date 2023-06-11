@@ -86,7 +86,7 @@ body {
         align-items: center;
         justify-content: left;
         font-size:large;
-        width: auto;
+        width: 100%;
         z-index: 2;
         position: absolute;
         top: 0%;
