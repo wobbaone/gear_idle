@@ -1886,6 +1886,7 @@ define("activities/loginActivity", ["require", "exports", "activities/activity",
             body.appendChild(storyContainer);
             const loginButton = document.createElement("div");
             loginButton.id = "login-button";
+            loginButton.role = "button";
             loginButton.textContent = "Snap out of it";
             const progressBar = document.createElement("progress");
             progressBar.id = "wake-progress";

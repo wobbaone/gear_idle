@@ -33,10 +33,11 @@ export class LoginActivity extends AActivity {
 
         const storyContainer: HTMLSpanElement = document.createElement("span");
         storyContainer.className = "login-story";
-        body.appendChild(storyContainer);  
+        body.appendChild(storyContainer); 
 
         const loginButton: HTMLDivElement = document.createElement("div");
         loginButton.id = "login-button";
+        loginButton.role = "button";
         loginButton.textContent = "Snap out of it";
 
         const progressBar: HTMLProgressElement = document.createElement("progress");
