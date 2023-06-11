@@ -8,8 +8,7 @@ body {
     user-select: none;
     text-rendering: optimizeLegibility;
     line-height: 1.2;
-    font-kerning: none;
-    letter-spacing: 1px;
+    letter-spacing: 0.05em;
     font-family: "'Goudy Old Style', Garamond, 'Times New Roman', Times, serif";
     
 }
