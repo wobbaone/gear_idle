@@ -1567,10 +1567,13 @@ define("story/tutorialStory", ["require", "exports", "story/story", "utils", "st
                 story2BContainer.textContent = chapter1_json_1.page2.paragraph2_b;
                 storyContainer.appendChild(story2BContainer);
                 loginContainer.appendChild(storyContainer);
+                const taskOptions = document.createElement("div");
+                taskOptions.id = "task-options";
+                storyContainer.appendChild(taskOptions);
                 const taskButton_a = document.createElement("div");
                 taskButton_a.id = "task-button-a";
                 taskButton_a.textContent = chapter1_json_1.page2.action2_a;
-                storyContainer.appendChild(taskButton_a);
+                taskOptions.appendChild(taskButton_a);
                 const progressBar_a = document.createElement("progress");
                 progressBar_a.id = "task-progress-a";
                 progressBar_a.max = 50;
@@ -1579,7 +1582,7 @@ define("story/tutorialStory", ["require", "exports", "story/story", "utils", "st
                 const taskButton_b = document.createElement("div");
                 taskButton_b.id = "task-button-b";
                 taskButton_b.textContent = chapter1_json_1.page2.action2_b;
-                storyContainer.appendChild(taskButton_b);
+                taskOptions.appendChild(taskButton_b);
                 const progressBar_b = document.createElement("progress");
                 progressBar_b.id = "task-progress-b";
                 progressBar_b.max = 300;
@@ -1588,7 +1591,7 @@ define("story/tutorialStory", ["require", "exports", "story/story", "utils", "st
                 var clickTask = false;
                 var taskProgress = 0;
                 taskButton_a.onclick = () => {
-                    storyContainer.removeChild(taskButton_b);
+                    taskOptions.removeChild(taskButton_b);
                     if (clickTask == false) {
                         clickTask = true;
                         const taskInterval = setInterval(function progressHanlder() {
@@ -1602,7 +1605,7 @@ define("story/tutorialStory", ["require", "exports", "story/story", "utils", "st
                     }
                 };
                 taskButton_b.onclick = () => {
-                    storyContainer.removeChild(taskButton_a);
+                    taskOptions.removeChild(taskButton_a);
                     if (clickTask == false) {
                         clickTask = true;
                         const taskInterval = setInterval(function progressHanlder() {

@@ -6,6 +6,12 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    text-rendering: optimizeLegibility;
+    line-height: 1.2;
+    font-kerning: none;
+    letter-spacing: 1px;
+    font-family: "'Goudy Old Style', Garamond, 'Times New Roman', Times, serif";
+    
 }
 
 :root {
@@ -58,21 +64,23 @@ body {
         position: fixed;
         top: calc(50vh - 8.5rem);
         left: calc(50vw - 17rem);
-        background-color: rgba(0,0,0,0.4);
+        background-color: rgba(0,0,0,0.7);
     }
 
     .intro-story {
         color: #fff;
         align-items: center;
         justify-content: left;
+        display: flex;
+        flex-direction: column;
         font-size:large;
-        width: 400px;
-        height: 300px;
+        width: 34rem;
         z-index: 2;
-        position: absolute;
+        position: fixed;
         top: 30%;
         left: calc( 50% - 16.6rem );
-        background-color: rgba(0,0,0,0.4);
+        background-color: rgba(0,0,0,0.7);
+        padding: 1rem;
     }
 }
 
@@ -88,23 +96,33 @@ body {
         font-size:large;
         width: 100%;
         z-index: 2;
-        position: absolute;
+        position: fixed;
         top: 0%;
         left: 0%;
-        background-color: rgba(0,0,0,0.4);
+        background-color: rgba(0,0,0,0.7);
+        box-sizing: border-box;
     }
+
     .intro-story {
         color: #fff;
         align-items: center;
         justify-content: left;
+        display: flex;
+        flex-direction: column;
         font-size:large;
         width: 100%;
         z-index: 2;
-        position: absolute;
+        position: fixed;
         top: 0%;
         left: 0%;
-        background-color: rgba(0,0,0,0.4);
+        background-color: rgba(0,0,0,0.7);
+        padding: 1rem;
+        box-sizing: border-box;
     }
+}
+
+#typed {
+   padding: 1rem; 
 }
 
 #login-button {  
@@ -125,30 +143,30 @@ body {
 }
 
 #task-button {  
-    width: 150px;
     background-repeat: no-repeat;
-    margin-top: 20px;
-    margin-left: 125px;
+    margin: 1rem;
     background-color: gray;
-    padding: 4px;
+    padding: 0.5rem;
+}
+
+#task-options {
+    flex-direction: column;
 }
 
 #task-button-a {  
-    width: 100px;
     background-repeat: no-repeat;
-    margin-top: 20px;
-    margin-left: 25px;
+    margin-top: 1.5rem;
+    margin-left: 2rem;
     background-color: gray;
-    padding: 4px;
+    padding: 0.3rem;
 }
 
 #task-button-b {  
-    width: 100px;
     background-repeat: no-repeat;
-    margin-top: 20px;
-    margin-left: 25px;
+    margin-top: 1.5rem;
+    margin-left: 2rem;
     background-color: gray;
-    padding: 4px;
+    padding: 0.3rem;
 }
 
 #task-button:hover, #task-button-a:hover, #task-button-b:hover{
@@ -156,17 +174,17 @@ body {
 }
 
 #task-progress {
-    width: 150px;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    padding: 4px;
+    width: 100%;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+    padding: 0.3rem;
 }
 
 #task-progress-a, #task-progress-b {
-    width: 100px;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    padding: 4px;
+    width: 100%;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+    padding: 0.3rem;
 }    
 
   

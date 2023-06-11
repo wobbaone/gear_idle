@@ -92,10 +92,14 @@ export class TutorialStory extends AStory {
 
             loginContainer.appendChild(storyContainer);  
 
+            const taskOptions: HTMLDivElement = document.createElement("div");
+            taskOptions.id = "task-options";
+            storyContainer.appendChild(taskOptions);
+
             const taskButton_a: HTMLDivElement = document.createElement("div");
             taskButton_a.id = "task-button-a";
             taskButton_a.textContent = page2.action2_a;
-            storyContainer.appendChild(taskButton_a); 
+            taskOptions.appendChild(taskButton_a); 
 
             const progressBar_a: HTMLProgressElement = document.createElement("progress");
             progressBar_a.id = "task-progress-a";
@@ -106,7 +110,7 @@ export class TutorialStory extends AStory {
             const taskButton_b: HTMLDivElement = document.createElement("div");
             taskButton_b.id = "task-button-b";
             taskButton_b.textContent = page2.action2_b;
-            storyContainer.appendChild(taskButton_b); 
+            taskOptions.appendChild(taskButton_b); 
 
             const progressBar_b: HTMLProgressElement = document.createElement("progress");
             progressBar_b.id = "task-progress-b";
@@ -117,7 +121,7 @@ export class TutorialStory extends AStory {
             var clickTask = false;
             var taskProgress = 0;
             taskButton_a.onclick = ()=> { 
-                storyContainer.removeChild(taskButton_b); 
+                taskOptions.removeChild(taskButton_b); 
 
                 if(clickTask == false ) {
                     clickTask = true;
@@ -133,7 +137,7 @@ export class TutorialStory extends AStory {
             };
 
             taskButton_b.onclick = ()=> { 
-                storyContainer.removeChild(taskButton_a); 
+                taskOptions.removeChild(taskButton_a); 
 
                 if(clickTask == false ) {
                     clickTask = true;
