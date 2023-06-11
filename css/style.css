@@ -37,19 +37,21 @@ body {
     font-size:large;
     width: auto;
 }
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 50rem) {
     .login-story {
-        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        padding: 0.8rem;
         color: #fff;
         align-items: center;
         justify-content: left;
         font-size:large;
-        width: 400px;
-        height: 200px;
+        width: 34rem;
+        height: 17rem;
         z-index: 2;
-        position: absolute;
-        top: 40%;
-        left: 40%;
+        position: fixed;
+        top: calc(50vh - 8.5rem);
+        left: calc(50vw - 17rem);
         background-color: rgba(0,0,0,0.4);
     }
 
@@ -64,14 +66,16 @@ body {
         z-index: 2;
         position: absolute;
         top: 30%;
-        left: 40%;
+        left: calc( 50% - 16.6rem );
         background-color: rgba(0,0,0,0.4);
     }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 50rem) {
     .login-story {
-        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        padding: 0.8rem;
         color: #fff;
         align-items: center;
         justify-content: left;
@@ -99,22 +103,20 @@ body {
 }
 
 #login-button {  
-    width: 100px;
     background-repeat: no-repeat;
-    margin-bottom: 20px;
-    margin-left: 150px;
+    margin: 1rem;
     background-color: gray;
-    padding: 4px;
+    padding: 0.5rem;
 }
 
 #login-button:hover{
     background-color: rgb(154, 154, 154);
 }
 #wake-progress {
-    width: 100px;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    padding: 4px;
+    width: 100%;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+    padding: 0.3rem;
 }
 
 #task-button {  
