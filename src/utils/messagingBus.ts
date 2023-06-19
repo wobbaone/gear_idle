@@ -2,7 +2,7 @@ import { ZoneManager, Zones } from "../zones/zones";
 import { Debug } from "./debug";
 
 export namespace MessagingBus {
-    const DEBUG_SUBSCRIPTIONS: boolean = true;
+    const DEBUG_SUBSCRIPTIONS: boolean = false;
 
     export class Subscription<T> {
         private registrationId: number;

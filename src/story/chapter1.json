@@ -1,6 +1,23 @@
 {
-    "intro_text" : {
-        "strings": ["^1000 As your ship nears the shores of the enchanting continent of Mystoria, a seasoned sailor steps forward, his voice filled with excitement and anticipation. With a wide smile, he addresses the crew and passengers gathered on the deck, \"Welcome, one and all, to the enchanting continent of Mystoria! Behold the shimmering shores of this wondrous land, where adventure awaits at every turn!\"\n"]
+    "page1": {
+        "paragraph1": "As you escape from the haze, your senses stir to life. The air carries a heavy, salty fragrance. Sways beneath your feet in tune with rhythmic waves. Creaking of wooden planks, the sound of seagulls, and distant voices calling out. You find yourself below deck, within the cozy confines of a ship's cabin. Memories of a sea voyage undertaken months ago being to resurface, as you reminisce about setting sail in pursuit of a promised fresh start.",
+        "action1": "Venture to the deck.",
+        "paragraph2": "As you ascend the weathered steps to the deck, a breathtaking sight unfolds before your eyes. The vibrant colors of a tropical paradise dance on the horizon, beckoning you closer. A verdant coastline emerges, framed by towering cliffs draped in lush foliage. Nestled at the meeting point of land and sea is a port town. Haven's Reach, a name that effortlessly flows into your mind.",
+        "action2": "Watch the approach.",
+        "paragraph3": "As the ship gracefully glides into the bustling port of Haven's Reach, you find yourself lost in a daze, the sights and sounds blending together in a whirlwind of excitement. The ship's anchor drops with a resounding thud, bringing you back to the present moment. A surge of anticipation courses through your veins as you join the gathering crowd preparing to disembark. Worries about who you once were fade away.",
+        "action3": "Disembark",
+        "paragraph4": "As you make your way through the dock, a cacophony of sounds fills the air. Merchants hawking their exotic goods, the clattering of crates being unloaded, and the cheerful banter of fellow adventurers create an atmosphere brimming with excitement and possibility. The spirit of camaraderie and adventure is palpable. You can't help but feel a sense of belonging, filling the void of those you once knew.",
+        "action4": "Enter the Haven's Reach.",
+        "paragraph5": "With each step, you absorb the sights and sounds of Haven's Reach. Colorful banners dance in the breeze, proudly displaying the emblems of diverse adventurer companies that have made this town their base of operations. The tantalizing aroma of freshly baked pastries drifts from a nearby bakery. You feel the sweet embrace of Haven's Reach.",
+        "action5": "Wander aimlessly."
+    },
+    "page2": {
+        "paragraph1": "Lost in your thoughts, a young teenager catches your attention with their ragged clothes and eager gaze.",
+        "paragraph1_b": "The teenager approaches you timidly, their eyes sparkling with a mix of curiosity and desperation. \"Excuse me, kind traveler,\" they say, their voice tinged with a hint of hope. \"I couldn't help but notice your arrival. Are you new to Haven's Reach? I offer my services as a guide, showing you the best spots in the city, including a cozy inn and the renowned Adventurer's Hall.\"",
+        "action1": "Check inventory",
+        "paragraph2": "You take a moment to assess your inventory, realizing that the coins you possess have dwindled considerably after your voyage. It's clear that resources are limited, and every decision must be made with care. The teenager seems earnest, their enthusiasm contagious, but you wonder if spending what little coin you have on a tour would be a wise investment.",
+        "paragraph2_b": "A range of possibilities lay before you. You could accept the teenager's offer and explore the city under their guidance, hoping to gain valuable insights and perhaps uncover hidden opportunities. Alternatively, you might decline the offer, choosing to wander the streets on your own, relying on your instincts to find the necessary establishments and make your own discoveries. How will you proceed?",
+        "action2_a": "Take up their offer.",
+        "action2_b": "Explore on your own."
     }
-
 }

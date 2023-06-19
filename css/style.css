@@ -1,6 +1,19 @@
+body {
+    margin: 0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-rendering: optimizeLegibility;
+    line-height: 1.2;
+    letter-spacing: 0.05em;
+    font-family: "'Goudy Old Style', Garamond, 'Times New Roman', Times, serif";
+    
+}
+
 :root {
-    --grid-spacing-px: 8px;
-    /*--border-px: 1px;*/
     background-color: #015656;
     color: #DDECEC;
 }
@@ -30,12 +43,149 @@
 
 .story {
     color: #fff;
-    display: flex;
     align-items: center;
     justify-content: left;
-    font-size:x-large;
-    font-weight: 200;
+    font-size:large;
+    width: auto;
 }
+
+@media screen and (min-width: 50rem) {
+    .login-story {
+        display: flex;
+        flex-direction: column;
+        color: #fff;
+        align-items: center;
+        justify-content: left;
+        font-size:large;
+        width: 34rem;
+        height: 17rem;
+        z-index: 2;
+        position: fixed;
+        top: calc(50vh - 8.5rem);
+        left: calc(50vw - 17rem);
+        background-color: rgba(0,0,0,0.7);
+    }
+
+    .intro-story {
+        color: #fff;
+        align-items: center;
+        justify-content: left;
+        display: flex;
+        flex-direction: column;
+        font-size:large;
+        width: 34rem;
+        z-index: 2;
+        position: fixed;
+        top: 30%;
+        left: calc( 50% - 16.6rem );
+        background-color: rgba(0,0,0,0.7);
+        padding: 1rem;
+    }
+}
+
+@media screen and (max-width: 50rem) {
+    .login-story {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        color: #fff;
+        align-items: center;
+        justify-content: left;
+        font-size:large;
+        width: 100%;
+        z-index: 2;
+        position: fixed;
+        top: 0%;
+        left: 0%;
+        background-color: rgba(0,0,0,0.7);
+        box-sizing: border-box;
+    }
+
+    .intro-story {
+        color: #fff;
+        align-items: center;
+        justify-content: left;
+        display: flex;
+        flex-direction: column;
+        font-size:large;
+        width: 100%;
+        z-index: 2;
+        position: fixed;
+        top: 0%;
+        left: 0%;
+        background-color: rgba(0,0,0,0.7);
+        padding: 1rem;
+        box-sizing: border-box;
+    }
+}
+
+#typed {
+   padding: 1rem; 
+}
+
+#login-button {  
+    background-repeat: no-repeat;
+    margin: 1rem;
+    background-color: gray;
+    padding: 0.5rem;
+}
+
+#login-button:hover{
+    background-color: rgb(154, 154, 154);
+}
+#wake-progress {
+    width: 100%;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+    padding: 0.3rem;
+}
+
+#task-button {  
+    background-repeat: no-repeat;
+    margin: 1rem;
+    background-color: gray;
+    padding: 0.5rem;
+}
+
+#task-options {
+    flex-direction: column;
+}
+
+#task-button-a {  
+    background-repeat: no-repeat;
+    margin-top: 1.5rem;
+    margin-left: 2rem;
+    background-color: gray;
+    padding: 0.3rem;
+}
+
+#task-button-b {  
+    background-repeat: no-repeat;
+    margin-top: 1.5rem;
+    margin-left: 2rem;
+    background-color: gray;
+    padding: 0.3rem;
+}
+
+#task-button:hover, #task-button-a:hover, #task-button-b:hover{
+    background-color: rgb(154, 154, 154);
+}
+
+#task-progress {
+    width: 100%;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+    padding: 0.3rem;
+}
+
+#task-progress-a, #task-progress-b {
+    width: 100%;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+    padding: 0.3rem;
+}    
+
   
 .header { 
     grid-area: header;
@@ -114,35 +264,20 @@
     padding: 20px;
 }
 
-.adventuring-zone-Woods {
-    background-image: url("../images/woods_cave_story.png");
+.login {
+    filter: blur(2px) grayscale(80%);
 }
-.adventuring-zone-Caves {
-    background-image: url("../images/caves_cave_story.png");
+
+.login-intro{
+    filter: none;
 }
-.adventuring-zone-Wilds {
-    background-image: url("../images/wilds_cave_story.png");
-}
-.adventuring-zone-WarforgeCitadel {
-    background-image: url("../images/warforge_citadel_cave_story.png");
-}
-.adventuring-zone-Jungle {
-    background-image: url("../images/jungle_cave_story.png");
-}
-.adventuring-zone-Volcano {
-    background-image: url("../images/volcano_cave_story.png");
-}
-.adventuring-zone-Desert {
-    background-image: url("../images/desert_cave_story.png");
-}
-.adventuring-zone-Graveyard {
-    background-image: url("../images/graveyard_cave_story.png");
-}
-.adventuring-zone-DarkForest {
-    background-image: url("../images/dark_forest_cave_story.png");
-}
-.adventuring-zone-Frozen {
-    background-image: url("../images/frozen_cave_story.png");
+
+#login-container {
+    background-image: url("../images/login_background_misty_dock.png");
+    transition: filter 4s;
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .adventuring-activities {

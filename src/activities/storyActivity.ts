@@ -1,7 +1,7 @@
 import { AActivity } from "./activity";
 import { Player } from "../player";
 import { Utils } from "../utils/utils";
-import  * as chapter1 from '../story/chapter1.json';
+import  chapter1 from '../story/chapter1.json';
 import  Typed  from "../../imports/typed/typed_2.0.16";
 
 export enum StoryActivityType {
@@ -19,16 +19,42 @@ export class StoryActivity extends AActivity {
         this.clearDOM();
         const body: HTMLElement = Utils.getContentDiv();
         
-        const storyContainer: HTMLDivElement = document.createElement("div");
-        storyContainer.className = "story";
-        storyContainer.id = "typed";
-        body.appendChild(storyContainer);
+/*
+        const p1Container: HTMLParagraphElement = document.createElement("p");
+        p1Container.textContent = chapter1.page1.paragraph1;
+        storyContainer.appendChild(p1Container);
 
-        //load Typed.js
-        
-        const scriptTag: HTMLScriptElement = document.createElement("script");
-        const t : Typed = new Typed(storyContainer, chapter1.intro_text);
-        t.start();
+        const p2Container: HTMLParagraphElement = document.createElement("p");
+        p2Container.textContent = chapter1.page1.paragraph2;
+        storyContainer.appendChild(p2Container);
+
+        const p3Container: HTMLParagraphElement = document.createElement("p");
+        p3Container.textContent = chapter1.page1.paragraph3;
+        storyContainer.appendChild(p3Container);
+
+        const p4Container: HTMLParagraphElement = document.createElement("p");
+        p4Container.textContent = chapter1.page1.paragraph4;
+        storyContainer.appendChild(p4Container);
+
+        const p5Container: HTMLParagraphElement = document.createElement("p");
+        p5Container.textContent = chapter1.page1.paragraph5;
+        storyContainer.appendChild(p5Container);
+
+        const p6Container: HTMLParagraphElement = document.createElement("p");
+        p6Container.textContent = chapter1.page1.paragraph6;
+        storyContainer.appendChild(p6Container);
+
+        const p7Container: HTMLParagraphElement = document.createElement("p");
+        p7Container.textContent = chapter1.page1.paragraph7;
+        storyContainer.appendChild(p7Container);
+*/
+        /*const nextButton: HTMLButtonElement = document.createElement("button");
+        nextButton.textContent = "login";
+        storyContainer.appendChild(nextButton);
+        nextButton.onclick = ()=> { 
+            //MessagingBus.publishToStoryChange(story); 
+            //this.parent.buildDOM();
+        };*/
     }
 
     clearDOM(): void {

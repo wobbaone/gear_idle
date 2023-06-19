@@ -56,6 +56,42 @@ define("utils/utils", ["require", "exports"], function (require, exports) {
             }
             return bodyNode;
         }
+        static showNavDiv() {
+            const navNode = document.getElementById("navigation");
+            if (navNode === null) {
+                console.error("Could not find the navigation html element to draw to");
+                return;
+            }
+            navNode.className = "navigation";
+            return;
+        }
+        static hideNavDiv() {
+            const navNode = document.getElementById("navigation");
+            if (navNode === null) {
+                console.error("Could not find the navigation html element to draw to");
+                return;
+            }
+            navNode.className = "hidden";
+            return;
+        }
+        static showHeader() {
+            const headerNode = document.getElementById("header");
+            if (headerNode === null) {
+                console.error("Could not find the navigation html element to draw to");
+                return;
+            }
+            headerNode.className = "header";
+            return;
+        }
+        static hideHeader() {
+            const headerNode = document.getElementById("header");
+            if (headerNode === null) {
+                console.error("Could not find the navigation html element to draw to");
+                return;
+            }
+            headerNode.className = "";
+            return;
+        }
         static clearAllDOM() {
             const header = Utils.getHeaderDiv();
             while (header.firstChild) {
@@ -1144,7 +1180,7 @@ define("utils/messagingBus", ["require", "exports", "utils/debug"], function (re
     exports.MessagingBus = void 0;
     var MessagingBus;
     (function (MessagingBus) {
-        const DEBUG_SUBSCRIPTIONS = true;
+        const DEBUG_SUBSCRIPTIONS = false;
         class Subscription {
             constructor(parent, id) {
                 this.registrationId = id;
@@ -1375,16 +1411,32 @@ define("player", ["require", "exports", "entities/characterData", "utils/messagi
     })(Player = exports.Player || (exports.Player = {}));
 });
 define("story/chapter1", [], {
-    "intro_text": {
-        "strings": ["^1000 As your ship nears the shores of the enchanting continent of Mystoria, a seasoned sailor steps forward, his voice filled with excitement and anticipation. With a wide smile, he addresses the crew and passengers gathered on the deck, \"Welcome, one and all, to the enchanting continent of Mystoria! Behold the shimmering shores of this wondrous land, where adventure awaits at every turn!\"\n"]
+    "page1": {
+        "paragraph1": "As you escape from the haze, your senses stir to life. The air carries a heavy, salty fragrance. Sways beneath your feet in tune with rhythmic waves. Creaking of wooden planks, the sound of seagulls, and distant voices calling out. You find yourself below deck, within the cozy confines of a ship's cabin. Memories of a sea voyage undertaken months ago being to resurface, as you reminisce about setting sail in pursuit of a promised fresh start.",
+        "action1": "Venture to the deck.",
+        "paragraph2": "As you ascend the weathered steps to the deck, a breathtaking sight unfolds before your eyes. The vibrant colors of a tropical paradise dance on the horizon, beckoning you closer. A verdant coastline emerges, framed by towering cliffs draped in lush foliage. Nestled at the meeting point of land and sea is a port town. Haven's Reach, a name that effortlessly flows into your mind.",
+        "action2": "Watch the approach.",
+        "paragraph3": "As the ship gracefully glides into the bustling port of Haven's Reach, you find yourself lost in a daze, the sights and sounds blending together in a whirlwind of excitement. The ship's anchor drops with a resounding thud, bringing you back to the present moment. A surge of anticipation courses through your veins as you join the gathering crowd preparing to disembark. Worries about who you once were fade away.",
+        "action3": "Disembark",
+        "paragraph4": "As you make your way through the dock, a cacophony of sounds fills the air. Merchants hawking their exotic goods, the clattering of crates being unloaded, and the cheerful banter of fellow adventurers create an atmosphere brimming with excitement and possibility. The spirit of camaraderie and adventure is palpable. You can't help but feel a sense of belonging, filling the void of those you once knew.",
+        "action4": "Enter the Haven's Reach.",
+        "paragraph5": "With each step, you absorb the sights and sounds of Haven's Reach. Colorful banners dance in the breeze, proudly displaying the emblems of diverse adventurer companies that have made this town their base of operations. The tantalizing aroma of freshly baked pastries drifts from a nearby bakery. You feel the sweet embrace of Haven's Reach.",
+        "action5": "Wander aimlessly."
+    },
+    "page2": {
+        "paragraph1": "Lost in your thoughts, a young teenager catches your attention with their ragged clothes and eager gaze.",
+        "paragraph1_b": "The teenager approaches you timidly, their eyes sparkling with a mix of curiosity and desperation. \"Excuse me, kind traveler,\" they say, their voice tinged with a hint of hope. \"I couldn't help but notice your arrival. Are you new to Haven's Reach? I offer my services as a guide, showing you the best spots in the city, including a cozy inn and the renowned Adventurer's Hall.\"",
+        "action1": "Check inventory",
+        "paragraph2": "You take a moment to assess your inventory, realizing that the coins you possess have dwindled considerably after your voyage. It's clear that resources are limited, and every decision must be made with care. The teenager seems earnest, their enthusiasm contagious, but you wonder if spending what little coin you have on a tour would be a wise investment.",
+        "paragraph2_b": "A range of possibilities lay before you. You could accept the teenager's offer and explore the city under their guidance, hoping to gain valuable insights and perhaps uncover hidden opportunities. Alternatively, you might decline the offer, choosing to wander the streets on your own, relying on your instincts to find the necessary establishments and make your own discoveries. How will you proceed?",
+        "action2_a": "Take up their offer.",
+        "action2_b": "Explore on your own."
     }
 });
-define("activities/storyActivity", ["require", "exports", "activities/activity", "utils/utils", "story/chapter1", "../../imports/typed/typed_2.0.16"], function (require, exports, activity_2, utils_8, chapter1, typed_2_0_16_1) {
+define("activities/storyActivity", ["require", "exports", "activities/activity", "utils/utils"], function (require, exports, activity_2, utils_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.StoryActivity = exports.StoryActivityType = void 0;
-    chapter1 = __importStar(chapter1);
-    typed_2_0_16_1 = __importDefault(typed_2_0_16_1);
     var StoryActivityType;
     (function (StoryActivityType) {
         StoryActivityType[StoryActivityType["Intro"] = 0] = "Intro";
@@ -1397,13 +1449,6 @@ define("activities/storyActivity", ["require", "exports", "activities/activity",
         buildDOM() {
             this.clearDOM();
             const body = utils_8.Utils.getContentDiv();
-            const storyContainer = document.createElement("div");
-            storyContainer.className = "story";
-            storyContainer.id = "typed";
-            body.appendChild(storyContainer);
-            const scriptTag = document.createElement("script");
-            const t = new typed_2_0_16_1.default(storyContainer, chapter1.intro_text);
-            t.start();
         }
         clearDOM() {
             utils_8.Utils.clearAllDOM();
@@ -1524,31 +1569,525 @@ define("activities/townActivity", ["require", "exports", "utils/utils", "activit
     }
     exports.TownActivity = TownActivity;
 });
-define("navigation", ["require", "exports", "activities/storyActivity", "activities/adventureActivity", "activities/clanActivity", "activities/inventoryActivity", "activities/partyActivity", "activities/profileActivity", "activities/townActivity", "utils/utils", "utils/deletable"], function (require, exports, storyActivity_1, adventureActivity_5, clanActivity_1, inventoryActivity_1, partyActivity_1, profileActivity_1, townActivity_1, utils_14, deletable_2) {
+define("story/chapterLogin", [], {
+    "login": {
+        "strings": [
+            "A sense of haziness engulfs your senses, dulling the vibrant colors.",
+            "A sense of haziness engulfs your senses, muting the sounds.",
+            "A sense of haziness engulfs your senses, leaving the world around you in an indistinct state.",
+            "A sense of haziness engulfs your surroundings, blurring the edges of reality into a surreal and uncertain landscape.",
+            "A sense of haziness engulfs your surroundings, giving rise to a disorienting sensation where distances seem distorted and proportions feel skewed.",
+            "A sense of haziness engulfs your surroundings, creating ambiance that shrouds everything in a soft, diffused light.",
+            "A sense of haziness engulfs your thoughts, making it challenging to fathom coherent ideas and causing a constant mental fog.",
+            "A sense of haziness engulfs your thoughts, eroding your focus and causing distractions to infiltrate your mind at every turn.",
+            "A sense of haziness engulfs your identity, causing a disconnection between who you once were and who you perceive yourself to be.",
+            "You find yourself struggling to recall the details of your past achievements, the triumphs and milestones that once defined you.",
+            "You find yourself struggling to recall the details of your dreams and aspirations, leaving you adrift in a sea of emptiness.",
+            "You find yourself struggling to recall the details of your own voice, the essence of your thoughts and opinions fading into whispers of uncertainty.",
+            "You find yourself struggling to recall the details of your purpose, grappling with a sense of existential confusion and a longing for direction.",
+            "You find yourself struggling to recall the details of where you grew up, the streets and neighborhoods that once formed the backdrop of your childhood.",
+            "You find yourself struggling to recall the details of where you grew up, the specific landmarks and local hangouts that held a special place in your heart.",
+            "You find yourself struggling to recall the details of where you grew up, the names and faces of the friends and neighbors who were once an integral part of your life.",
+            "You grasp at fleeting glimpses of familiar faces and places, but they slip through your fingers like grains of sand.",
+            "It's as if your memories have been scattered and lost, leaving you with fragments of who you once were.",
+            "It's as if your memories have been scattered and lost, drifting away like leaves carried by an unforgiving wind.",
+            "Each attempt to retrieve a memory only adds to the disorientation that clouds your mind.",
+            "Each moment is filled with a sense of unease, as if there is a hidden truth just beyond your reach.",
+            "Each moment is filled with a sense of unease, as if a lurking presence watches from the shadows, unseen but deeply felt.",
+            "Each moment is filled with a sense of unease, as if an invisible weight presses upon your chest, making it harder to breathe.",
+            "The remnants of your past flicker like distant stars in the night sky, teasing you with their presence.",
+            "The world around you feels both foreign and familiar, a paradox that intensifies the confusion within.",
+            "The world around you feels both foreign and familiar, like a dream that hints at half-truths.",
+            "As you navigate this labyrinth of forgotten recollections, you can't help but wonder if you will ever regain a firm grip on your own identity.",
+            "As you navigate this labyrinth of forgotten recollections, you can't help but wonder if the gaps in your memory are a blessing or a curse.",
+            "As you navigate this labyrinth of forgotten recollections, you can't help but wonder if the fleeting memories are protecting you from painful truths or robbing you of essential knowledge."
+        ],
+        "startDelay": 500,
+        "showCursor": false,
+        "typeSpeed": 25,
+        "backSpeed": 25,
+        "loop": true
+    }
+});
+define("story/story", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.NavigationState = void 0;
+    exports.AStory = void 0;
+    class AStory {
+        delete() { }
+    }
+    exports.AStory = AStory;
+});
+define("story/tutorialStory", ["require", "exports", "story/story", "utils/utils", "story/chapter1", "main", "navigation"], function (require, exports, story_1, utils_14, chapter1_json_1, main_1, navigation_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.TutorialStory = void 0;
+    class TutorialStory extends story_1.AStory {
+        buildDOM() {
+            this.part1();
+        }
+        part1() {
+            const loginContainer = document.getElementById("login-container");
+            if (loginContainer != null) {
+                loginContainer.className = "login-intro";
+                const storyContainer = document.createElement("span");
+                storyContainer.className = "intro-story";
+                const story1AContainer = document.createElement("div");
+                story1AContainer.textContent = chapter1_json_1.page2.paragraph1;
+                storyContainer.appendChild(story1AContainer);
+                const breakElement1 = document.createElement("br");
+                storyContainer.appendChild(breakElement1);
+                const story1BContainer = document.createElement("div");
+                story1BContainer.textContent = chapter1_json_1.page2.paragraph1_b;
+                storyContainer.appendChild(story1BContainer);
+                loginContainer.appendChild(storyContainer);
+                const taskButton = document.createElement("div");
+                taskButton.id = "task-button";
+                taskButton.textContent = chapter1_json_1.page2.action1;
+                storyContainer.appendChild(taskButton);
+                const progressBar = document.createElement("progress");
+                progressBar.id = "task-progress";
+                progressBar.max = 50;
+                progressBar.value = 0;
+                taskButton.appendChild(progressBar);
+                var clickTask = false;
+                var taskProgress = 0;
+                taskButton.onclick = () => {
+                    if (clickTask == false) {
+                        clickTask = true;
+                        const taskInterval = setInterval(function progressHanlder() {
+                            taskProgress += 10;
+                            progressBar.value = taskProgress;
+                            if (taskProgress >= progressBar.max) {
+                                clearInterval(taskInterval);
+                                finishPart1();
+                            }
+                        }, 500);
+                    }
+                };
+                function finishPart1() {
+                    if (loginContainer != null) {
+                        loginContainer.removeChild(storyContainer);
+                    }
+                    TutorialStory.part2();
+                    return;
+                }
+            }
+        }
+        static part2() {
+            const loginContainer = document.getElementById("login-container");
+            if (loginContainer != null) {
+                loginContainer.className = "login-intro";
+                const storyContainer = document.createElement("span");
+                storyContainer.className = "intro-story";
+                const story2AContainer = document.createElement("div");
+                story2AContainer.textContent = chapter1_json_1.page2.paragraph2;
+                storyContainer.appendChild(story2AContainer);
+                const breakElement2 = document.createElement("br");
+                storyContainer.appendChild(breakElement2);
+                const story2BContainer = document.createElement("div");
+                story2BContainer.textContent = chapter1_json_1.page2.paragraph2_b;
+                storyContainer.appendChild(story2BContainer);
+                loginContainer.appendChild(storyContainer);
+                const taskOptions = document.createElement("div");
+                taskOptions.id = "task-options";
+                storyContainer.appendChild(taskOptions);
+                const taskButton_a = document.createElement("div");
+                taskButton_a.id = "task-button-a";
+                taskButton_a.textContent = chapter1_json_1.page2.action2_a;
+                taskOptions.appendChild(taskButton_a);
+                const progressBar_a = document.createElement("progress");
+                progressBar_a.id = "task-progress-a";
+                progressBar_a.max = 50;
+                progressBar_a.value = 0;
+                taskButton_a.appendChild(progressBar_a);
+                const taskButton_b = document.createElement("div");
+                taskButton_b.id = "task-button-b";
+                taskButton_b.textContent = chapter1_json_1.page2.action2_b;
+                taskOptions.appendChild(taskButton_b);
+                const progressBar_b = document.createElement("progress");
+                progressBar_b.id = "task-progress-b";
+                progressBar_b.max = 300;
+                progressBar_b.value = 0;
+                taskButton_b.appendChild(progressBar_b);
+                var clickTask = false;
+                var taskProgress = 0;
+                taskButton_a.onclick = () => {
+                    taskOptions.removeChild(taskButton_b);
+                    if (clickTask == false) {
+                        clickTask = true;
+                        const taskInterval = setInterval(function progressHanlder() {
+                            taskProgress += 10;
+                            progressBar_a.value = taskProgress;
+                            if (taskProgress >= progressBar_a.max) {
+                                clearInterval(taskInterval);
+                                finishPart2_A();
+                            }
+                        }, 500);
+                    }
+                };
+                taskButton_b.onclick = () => {
+                    taskOptions.removeChild(taskButton_a);
+                    if (clickTask == false) {
+                        clickTask = true;
+                        const taskInterval = setInterval(function progressHanlder() {
+                            taskProgress += 10;
+                            progressBar_b.value = taskProgress;
+                            if (taskProgress >= progressBar_b.max) {
+                                clearInterval(taskInterval);
+                                finishPart2_B();
+                            }
+                        }, 500);
+                    }
+                };
+                function finishPart2_A() {
+                    if (loginContainer != null) {
+                        loginContainer.removeChild(storyContainer);
+                    }
+                    utils_14.Utils.showNavDiv();
+                    utils_14.Utils.showHeader();
+                    main_1.Game.getNavigationState().setScreen(navigation_1.Screen.Profile);
+                    return;
+                }
+                function finishPart2_B() {
+                    if (loginContainer != null) {
+                        loginContainer.removeChild(storyContainer);
+                    }
+                    utils_14.Utils.showNavDiv();
+                    utils_14.Utils.showHeader();
+                    main_1.Game.getNavigationState().setScreen(navigation_1.Screen.Profile);
+                    return;
+                }
+            }
+        }
+        clearDOM() {
+            utils_14.Utils.clearAllDOM();
+        }
+    }
+    exports.TutorialStory = TutorialStory;
+});
+define("story/introStory", ["require", "exports", "story/story", "utils/utils", "story/chapter1", "story/tutorialStory"], function (require, exports, story_2, utils_15, chapter1_json_2, tutorialStory_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.IntroStory = void 0;
+    class IntroStory extends story_2.AStory {
+        buildDOM() {
+            this.part1();
+        }
+        part1() {
+            const loginContainer = document.getElementById("login-container");
+            if (loginContainer != null) {
+                loginContainer.className = "login-intro";
+                const storyContainer = document.createElement("span");
+                storyContainer.className = "intro-story";
+                storyContainer.textContent = chapter1_json_2.page1.paragraph1;
+                loginContainer.appendChild(storyContainer);
+                const taskButton = document.createElement("div");
+                taskButton.id = "task-button";
+                taskButton.textContent = chapter1_json_2.page1.action1;
+                storyContainer.appendChild(taskButton);
+                const progressBar = document.createElement("progress");
+                progressBar.id = "task-progress";
+                progressBar.max = 50;
+                progressBar.value = 0;
+                taskButton.appendChild(progressBar);
+                var clickTask = false;
+                var taskProgress = 0;
+                taskButton.onclick = () => {
+                    if (clickTask == false) {
+                        clickTask = true;
+                        const taskInterval = setInterval(function progressHanlder() {
+                            taskProgress += 10;
+                            progressBar.value = taskProgress;
+                            if (taskProgress >= progressBar.max) {
+                                clearInterval(taskInterval);
+                                finishPart1();
+                            }
+                        }, 500);
+                    }
+                };
+                function finishPart1() {
+                    if (loginContainer != null) {
+                        loginContainer.removeChild(storyContainer);
+                    }
+                    IntroStory.part2();
+                    return;
+                }
+            }
+        }
+        static part2() {
+            const loginContainer = document.getElementById("login-container");
+            if (loginContainer != null) {
+                const storyContainer = document.createElement("span");
+                storyContainer.className = "intro-story";
+                storyContainer.textContent = chapter1_json_2.page1.paragraph2;
+                loginContainer.appendChild(storyContainer);
+                const taskButton = document.createElement("div");
+                taskButton.id = "task-button";
+                taskButton.textContent = chapter1_json_2.page1.action2;
+                storyContainer.appendChild(taskButton);
+                const progressBar = document.createElement("progress");
+                progressBar.id = "task-progress";
+                progressBar.max = 100;
+                progressBar.value = 0;
+                taskButton.appendChild(progressBar);
+                var clickTask = false;
+                var taskProgress = 0;
+                taskButton.onclick = () => {
+                    if (clickTask == false) {
+                        clickTask = true;
+                        const taskInterval = setInterval(function progressHanlder() {
+                            taskProgress += 10;
+                            progressBar.value = taskProgress;
+                            if (taskProgress >= progressBar.max) {
+                                clearInterval(taskInterval);
+                                finishPart2();
+                            }
+                        }, 500);
+                    }
+                };
+                function finishPart2() {
+                    if (loginContainer != null) {
+                        loginContainer.removeChild(storyContainer);
+                    }
+                    IntroStory.part3();
+                    return;
+                }
+            }
+        }
+        static part3() {
+            const loginContainer = document.getElementById("login-container");
+            if (loginContainer != null) {
+                const storyContainer = document.createElement("span");
+                storyContainer.className = "intro-story";
+                storyContainer.textContent = chapter1_json_2.page1.paragraph3;
+                loginContainer.appendChild(storyContainer);
+                const taskButton = document.createElement("div");
+                taskButton.id = "task-button";
+                taskButton.textContent = chapter1_json_2.page1.action3;
+                storyContainer.appendChild(taskButton);
+                const progressBar = document.createElement("progress");
+                progressBar.id = "task-progress";
+                progressBar.max = 50;
+                progressBar.value = 0;
+                taskButton.appendChild(progressBar);
+                var clickTask = false;
+                var taskProgress = 0;
+                taskButton.onclick = () => {
+                    if (clickTask == false) {
+                        clickTask = true;
+                        const taskInterval = setInterval(function progressHanlder() {
+                            taskProgress += 10;
+                            progressBar.value = taskProgress;
+                            if (taskProgress >= progressBar.max) {
+                                clearInterval(taskInterval);
+                                finishPart3();
+                            }
+                        }, 500);
+                    }
+                };
+                function finishPart3() {
+                    if (loginContainer != null) {
+                        loginContainer.removeChild(storyContainer);
+                    }
+                    IntroStory.part4();
+                    return;
+                }
+            }
+        }
+        static part4() {
+            const loginContainer = document.getElementById("login-container");
+            if (loginContainer != null) {
+                const storyContainer = document.createElement("span");
+                storyContainer.className = "intro-story";
+                storyContainer.textContent = chapter1_json_2.page1.paragraph4;
+                loginContainer.appendChild(storyContainer);
+                const taskButton = document.createElement("div");
+                taskButton.id = "task-button";
+                taskButton.textContent = chapter1_json_2.page1.action4;
+                storyContainer.appendChild(taskButton);
+                const progressBar = document.createElement("progress");
+                progressBar.id = "task-progress";
+                progressBar.max = 50;
+                progressBar.value = 0;
+                taskButton.appendChild(progressBar);
+                var clickTask = false;
+                var taskProgress = 0;
+                taskButton.onclick = () => {
+                    if (clickTask == false) {
+                        clickTask = true;
+                        const taskInterval = setInterval(function progressHanlder() {
+                            taskProgress += 10;
+                            progressBar.value = taskProgress;
+                            if (taskProgress >= progressBar.max) {
+                                clearInterval(taskInterval);
+                                finishPart4();
+                            }
+                        }, 500);
+                    }
+                };
+                function finishPart4() {
+                    if (loginContainer != null) {
+                        loginContainer.removeChild(storyContainer);
+                    }
+                    IntroStory.part5();
+                    return;
+                }
+            }
+        }
+        static part5() {
+            const loginContainer = document.getElementById("login-container");
+            if (loginContainer != null) {
+                const storyContainer = document.createElement("span");
+                storyContainer.className = "intro-story";
+                storyContainer.textContent = chapter1_json_2.page1.paragraph5;
+                loginContainer.appendChild(storyContainer);
+                const taskButton = document.createElement("div");
+                taskButton.id = "task-button";
+                taskButton.textContent = chapter1_json_2.page1.action5;
+                storyContainer.appendChild(taskButton);
+                const progressBar = document.createElement("progress");
+                progressBar.id = "task-progress";
+                progressBar.max = 150;
+                progressBar.value = 0;
+                taskButton.appendChild(progressBar);
+                var clickTask = false;
+                var taskProgress = 0;
+                taskButton.onclick = () => {
+                    if (clickTask == false) {
+                        clickTask = true;
+                        const taskInterval = setInterval(function progressHanlder() {
+                            taskProgress += 10;
+                            progressBar.value = taskProgress;
+                            if (taskProgress >= progressBar.max) {
+                                clearInterval(taskInterval);
+                                finishPart5();
+                            }
+                        }, 500);
+                    }
+                };
+                function finishPart5() {
+                    if (loginContainer != null) {
+                        loginContainer.removeChild(storyContainer);
+                    }
+                    const s = new tutorialStory_1.TutorialStory();
+                    s.buildDOM();
+                    return;
+                }
+            }
+        }
+        clearDOM() {
+            utils_15.Utils.clearAllDOM();
+        }
+    }
+    exports.IntroStory = IntroStory;
+});
+define("activities/loginActivity", ["require", "exports", "activities/activity", "utils/utils", "story/chapterLogin", "../../imports/typed/typed_2.0.16", "main", "navigation", "story/introStory"], function (require, exports, activity_8, utils_16, chapterLogin_json_1, typed_2_0_16_1, main_2, navigation_2, introStory_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.LoginActivity = exports.LoginActivityType = void 0;
+    chapterLogin_json_1 = __importDefault(chapterLogin_json_1);
+    typed_2_0_16_1 = __importDefault(typed_2_0_16_1);
+    var LoginActivityType;
+    (function (LoginActivityType) {
+        LoginActivityType[LoginActivityType["Google"] = 0] = "Google";
+        LoginActivityType[LoginActivityType["Steam"] = 1] = "Steam";
+    })(LoginActivityType = exports.LoginActivityType || (exports.LoginActivityType = {}));
+    class LoginActivity extends activity_8.AActivity {
+        constructor() {
+            super();
+        }
+        buildDOM() {
+            this.clearDOM();
+            utils_16.Utils.hideNavDiv();
+            utils_16.Utils.hideHeader();
+            const body = utils_16.Utils.getContentDiv();
+            const loginContainer = document.createElement("div");
+            loginContainer.className = "login";
+            loginContainer.id = "login-container";
+            body.appendChild(loginContainer);
+            const storyContainer = document.createElement("span");
+            storyContainer.className = "login-story";
+            body.appendChild(storyContainer);
+            const loginButton = document.createElement("div");
+            loginButton.id = "login-button";
+            loginButton.role = "button";
+            loginButton.textContent = "Snap out of it";
+            const progressBar = document.createElement("progress");
+            progressBar.id = "wake-progress";
+            progressBar.max = 100;
+            progressBar.value = 0;
+            loginButton.appendChild(progressBar);
+            var clickWake = false;
+            var wakeProgress = 0;
+            function wake() {
+                var newUser = true;
+                if (newUser) {
+                    body.removeChild(storyContainer);
+                    const s = new introStory_1.IntroStory();
+                    s.buildDOM();
+                }
+                else {
+                    utils_16.Utils.showNavDiv();
+                    utils_16.Utils.showHeader();
+                    main_2.Game.getNavigationState().setScreen(navigation_2.Screen.Profile);
+                }
+            }
+            loginButton.onclick = () => {
+                if (clickWake == false) {
+                    clickWake = true;
+                    const wakeInterval = setInterval(function progressHanlder() {
+                        wakeProgress += 10;
+                        progressBar.value = wakeProgress;
+                        if (wakeProgress >= progressBar.max) {
+                            clearInterval(wakeInterval);
+                            wake();
+                        }
+                    }, 500);
+                }
+            };
+            storyContainer.appendChild(loginButton);
+            const textContainer = document.createElement("span");
+            textContainer.id = "typed";
+            const t = new typed_2_0_16_1.default(textContainer, chapterLogin_json_1.default.login);
+            t.start();
+            storyContainer.appendChild(textContainer);
+        }
+        clearDOM() {
+            utils_16.Utils.clearAllDOM();
+        }
+        delete() {
+            super.delete();
+        }
+    }
+    exports.LoginActivity = LoginActivity;
+});
+define("navigation", ["require", "exports", "activities/storyActivity", "activities/adventureActivity", "activities/clanActivity", "activities/inventoryActivity", "activities/partyActivity", "activities/profileActivity", "activities/townActivity", "activities/loginActivity", "utils/utils", "utils/deletable"], function (require, exports, storyActivity_1, adventureActivity_5, clanActivity_1, inventoryActivity_1, partyActivity_1, profileActivity_1, townActivity_1, loginActivity_1, utils_17, deletable_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NavigationState = exports.Screen = void 0;
     var Screen;
     (function (Screen) {
-        Screen[Screen["Story"] = 0] = "Story";
-        Screen[Screen["Profile"] = 1] = "Profile";
-        Screen[Screen["Inventory"] = 2] = "Inventory";
-        Screen[Screen["Clan"] = 3] = "Clan";
-        Screen[Screen["Town"] = 4] = "Town";
-        Screen[Screen["Party"] = 5] = "Party";
-        Screen[Screen["Adventure"] = 6] = "Adventure";
-    })(Screen || (Screen = {}));
+        Screen[Screen["Login"] = 0] = "Login";
+        Screen[Screen["Story"] = 1] = "Story";
+        Screen[Screen["Profile"] = 2] = "Profile";
+        Screen[Screen["Inventory"] = 3] = "Inventory";
+        Screen[Screen["Clan"] = 4] = "Clan";
+        Screen[Screen["Town"] = 5] = "Town";
+        Screen[Screen["Party"] = 6] = "Party";
+        Screen[Screen["Adventure"] = 7] = "Adventure";
+    })(Screen = exports.Screen || (exports.Screen = {}));
     class NavigationState {
         constructor() {
-            this.currentScreen = Screen.Story;
-            this.currentActivity = new deletable_2.DeletableContainer(new profileActivity_1.ProfileActivity());
-            this.setScreen(Screen.Story);
-            utils_14.Utils.addOnClickToElement("profile-nav", () => this.setScreen(Screen.Profile));
-            utils_14.Utils.addOnClickToElement("inventory-nav", () => this.setScreen(Screen.Inventory));
-            utils_14.Utils.addOnClickToElement("clan-nav", () => this.setScreen(Screen.Clan));
-            utils_14.Utils.addOnClickToElement("towns-nav", () => this.setScreen(Screen.Town));
-            utils_14.Utils.addOnClickToElement("party-nav", () => this.setScreen(Screen.Party));
-            utils_14.Utils.addOnClickToElement("adventure-nav", () => this.setScreen(Screen.Adventure));
+            this.currentScreen = Screen.Login;
+            this.currentActivity = new deletable_2.DeletableContainer(new loginActivity_1.LoginActivity());
+            this.setScreen(Screen.Login);
+            utils_17.Utils.addOnClickToElement("profile-nav", () => this.setScreen(Screen.Profile));
+            utils_17.Utils.addOnClickToElement("inventory-nav", () => this.setScreen(Screen.Inventory));
+            utils_17.Utils.addOnClickToElement("clan-nav", () => this.setScreen(Screen.Clan));
+            utils_17.Utils.addOnClickToElement("towns-nav", () => this.setScreen(Screen.Town));
+            utils_17.Utils.addOnClickToElement("party-nav", () => this.setScreen(Screen.Party));
+            utils_17.Utils.addOnClickToElement("adventure-nav", () => this.setScreen(Screen.Adventure));
         }
         getCurrentScreen() {
             return this.currentScreen;
@@ -1557,8 +2096,13 @@ define("navigation", ["require", "exports", "activities/storyActivity", "activit
             return this.currentActivity.get();
         }
         setScreen(screen) {
+            if (screen === this.getCurrentScreen())
+                return;
             this.currentScreen = screen;
             switch (screen) {
+                case Screen.Login:
+                    this.currentActivity.set(new loginActivity_1.LoginActivity());
+                    break;
                 case Screen.Story:
                     this.currentActivity.set(new storyActivity_1.StoryActivity());
                     break;
@@ -1590,7 +2134,7 @@ define("navigation", ["require", "exports", "activities/storyActivity", "activit
     NavigationState.Screen = Screen;
     exports.NavigationState = NavigationState;
 });
-define("main", ["require", "exports", "navigation", "player"], function (require, exports, navigation_1, player_5) {
+define("main", ["require", "exports", "navigation", "player"], function (require, exports, navigation_3, player_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Game = void 0;
@@ -1598,7 +2142,7 @@ define("main", ["require", "exports", "navigation", "player"], function (require
     (function (Game) {
         class GameState {
             constructor() {
-                this.navigation = new navigation_1.NavigationState();
+                this.navigation = new navigation_3.NavigationState();
                 this.gameLoopThread = null;
             }
             start() {
@@ -1629,23 +2173,5 @@ define("main", ["require", "exports", "navigation", "player"], function (require
         }
         Game.getNavigationState = getNavigationState;
     })(Game = exports.Game || (exports.Game = {}));
-});
-define("story/story", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("story/introStory", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.IntroStory = void 0;
-    class IntroStory {
-        getStory() {
-            return "";
-        }
-        onGameTick() {
-            return;
-        }
-    }
-    exports.IntroStory = IntroStory;
 });
 //# sourceMappingURL=main.js.map
