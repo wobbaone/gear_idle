@@ -6,7 +6,8 @@ import { InventoryActivity } from "./activities/inventoryActivity";
 import { PartyActivity } from "./activities/partyActivity";
 import { ProfileActivity } from "./activities/profileActivity";
 import { TownActivity } from "./activities/townActivity";
-import { Utils } from "./utils";
+import { Utils } from "./utils/utils";
+import { DeletableContainer } from "./utils/deletable";
 
 enum Screen  {
     Story = 0,
@@ -22,7 +23,7 @@ export class NavigationState {
     static readonly Screen = Screen;
 
     private currentScreen: Screen = Screen.Story;
-    private currentActivity: AActivity = new ProfileActivity();
+    private currentActivity: DeletableContainer<AActivity> = new DeletableContainer<AActivity>(new ProfileActivity());
 
     constructor() {
         this.setScreen(Screen.Story);
@@ -40,43 +41,40 @@ export class NavigationState {
     }
 
     getCurrentActivity(): AActivity {
-        return this.currentActivity;
+        return this.currentActivity.get();
     }
 
     setScreen(screen: Screen) {
-        this.currentActivity.clearDOM();
-        this.currentActivity.delete();
-
         this.currentScreen = screen;
 
         switch (screen) {
             case Screen.Story:
-                this.currentActivity = new StoryActivity();
+                this.currentActivity.set(new StoryActivity());
                 break;
             case Screen.Profile:
-                this.currentActivity = new ProfileActivity();
+                this.currentActivity.set(new ProfileActivity());
                 break;
             case Screen.Inventory:
-                this.currentActivity = new InventoryActivity();
+                this.currentActivity.set(new InventoryActivity());
                 break;
             case Screen.Clan:
-                this.currentActivity = new ClanActivity();
+                this.currentActivity.set(new ClanActivity());
                 break;
             case Screen.Town:
-                this.currentActivity = new TownActivity();
+                this.currentActivity.set(new TownActivity());
                 break;
             case Screen.Party:
-                this.currentActivity = new PartyActivity();
+                this.currentActivity.set(new PartyActivity());
                 break;
             case Screen.Adventure:
-                this.currentActivity = new AdventureActivity();
+                this.currentActivity.set(new AdventureActivity());
                 break;
             default:
                 console.error("Unimplemented activity (" + Screen[this.currentScreen] + ") when setting screen");
                 return;
         }
 
-        this.currentActivity.buildDOM();
+        this.getCurrentActivity().buildDOM();
     }
 }
 

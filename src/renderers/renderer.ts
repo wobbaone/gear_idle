@@ -1,4 +1,4 @@
-import { Utils } from "../utils";
+import { Utils } from "../utils/utils";
 
 export interface IRenderer {
     buildDOM(): void;

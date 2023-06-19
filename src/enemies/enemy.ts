@@ -1,28 +1,29 @@
-import { HealthData } from "../characterData";
+import { ABattleEntity } from "../entities/battleEntity";
+import { HealthData } from "../entities/health";
 import { Items } from "../inventory/items";
-import { Utils } from "../utils";
 
-export abstract class AEnemy {
+export abstract class AEnemy extends ABattleEntity {
     private name: string;
-    private healthData: HealthData;
     private attackDamage: number;
+    private activityThreshold: number;
     private dropTable: DropEntry[];
+    private imgSrc : string;
 
-    constructor(name: string, healthData: HealthData, attackDamage: number, dropTable: DropEntry[]) {
+    constructor(name: string, healthData: HealthData, attackDamage: number, activityThreshold: number, imgSrc: string, dropTable: DropEntry[]) {
+        super(healthData);
+
         this.name = name;
-        this.healthData = healthData;
         this.attackDamage = attackDamage;
+        this.activityThreshold = activityThreshold;
         this.dropTable = dropTable.sort((a: DropEntry, b: DropEntry) => {
             return a.getWeight() - b. getWeight();
         });
+
+        this.imgSrc = imgSrc;
     }
     
     getName(): string {
         return this.name;
-    }
-
-    getHealth(): HealthData {
-        return this.healthData;
     }
 
     getAttackDamage(): number {
@@ -30,7 +31,7 @@ export abstract class AEnemy {
     }
 
     getRandomDropItem(): Items.Entry | null {
-        let dropRoll: number = Math.random() * this.getMaxWeight();
+        let dropRoll: number = Math.random() * this.getMaxItemDropWeight();
 
         for (let i = 0; i < this.dropTable.length; i++) {
             const drop: DropEntry = this.dropTable[i];
@@ -44,13 +45,21 @@ export abstract class AEnemy {
         return null;
     }
 
-    getMaxWeight(): number {
+    getMaxItemDropWeight(): number {
         let weight = 0;
         for (let i = 0; i < this.dropTable.length; i++) {
             weight += this.dropTable[i].getWeight();
         } 
 
         return weight;
+    }
+
+    getImageSource(): string {
+        return this.imgSrc;
+    }
+
+    getActivityThreshold(): number {
+        return this.activityThreshold;
     }
 }
 

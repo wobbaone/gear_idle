@@ -11,7 +11,7 @@ export class ActiveAdventuringRenderer implements IRenderer {
     }
 
     buildDOM(): void {
-        const zone: Zones.IZone | null = Player.getCurrentZoneActivity().getCurrentZone();
+        const zone: Zones.AZoneRenderer | null = Player.getCurrentZoneActivity();
         if (zone === null) {
             return;
         }
@@ -20,7 +20,7 @@ export class ActiveAdventuringRenderer implements IRenderer {
     }
 
     clearDOM(): void {
-        const zone: Zones.IZone | null = Player.getCurrentZoneActivity().getCurrentZone();
+        const zone: Zones.AZoneRenderer | null = Player.getCurrentZoneActivity();
         if (zone === null) {
             return;
         }

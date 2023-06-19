@@ -16,7 +16,7 @@ export namespace Game {
         start(): void {
             stop();
     
-            this.gameLoopThread = setInterval(this.gameLoop, 1000);
+            this.gameLoopThread = setInterval(this.gameLoop, 100);
         }
     
         stop(): void {
@@ -30,7 +30,7 @@ export namespace Game {
         gameLoop(): void {
             console.log("In game loop");
             
-            const zone: Zones.IZone | null = Player.getCurrentZoneActivity().getCurrentZone();
+            const zone: Zones.AZoneRenderer | null = Player.getCurrentZoneActivity();
             if (zone !== null) {
                 zone.onGameTick();
             }

@@ -1,8 +1,8 @@
 import { AActivity } from "./activity";
 import { Player } from "../player";
-import { Utils } from "../utils";
+import { Utils } from "../utils/utils";
 import  * as chapter1 from '../story/chapter1.json';
-import  Typed  from "../../imports/typed_2.0.16";
+import  Typed  from "../../imports/typed/typed_2.0.16";
 
 export enum StoryActivityType {
     Intro = 0,

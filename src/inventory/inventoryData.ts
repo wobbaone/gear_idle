@@ -1,4 +1,4 @@
-import { MessagingBus } from "../messagingBus";
+import { MessagingBus } from "../utils/messagingBus";
 import { Inventory } from "./inventoryState";
 
 export class InventoryData {

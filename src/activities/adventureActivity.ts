@@ -2,8 +2,8 @@ import { AActivity } from "./activity";
 import { ActiveAdventuringRenderer } from "../renderers/activeAdventuringRenderer";
 import { AdventureZoneSelectionRenderer } from "../renderers/adventureZoneSelectionRenderer";
 import { Player } from "../player";
-import { MessagingBus } from "../messagingBus";
-import { Utils } from "../utils";
+import { MessagingBus } from "../utils/messagingBus";
+import { Utils } from "../utils/utils";
 
 export enum AdventureActivityType {
     Mining = 0,
@@ -25,7 +25,7 @@ export class AdventureActivity extends AActivity {
     buildDOM(): void {
         this.clearDOM();
 
-        if (Player.getCurrentZoneActivity().getCurrentZone() === null) {
+        if (Player.getCurrentZoneActivity() === null) {
             new AdventureZoneSelectionRenderer(this).buildDOM();
         } else {
             new ActiveAdventuringRenderer(this).buildDOM();

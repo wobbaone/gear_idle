@@ -31,7 +31,7 @@ export class Utils {
         return bodyNode;
     }
     
-    public static clearAllDOM(): void {
+    static clearAllDOM(): void {
         const header: HTMLElement = Utils.getHeaderDiv();
         while (header.firstChild) {
             header.removeChild(header.firstChild);
@@ -45,7 +45,29 @@ export class Utils {
     }
 
     // returns the result inclusive
-    public static randomIntBetween(min: number, max: number) : number {
+    static randomIntBetween(min: number, max: number) : number {
         return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+    static doesPathMatch(src1: string, src2: string) : boolean {
+        if (src1.length === 0 && src2.length === 0) {
+            return true;
+        }
+
+        if (src1.length === 0 || src2.length === 0) {
+            return false;
+        }
+
+        let srcSplit1: string = src1;
+        if (srcSplit1.charAt(0) === '.') {
+            srcSplit1 = srcSplit1.substring(srcSplit1.indexOf('/')+1);
+        }
+
+        let srcSplit2: string = src2;
+        if (srcSplit2.length !== 0 && srcSplit2.charAt(0) === '.') {
+            srcSplit2 = srcSplit2.substring(srcSplit2.indexOf('/')+1);
+        }
+
+        return srcSplit2.endsWith(srcSplit1) || srcSplit1.endsWith(srcSplit1);
     }
 }

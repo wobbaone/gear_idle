@@ -1,8 +1,8 @@
 import { InventoryData } from "../inventory/inventoryData";
 import { Inventory } from "../inventory/inventoryState";
-import { MessagingBus } from "../messagingBus";
+import { MessagingBus } from "../utils/messagingBus";
 import { Player } from "../player";
-import { Utils } from "../utils";
+import { Utils } from "../utils/utils";
 import { AActivity } from "./activity";
 export class InventoryActivity extends AActivity {
     private resourceChangeCallback: MessagingBus.Subscription<MessagingBus.ResourceChangeEvent>;

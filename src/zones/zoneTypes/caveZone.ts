@@ -1,62 +1,58 @@
 import { AdventureActivityType } from "../../activities/adventureActivity";
-import { Inventory } from "../../inventory/inventoryState";
-import { Items } from "../../inventory/items";
-import { MessagingBus } from "../../messagingBus";
-import { Utils } from "../../utils";
-import { IZone } from "./zone";
+import { MessagingBus } from "../../utils/messagingBus";
+import { AZone, AZoneRenderer } from "./zone";
+import { ZoneManager } from "../zones"
+import { Utils } from "../../utils/utils";
 
-export class CavesZone implements IZone {
-    buildDOM(): void {
-        this.clearDOM();
-
-        const header: HTMLElement = Utils.getHeaderDiv();
-        const headerText: HTMLDivElement = document.createElement("div");
-        headerText.innerHTML = "Caves";
-        header.appendChild(headerText);
-
-        const body: HTMLElement = Utils.getContentDiv();
-        
-        const adContainer: HTMLDivElement = document.createElement("div");
-        adContainer.className = "adventuring-zone-container adventuring-zone-"+this.getName();
-        body.appendChild(adContainer);
-
-        const content: HTMLDivElement = document.createElement("div");
-        content.className = "adventuring-zone-content";
-        adContainer.appendChild(content);
-
-        const profileText: HTMLDivElement = document.createElement("div");
-        profileText.innerHTML = "Mining in " + this.getName();
-        content.appendChild(profileText);
-
-        const backButton: HTMLDivElement = document.createElement("div");
-        backButton.innerHTML = "Leave " + this.getName();
-        backButton.className = "back-button";
-        backButton.onclick = () => {
-            MessagingBus.publishToZoneChange(null); 
+export namespace Caves {
+    export class Zone extends AZone {
+        createState(): State {
+            return new State(this);
         }
-        content.appendChild(backButton);
+
+        private activityTypes: ReadonlyArray<AdventureActivityType> = [
+            AdventureActivityType.Mining,
+            AdventureActivityType.Combat
+        ].sort();
+
+        getActivityTypes(): ReadonlyArray<AdventureActivityType> {
+            return this.activityTypes;
+        }   
+
+        getName(): string {
+            return "Cave";
+        }
     }
 
-    clearDOM(): void {
-        Utils.clearAllDOM();
-    }
+    export class State extends AZoneRenderer {
+        constructor(parentZone: AZone) {
+            super(parentZone, MessagingBus.subscribeToExecuteZoneAction(() => this.executeZoneAction));
+        }
 
-    private activityTypes: ReadonlyArray<AdventureActivityType> = [
-        AdventureActivityType.Mining,
-        AdventureActivityType.Combat
-    ].sort();
+        executeZoneAction(entityId: number, zoneId: number): void {
+            if (zoneId !== this.getId()) {
+                return;
+            }
+        }
 
-    getActivityTypes(): ReadonlyArray<AdventureActivityType> {
-        return this.activityTypes;
-    }   
+        buildDOM(): void {
+            this.clearDOM();
+    
+            Utils.getHeaderDiv().appendChild(this.createZoneHeaderElement(this.parentZone.getName()));
+    
+            const body: HTMLElement = Utils.getContentDiv();
+            const parentContainer = this.createParentContainer();
 
-    getName(): string {
-        return "Caves";
-    }
-
-    onGameTick(): void {
-        const orePerTick: number = Utils.randomIntBetween(1, 2);
+            const contentContainer: HTMLDivElement = this.createContentContainer();
+            parentContainer.appendChild(contentContainer);
         
-        MessagingBus.publishToResourceChange(Items.getItem(Items.OreCopperItem).getId(), orePerTick);
+            this.zoneContent = this.createZoneContentContainer();   
+            contentContainer.appendChild(this.zoneContent.getElement());
+
+            this.updateZoneContent();
+    
+            body.appendChild(this.createBackButton("Leave Caves"));
+            body.appendChild(parentContainer);
+        }
     }
 }

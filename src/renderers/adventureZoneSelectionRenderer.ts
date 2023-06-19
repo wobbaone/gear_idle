@@ -1,8 +1,9 @@
 import { AdventureActivityType, AdventureActivity } from "../activities/adventureActivity";
-import { Utils } from "../utils"
-import { Zones } from "../zones/zones";
+import { Utils } from "../utils/utils"
+import { ZoneManager, Zones } from "../zones/zones";
 import { IRenderer } from "./renderer";
-import { MessagingBus } from "../messagingBus";
+import { MessagingBus } from "../utils/messagingBus";
+import { Player } from "../player";
 
 export class AdventureZoneSelectionRenderer implements IRenderer {
     private parent: AdventureActivity;
@@ -21,17 +22,9 @@ export class AdventureZoneSelectionRenderer implements IRenderer {
         const zoneContainer: HTMLElement = this.drawZoneBox();
         body.appendChild(zoneContainer);
 
-        
-        zoneContainer.appendChild(this.drawZoneButton(new Zones.WildernessZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new Zones.WoodsZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new Zones.CavesZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new Zones.JungleZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new Zones.DesertZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new Zones.WarforgeCitadelZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new Zones.DarkForestZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new Zones.GraveyardZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new Zones.FrozenZone()));
-        zoneContainer.appendChild(this.drawZoneButton(new Zones.VolcanoZone()));
+        zoneContainer.appendChild(this.drawZoneButton(ZoneManager.Zone.Woods));
+        zoneContainer.appendChild(this.drawZoneButton(ZoneManager.Zone.Cave));
+        zoneContainer.appendChild(this.drawZoneButton(ZoneManager.Zone.Wilderness));
     }
 
     clearDOM(): void {}
@@ -43,17 +36,24 @@ export class AdventureZoneSelectionRenderer implements IRenderer {
         return zoneBoxDiv;
     }
 
-    private drawZoneButton(zone: Zones.IZone): HTMLElement {
+    private drawZoneButton(zone: ZoneManager.Zone): HTMLElement {
+        const zoneData: Zones.AZone = ZoneManager.CreateZone(zone);
+
         const zoneDiv: HTMLDivElement = document.createElement("div");
-        zoneDiv.className = "adventuring-zone-element adventuring-zone-" + zone.getName();
+        zoneDiv.className = "adventuring-zone-element adventuring-zone-" + zoneData.getName();
 
         zoneDiv.onclick = ()=> { 
-            MessagingBus.publishToZoneChange(zone); 
+            const newZoneState: Zones.AZoneRenderer = zoneData.createState();
+            const zoneId: number = ZoneManager.RegisterRenderer(newZoneState);
+            
+            newZoneState.addPlayer(Player.getCharacterData());
+
+            MessagingBus.publishToZoneChange(zoneId); 
             this.parent.buildDOM();
         };
 
         const nameSpan: HTMLSpanElement = document.createElement("div");
-        nameSpan.innerHTML = zone.getName();
+        nameSpan.innerHTML = zoneData.getName();
         nameSpan.className = "adventuring-activities-name";
 
 
@@ -64,7 +64,7 @@ export class AdventureZoneSelectionRenderer implements IRenderer {
 
         zoneDiv.appendChild(zoneActivitiesDiv);
 
-        const activityTypes: ReadonlyArray<AdventureActivityType> = zone.getActivityTypes();
+        const activityTypes: ReadonlyArray<AdventureActivityType> = zoneData.getActivityTypes();
         for (let i: number = 0; i < activityTypes.length; i++) {
             const activityElement: HTMLElement = this.createActivityElement(activityTypes[i]);
             zoneActivitiesDiv.appendChild(activityElement);
