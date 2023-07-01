@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Compile TS on build",
+            "label": "Compile",
             "type": "typescript",
             "tsconfig": "tsconfig.json",
             "problemMatcher": [
@@ -14,6 +14,28 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "Minify",
+            "type": "shell",
+            "command": "uglifyjs",
+            "args": [
+                "--compress",
+                "--output",
+                "./out/main.min.js",
+                "--no-annotations",
+                "--source-map",
+                "\"filename='main.min.js.map'\"",
+                "--",
+                "./out/main.js"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "dependsOn": [
+                "Compile"
+            ]
         }
     ]
 }

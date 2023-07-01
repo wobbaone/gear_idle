@@ -122,7 +122,7 @@ export abstract class AZoneRenderer extends Identifiable implements IRenderer, I
 
         const targetHealth: HealthData = target.get().getHealth(); 
         targetHealth.dealDamage(damage);
-        
+
         if (targetHealth.getCurrentHealth() <= 0) {
             console.log("player died");
         }

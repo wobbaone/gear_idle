@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Open index.html",
             "file": "./index.html",
-            "preLaunchTask":  "Compile TS on build",
+            "preLaunchTask":  "Compile",
         }
     ]
 }
