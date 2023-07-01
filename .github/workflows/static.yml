@@ -42,16 +42,17 @@ jobs:
       - name: Compile
         run: tsc -p ./tsconfig.json
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
-          # Upload entire repository
+          name: github-pages
           path: |
-            ./imports/*.js
-            ./imports/*.txt
-            ./out/main.js
-            ./css/*.css
-            ./images/*
-            ./*.html
+            ./**/imports/**/*.js
+            ./**/imports/**/*.txt
+            ./**/out/main.js
+            ./**/css/*.css
+            ./**/images/**/*
+            ./**/*.html
+          if-no-files-found: error
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
