@@ -46,12 +46,12 @@ jobs:
           tar \
             --dereference --hard-dereference \
             -czvf ./artifact.tar \
-            ./**/imports/**/*.js \
-            ./**/imports/**/*.txt \
-            ./**/out/*.js \
-            ./**/css/*.css \
-            ./**/images/**/* \
-            ./**/*.html
+            ${{ github.workspace }}/**/imports/**/*.js \
+            ${{ github.workspace }}/**/imports/**/*.txt \
+            ${{ github.workspace }}/**/out/*.js \
+            ${{ github.workspace }}/**/css/*.css \
+            ${{ github.workspace }}/**/images/**/* \
+            ${{ github.workspace }}/**/*.html
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
