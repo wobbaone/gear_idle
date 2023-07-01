@@ -25,6 +25,8 @@ export abstract class AZoneRenderer extends Identifiable implements IRenderer, I
 
     private shouldRedraw: boolean = false;
 
+    private currentRespawnProgress: number = 0;
+
     constructor(parentZone: AZone, zoneActionListener: MessagingBus.Subscription<MessagingBus.ExecuteZoneActionEvent>) {
         super();
 
@@ -82,7 +84,11 @@ export abstract class AZoneRenderer extends Identifiable implements IRenderer, I
         }
         
         if (this.enemies.count() === 0) {
-            this.enemies.set(new Enemies.Boar(), 0, 1);
+            this.currentRespawnProgress += 1;
+            if (this.currentRespawnProgress >= this.parentZone.getZoneRespawnTime()) {
+                this.currentRespawnProgress = 0;
+                this.enemies.set(new Enemies.Boar(), 0, 1);
+            }    
         }
 
         if (this.shouldRedraw) {
@@ -255,6 +261,8 @@ export abstract class AZone {
     abstract getName(): string
 
     abstract createState(): AZoneRenderer
+
+    abstract getZoneRespawnTime(): number
 
     clearDOM(): void {
         Utils.clearAllDOM();

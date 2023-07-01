@@ -5,7 +5,10 @@ import { Utils } from "../../utils/utils";
 
 export namespace Woods {
     export class Zone extends AZone {
-
+        getZoneRespawnTime(): number {
+            return 10
+        }
+        
         createState(): State {
             return new State(this);
         }

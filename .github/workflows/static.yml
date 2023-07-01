@@ -41,6 +41,15 @@ jobs:
         run: npm install -g typescript
       - name: Compile
         run: tsc -p ./tsconfig.json
+      - name: Install uglify
+        run: npm install -g uglify-js
+      - name: Minify
+        run: |
+          uglifyjs \
+            --compress --mangle \
+            --output ./out/main.js \
+            --no-annotations \
+            -- ./out/main.js
       - name: Compress files
         run: |
           shopt -s globstar
@@ -51,6 +60,7 @@ jobs:
           FILES+="$(ls ./**/css/*.css) "
           FILES+="$(ls ./**/images/**/*) "
           FILES+="$(ls ./**/*.html)"
+          
           FILES="${FILES//[$'\t\r\n']/' '}"
 
           echo "File list to compress: $FILES"

@@ -48,6 +48,9 @@ export namespace ZoneManager {
     }
 
     class EmptyZone extends Zones.AZone {
+        getZoneRespawnTime(): number {
+            return 0;
+        }
         getMaxZoneActivityTime(): number { 
             return 0;
         }
@@ -64,7 +67,7 @@ export namespace ZoneManager {
                 constructor(parentZone: Zones.AZone) {
                     super(parentZone, MessagingBus.subscribeToExecuteZoneAction(()=>{}));
                 }
-
+                
                 delete(): void {}
                 buildDOM(): void {}
                 clearDOM(): void {}

@@ -21,6 +21,7 @@
             "command": "uglifyjs",
             "args": [
                 "--compress",
+                "--mangle",
                 "--output",
                 "./out/main.min.js",
                 "--no-annotations",
