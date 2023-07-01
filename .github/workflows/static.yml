@@ -41,22 +41,24 @@ jobs:
         run: npm install -g typescript
       - name: Compile
         run: tsc -p ./tsconfig.json
-      - name: Find files
+      - name: Compress files
         run: |
           shopt -s globstar
-          FILES="$(ls ./**/imports/**/*.js)"
-          FILES+="$(ls ./**/imports/**/*.txt)"
-          FILES+="$(ls ./**/out/*.js)"
-          FILES+="$(ls ./**/css/*.css)"
-          FILES+="$(ls ./**/images/**/*)"
+
+          FILES="$(ls ./**/imports/**/*.js) "
+          FILES+="$(ls ./**/imports/**/*.txt) "
+          FILES+="$(ls ./**/out/*.js) "
+          FILES+="$(ls ./**/css/*.css) "
+          FILES+="$(ls ./**/images/**/*) "
           FILES+="$(ls ./**/*.html)"
+
           echo "File list to compress: $FILES"
+
           if [ -z "${FILES// }" ]; then
             echo "No files found"
             exit 2
           fi
-      - name: Compress files
-        run: |
+
           tar \
             --dereference --hard-dereference \
             -czvf ./artifact.tar \
