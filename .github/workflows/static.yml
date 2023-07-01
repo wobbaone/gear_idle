@@ -45,7 +45,7 @@ jobs:
         run: |
           tar \
             --dereference --hard-dereference \
-            -czvf ./artifact.tar -C / \
+            -czvf ./artifact.tar \
             ./**/imports/**/*.js \
             ./**/imports/**/*.txt \
             ./**/out/*.js \
