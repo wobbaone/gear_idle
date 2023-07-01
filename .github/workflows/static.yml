@@ -46,12 +46,12 @@ jobs:
           tar \
             --dereference --hard-dereference \
             -czvf ./artifact.tar -C \
-            $(echo ./**/imports/**/*.js) \
-            $(echo ./**/imports/**/*.txt) \
-            $(echo ./**/out/*.js) \
-            $(echo ./**/css/*.css) \
-            $(echo ./**/images/**/*) \
-            $(echo ./**/*.html)
+            $(find . -wholename "./**/imports/**/*.js" -type f -printf "%p ") \
+            $(find . -wholename "./**/imports/**/*.txt" -type f -printf "%p ") \
+            $(find . -wholename "./**/out/*.js" -type f -printf "%p ") \
+            $(find . -wholename "./**/css/*.css" -type f -printf "%p ") \
+            $(find . -wholename "./**/images/**/*" -type f -printf "%p ") \
+            $(find . -wholename "./**/*.html" -type f -printf "%p ")
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
