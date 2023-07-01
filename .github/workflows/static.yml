@@ -43,18 +43,23 @@ jobs:
         run: tsc -p ./tsconfig.json
       - name: Find files
         run: |
-          FILES=$(find . -wholename "./**/imports/**/*.js" -type f -printf "%p ")
-          FILES+=$(find . -wholename "./**/imports/**/*.txt" -type f -printf "%p ")
-          FILES+=$(find . -wholename "./**/out/*.js" -type f -printf "%p ")
-          FILES+=$(find . -wholename "./**/css/*.css" -type f -printf "%p ")
-          FILES+=$(find . -wholename "./**/images/**/*" -type f -printf "%p ")
-          FILES+=$(find . -wholename "./**/*.html" -type f -printf "%p ")
-          echo $FILES
+          shopt -s globstar
+          FILES=$(find . -path "./**/imports/**/*.js" -type f -printf "%p ")
+          FILES+=$(find . -path "./**/imports/**/*.txt" -type f -printf "%p ")
+          FILES+=$(find . -path "./**/out/*.js" -type f -printf "%p ")
+          FILES+=$(find . -path "./**/css/*.css" -type f -printf "%p ")
+          FILES+=$(find . -path "./**/images/**/*" -type f -printf "%p ")
+          FILES+=$(find . -path "./**/*.html" -type f -printf "%p ")
+          echo "File list to compress: $FILES"
+          if (($FILES | xargs) == "") then
+            echo "No files found"
+            exit 1
+          fi
       - name: Compress files
         run: |
           tar \
             --dereference --hard-dereference \
-            -czvf ./artifact.tar -C \
+            -czvf ./artifact.tar \
             $FILES
       - name: Upload artifact
         uses: actions/upload-artifact@v3
