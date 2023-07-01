@@ -62,7 +62,7 @@ jobs:
 
           tar \
             --dereference --hard-dereference \
-            -czvf ./artifact.tar -C / \
+            -cvf ./artifact.tar \
             $FILES
       - name: Upload artifact
         uses: actions/upload-artifact@v3
