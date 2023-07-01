@@ -44,7 +44,7 @@ jobs:
       - name: Find files
         run: |
           FILES=$(echo $(find . -wholename "./**/imports/**/*.js" -type f -printf "%p ")) \
-            $(echo $(find . -wholename "./**/imports/**/*.txt" -type f -printf "%p ") \
+            $(echo $(find . -wholename "./**/imports/**/*.txt" -type f -printf "%p ")) \
             $(echo $(find . -wholename "./**/out/*.js" -type f -printf "%p ")) \
             $(echo $(find . -wholename "./**/css/*.css" -type f -printf "%p ")) \
             $(echo $(find . -wholename "./**/images/**/*" -type f -printf "%p ")) \
