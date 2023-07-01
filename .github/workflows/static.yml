@@ -33,8 +33,14 @@ jobs:
         uses: actions/checkout@v3
       - name: Setup Pages
         uses: actions/configure-pages@v3
-      - name: tsc compile
-        uses: iCrawl/action-tsc@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Install typescript
+        run: npm install -g typescript
+      - name: Compile
+        run: tsc -p ./tsconfig.json
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
