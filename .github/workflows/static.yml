@@ -44,12 +44,12 @@ jobs:
       - name: Find files
         run: |
           shopt -s globstar
-          FILES=$(find . -wholename "./**/imports/**/*.js" -type f -printf "%p ")
-          FILES+=$(find . -wholename "./**/imports/**/*.txt" -type f -printf "%p ")
-          FILES+=$(find . -wholename "./**/out/*.js" -type f -printf "%p ")
-          FILES+=$(find . -wholename "./**/css/*.css" -type f -printf "%p ")
-          FILES+=$(find . -wholename "./**/images/**/*" -type f -printf "%p ")
-          FILES+=$(find . -wholename "./**/*.html" -type f -printf "%p ")
+          FILES="$(ls ./**/imports/**/*.js)"
+          FILES+="$(ls ./**/imports/**/*.txt)"
+          FILES+="$(ls ./**/out/*.js)"
+          FILES+="$(ls ./**/css/*.css)"
+          FILES+="$(ls ./**/images/**/*)"
+          FILES+="$(ls ./**/*.html)"
           echo "File list to compress: $FILES"
           if [ -z "${FILES// }" ]; then
             echo "No files found"
