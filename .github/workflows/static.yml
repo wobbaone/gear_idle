@@ -45,13 +45,13 @@ jobs:
         run: |
           tar \
             --dereference --hard-dereference \
-            -czvf ./artifact.tar \
-            ${{ github.workspace }}/**/imports/**/*.js \
-            ${{ github.workspace }}/**/imports/**/*.txt \
-            ${{ github.workspace }}/**/out/*.js \
-            ${{ github.workspace }}/**/css/*.css \
-            ${{ github.workspace }}/**/images/**/* \
-            ${{ github.workspace }}/**/*.html
+            -czvf ./artifact.tar -C \
+            $(echo ./**/imports/**/*.js) \
+            $(echo ./**/imports/**/*.txt) \
+            $(echo ./**/out/*.js) \
+            $(echo ./**/css/*.css) \
+            $(echo ./**/images/**/*) \
+            $(echo ./**/*.html)
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
