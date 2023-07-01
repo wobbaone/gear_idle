@@ -43,12 +43,12 @@ jobs:
         run: tsc -p ./tsconfig.json
       - name: Find files
         run: |
-          FILES=$(echo $(find . -wholename "./**/imports/**/*.js" -type f -printf "%p ")) \
-            $(echo $(find . -wholename "./**/imports/**/*.txt" -type f -printf "%p ")) \
-            $(echo $(find . -wholename "./**/out/*.js" -type f -printf "%p ")) \
-            $(echo $(find . -wholename "./**/css/*.css" -type f -printf "%p ")) \
-            $(echo $(find . -wholename "./**/images/**/*" -type f -printf "%p ")) \
-            $(echo $(find . -wholename "./**/*.html" -type f -printf "%p "))
+          FILES=$(find . -wholename "./**/imports/**/*.js" -type f -printf "%p ")
+          FILES+=$(find . -wholename "./**/imports/**/*.txt" -type f -printf "%p ")
+          FILES+=$(find . -wholename "./**/out/*.js" -type f -printf "%p ")
+          FILES+=$(find . -wholename "./**/css/*.css" -type f -printf "%p ")
+          FILES+=$(find . -wholename "./**/images/**/*" -type f -printf "%p ")
+          FILES+=$(find . -wholename "./**/*.html" -type f -printf "%p ")
           echo $FILES
       - name: Compress files
         run: |
