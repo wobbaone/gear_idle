@@ -41,11 +41,22 @@ jobs:
         run: npm install -g typescript
       - name: Compile
         run: tsc -p ./tsconfig.json
+      - name: Compress
+        run: |
+          tar \
+            --dereference --hard-dereference \
+            -czvf ./artifact.tar -C / \
+            ./**/imports/**/*.js \
+            ./**/imports/**/*.txt \
+            ./**/out/*.js \
+            ./**/css/*.css \
+            ./**/images/**/* \
+            ./**/*.html
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          name: github-pages
+          path: './artifact.tar'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
