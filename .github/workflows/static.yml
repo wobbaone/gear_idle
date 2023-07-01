@@ -41,17 +41,21 @@ jobs:
         run: npm install -g typescript
       - name: Compile
         run: tsc -p ./tsconfig.json
-      - name: Compress
+      - name: Find files
+        run: |
+          FILES=$(echo $(find . -wholename "./**/imports/**/*.js" -type f -printf "%p ")) \
+            $(echo $(find . -wholename "./**/imports/**/*.txt" -type f -printf "%p ") \
+            $(echo $(find . -wholename "./**/out/*.js" -type f -printf "%p ")) \
+            $(echo $(find . -wholename "./**/css/*.css" -type f -printf "%p ")) \
+            $(echo $(find . -wholename "./**/images/**/*" -type f -printf "%p ")) \
+            $(echo $(find . -wholename "./**/*.html" -type f -printf "%p "))
+          echo $FILES
+      - name: Compress files
         run: |
           tar \
             --dereference --hard-dereference \
             -czvf ./artifact.tar -C \
-            $(find . -wholename "./**/imports/**/*.js" -type f -printf "%p ") \
-            $(find . -wholename "./**/imports/**/*.txt" -type f -printf "%p ") \
-            $(find . -wholename "./**/out/*.js" -type f -printf "%p ") \
-            $(find . -wholename "./**/css/*.css" -type f -printf "%p ") \
-            $(find . -wholename "./**/images/**/*" -type f -printf "%p ") \
-            $(find . -wholename "./**/*.html" -type f -printf "%p ")
+            $FILES
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
