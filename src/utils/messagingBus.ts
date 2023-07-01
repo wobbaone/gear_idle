@@ -100,24 +100,28 @@ export namespace MessagingBus {
         changeZoneBus.publish(zone);
     }
 
-    export type ResourceChangeEvent = readonly [resourceId: number, amount: number];
+    export type ResourceChangeEvent = readonly [entityId: number, resourceId: number, amount: number];
     const resourceChangeBus: MessagingBusData<ResourceChangeEvent> = new MessagingBusData<ResourceChangeEvent>("ResourceChangeBus");
-    export function subscribeToResourceChange(callback: (resourceId: number, amount: number) => void, order?: number): Subscription<ResourceChangeEvent> {
+    export function subscribeToResourceChange(callback: (entityId: number, resourceId: number, amount: number) => void, order?: number): Subscription<ResourceChangeEvent> {
         return resourceChangeBus.subscribe((resourceChange: ResourceChangeEvent) => {
-            callback(resourceChange[0], resourceChange[1]);
+            callback(resourceChange[0], resourceChange[1], resourceChange[2]);
         }, order);
     } 
-    export function publishToResourceChange(resourceId: number, amount: number): void {
-        const resourceChange: ResourceChangeEvent = [resourceId, amount];
+    export function publishToResourceChange(entityId: number, resourceId: number, amount: number): void {
+        const resourceChange: ResourceChangeEvent = [entityId, resourceId, amount];
         resourceChangeBus.publish(resourceChange);
     }
 
-    const addActivityProgressBus: MessagingBusData<number> = new MessagingBusData<number>("ActivityProgressBus");
-    export function subscribeToAddActivityProgress(callback: (activityProgress: number) => void, order?: number): Subscription<number> {
-        return addActivityProgressBus.subscribe(callback, order);
+    export type ActivityProgressEvent = readonly [entityId: number, amount: number];
+    const addActivityProgressBus: MessagingBusData<ActivityProgressEvent> = new MessagingBusData<ActivityProgressEvent>("ActivityProgressBus");
+    export function subscribeToAddActivityProgress(callback: (entityId: number, amount: number) => void, order?: number): Subscription<ActivityProgressEvent> {
+        return addActivityProgressBus.subscribe((activityProgress: ActivityProgressEvent) => {
+            callback(activityProgress[0], activityProgress[1]);
+        }, order);
     }
-    export function publishToAddActivityProgress(activityProgress: number): void {
-        addActivityProgressBus.publish(activityProgress);
+    export function publishToAddActivityProgress(entityId: number, amount: number): void {
+        const addActivityProgressEvent: ActivityProgressEvent = [entityId, amount];
+        addActivityProgressBus.publish(addActivityProgressEvent);
     }
 
     export type ExecuteZoneActionEvent = readonly [entityId: number, zoneId: number];
@@ -128,7 +132,7 @@ export namespace MessagingBus {
         }, order);
     }
     export function publishToExecuteZoneAction(entityId: number, zoneId: number): void {
-        const resourceChange: ResourceChangeEvent = [entityId, zoneId];
+        const resourceChange: ExecuteZoneActionEvent = [entityId, zoneId];
         executeZoneActionBus.publish(resourceChange);
     }
 }

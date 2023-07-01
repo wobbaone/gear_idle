@@ -392,6 +392,12 @@ define("entities/health", ["require", "exports"], function (require, exports) {
         getMaxHealth() {
             return this.maxHealth;
         }
+        dealDamage(amount) {
+            this.currentHealth -= amount;
+            if (this.currentHealth < 0) {
+                this.currentHealth = 0;
+            }
+        }
     }
     HealthData.DEFAULT_MAX_HEALTH = 10;
     exports.HealthData = HealthData;
@@ -568,12 +574,28 @@ define("inventory/items", ["require", "exports", "inventory/items/itemIndex"], f
     Items = __importStar(Items);
     exports.Items = Items;
 });
-define("entities/battleEntity", ["require", "exports", "zones/zones", "entities/health"], function (require, exports, zones_2, health_1) {
+define("utils/identifiable", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Identifiable = void 0;
+    class Identifiable {
+        constructor() {
+            this.id = ++Identifiable.lastId;
+        }
+        getId() {
+            return this.id;
+        }
+    }
+    Identifiable.lastId = 0;
+    exports.Identifiable = Identifiable;
+});
+define("entities/battleEntity", ["require", "exports", "entities/health", "utils/identifiable"], function (require, exports, health_1, identifiable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ABattleEntity = void 0;
-    class ABattleEntity {
+    class ABattleEntity extends identifiable_1.Identifiable {
         constructor(health) {
+            super();
             if (health === undefined) {
                 this.health = new health_1.HealthData(health_1.HealthData.DEFAULT_MAX_HEALTH);
             }
@@ -582,10 +604,6 @@ define("entities/battleEntity", ["require", "exports", "zones/zones", "entities/
             }
             this.activityProgress = 0;
             this.currentZoneId = null;
-            this.id = ++ABattleEntity.lastId;
-        }
-        getId() {
-            return this.id;
         }
         getHealth() {
             return this.health;
@@ -599,12 +617,6 @@ define("entities/battleEntity", ["require", "exports", "zones/zones", "entities/
         getZoneId() {
             return this.currentZoneId;
         }
-        getCurrentZoneActivity() {
-            if (this.currentZoneId === null) {
-                return null;
-            }
-            return zones_2.ZoneManager.GetZone(this.currentZoneId);
-        }
         setCurrentZone(zoneId) {
             this.currentZoneId = zoneId;
         }
@@ -617,7 +629,6 @@ define("entities/battleEntity", ["require", "exports", "zones/zones", "entities/
             return true;
         }
     }
-    ABattleEntity.lastId = 0;
     exports.ABattleEntity = ABattleEntity;
 });
 define("enemies/enemy", ["require", "exports", "entities/battleEntity"], function (require, exports, battleEntity_1) {
@@ -687,8 +698,7 @@ define("enemies/enemyTypes/boar", ["require", "exports", "entities/health", "inv
     exports.Boar = void 0;
     class Boar extends enemy_1.AEnemy {
         constructor() {
-            super("Boar", new health_2.HealthData(3), 1, 11, "./images/boar.png", [
-                new enemy_1.DropEntry(null, 3),
+            super("Boar", new health_2.HealthData(3), 1, 51, "./images/boar.png", [
                 new enemy_1.DropEntry(items_2.Items.getItem(items_2.Items.MeatBoarItem), 2),
             ]);
         }
@@ -743,27 +753,204 @@ define("utils/htmlContainer", ["require", "exports", "utils/utils"], function (r
     }
     exports.HTMLContainer = HTMLContainer;
 });
-define("zones/zoneTypes/zone", ["require", "exports", "utils/messagingBus", "utils/utils", "utils/htmlContainer"], function (require, exports, messagingBus_3, utils_4, htmlContainer_1) {
+define("utils/container2d", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Container2DResult = exports.Container2D = void 0;
+    class Container2D {
+        constructor(width, height) {
+            this.data = new Array(width * height).fill(null);
+            this.width = width;
+            this.height = height;
+            this.dataMap = new Map();
+        }
+        [Symbol.iterator]() {
+            return new Container2DIterator(this);
+        }
+        iterateAll() {
+            return new NullableContainer2D(this);
+        }
+        get(x, y) {
+            if (y == undefined) {
+                return this.getByIndex(x);
+            }
+            return this.getByIndex(this.width * y + x);
+        }
+        getByIndex(index) {
+            if (index < 0) {
+                return null;
+            }
+            if (index >= this.data.length) {
+                return null;
+            }
+            return this.data[index];
+        }
+        getFromId(id) {
+            if (!this.dataMap.has(id)) {
+                return null;
+            }
+            const constvalue = this.dataMap.get(id);
+            if (constvalue === undefined) {
+                return null;
+            }
+            return constvalue;
+        }
+        hasId(id) {
+            return this.dataMap.has(id);
+        }
+        set(value, x, y) {
+            if (x < 0 || y < 0) {
+                return;
+            }
+            if (x > this.width - 1 || y > this.height - 1) {
+                return;
+            }
+            const index = this.width * y + x;
+            const currentValue = this.data[index];
+            if (currentValue !== null && this.dataMap.has(currentValue.getId())) {
+                this.dataMap.delete(currentValue.getId());
+            }
+            this.data[index] = value;
+            if (value !== null) {
+                this.dataMap.set(value.getId(), new Container2DResult(x, y, value));
+            }
+        }
+        removeById(id) {
+            const item = this.getFromId(id);
+            if (item === null) {
+                return;
+            }
+            this.set(null, item.getX(), item.getY());
+        }
+        getRandomEntry() {
+            const data = Array.from(this.dataMap.keys());
+            if (data.length === 0) {
+                return null;
+            }
+            const index = Math.floor(Math.random() * data.length);
+            const result = this.dataMap.get(data[index]);
+            if (result === undefined) {
+                console.error("There is an invalid entity in a zone container with id: " + data[index]);
+                return null;
+            }
+            return result;
+        }
+        getWidth() {
+            return this.width;
+        }
+        getHeight() {
+            return this.height;
+        }
+        count() {
+            let count = 0;
+            for (const value of this.data) {
+                if (value !== null) {
+                    count++;
+                }
+            }
+            return count;
+        }
+    }
+    exports.Container2D = Container2D;
+    class NullableContainer2D {
+        constructor(parent) {
+            this.parent = parent;
+        }
+        [Symbol.iterator]() {
+            return new NullableIterable2DIterator(this.parent);
+        }
+    }
+    class Container2DIterator {
+        constructor(parent) {
+            this.pointer = 0;
+            this.parent = parent;
+        }
+        next() {
+            if (this.pointer >= this.parent.getWidth() * this.parent.getHeight()) {
+                return new class {
+                    constructor() {
+                        this.done = true;
+                        this.value = null;
+                    }
+                }();
+            }
+            let x = this.pointer % this.parent.getWidth();
+            let y = Math.floor(this.pointer / this.parent.getWidth());
+            const currentValue = this.parent.get(this.pointer++);
+            if (currentValue === null) {
+                return this.next();
+            }
+            const result = new Container2DResult(x, y, currentValue);
+            return new class {
+                constructor() {
+                    this.done = false;
+                    this.value = result;
+                }
+            }();
+        }
+    }
+    class NullableIterable2DIterator {
+        constructor(parent) {
+            this.pointer = 0;
+            this.parent = parent;
+        }
+        next() {
+            if (this.pointer >= this.parent.getWidth() * this.parent.getHeight()) {
+                return new class {
+                    constructor() {
+                        this.done = true;
+                        this.value = null;
+                    }
+                }();
+            }
+            let x = this.pointer % this.parent.getWidth();
+            let y = Math.floor(this.pointer / this.parent.getWidth());
+            const currentValue = this.parent.get(this.pointer++);
+            const result = new Container2DResult(x, y, currentValue);
+            return new class {
+                constructor() {
+                    this.done = false;
+                    this.value = result;
+                }
+            }();
+        }
+    }
+    class Container2DResult {
+        constructor(x, y, value) {
+            this.x = x;
+            this.y = y;
+            this.value = value;
+        }
+        getX() {
+            return this.x;
+        }
+        getY() {
+            return this.y;
+        }
+        get() {
+            return this.value;
+        }
+    }
+    exports.Container2DResult = Container2DResult;
+});
+define("zones/zoneTypes/zone", ["require", "exports", "utils/messagingBus", "utils/utils", "enemies/enemies", "utils/htmlContainer", "utils/container2d", "utils/identifiable"], function (require, exports, messagingBus_3, utils_4, enemies_1, htmlContainer_1, container2d_1, identifiable_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.AZone = exports.AZoneRenderer = void 0;
-    class AZoneRenderer {
+    class AZoneRenderer extends identifiable_2.Identifiable {
         constructor(parentZone, zoneActionListener) {
-            this.players = [[null, null], [null, null], [null, null]];
-            this.enemies = [[null, null], [null, null], [null, null]];
+            super();
+            this.players = new container2d_1.Container2D(2, 3);
+            this.enemies = new container2d_1.Container2D(2, 3);
             this.zoneContent = null;
-            this.id = null;
+            this.shouldRedraw = false;
             this.parentZone = parentZone;
             this.zoneActionListener = zoneActionListener;
-            this.activityProgressListener = messagingBus_3.MessagingBus.subscribeToAddActivityProgress((activityProgress) => {
-                this.updateZoneContent();
+            this.activityProgressListener = messagingBus_3.MessagingBus.subscribeToAddActivityProgress((entityId, amount) => {
+                if (amount > 0) {
+                    this.shouldRedraw = true;
+                }
             }, 1000);
-        }
-        setId(id) {
-            this.id = id;
-        }
-        getId() {
-            return this.id;
         }
         delete() {
             this.clearDOM();
@@ -774,10 +961,60 @@ define("zones/zoneTypes/zone", ["require", "exports", "utils/messagingBus", "uti
             utils_4.Utils.clearAllDOM();
         }
         addPlayer(character) {
-            this.players[0][0] = character;
+            this.players.set(character, 1, 1);
         }
         onGameTick() {
-            messagingBus_3.MessagingBus.publishToAddActivityProgress(1);
+            for (const charData of this.players) {
+                const character = charData.get();
+                messagingBus_3.MessagingBus.publishToAddActivityProgress(character.getId(), 1);
+                if (character.addActivityProgress(1)) {
+                    messagingBus_3.MessagingBus.publishToExecuteZoneAction(character.getId(), this.getId());
+                    this.playerZoneAction(character);
+                }
+            }
+            for (const enemyData of this.enemies) {
+                const enemy = enemyData.get();
+                messagingBus_3.MessagingBus.publishToAddActivityProgress(enemy.getId(), 1);
+                if (enemy.addActivityProgress(1)) {
+                    messagingBus_3.MessagingBus.publishToExecuteZoneAction(enemy.getId(), this.getId());
+                    this.enemyZoneAction(enemy);
+                }
+            }
+            if (this.enemies.count() === 0) {
+                this.enemies.set(new enemies_1.Enemies.Boar(), 0, 1);
+            }
+            if (this.shouldRedraw) {
+                this.updateZoneContent();
+                this.shouldRedraw = false;
+            }
+        }
+        playerZoneAction(character) {
+            const damage = character.getEquipment().getAttackDamage();
+            const target = this.enemies.getRandomEntry();
+            if (target === null) {
+                return;
+            }
+            const targetHealth = target.get().getHealth();
+            targetHealth.dealDamage(damage);
+            if (targetHealth.getCurrentHealth() <= 0) {
+                const itemDrop = target.get().getRandomDropItem();
+                if (itemDrop !== null) {
+                    messagingBus_3.MessagingBus.publishToResourceChange(character.getId(), itemDrop.getId(), 1);
+                }
+                this.enemies.set(null, target.getX(), target.getY());
+            }
+        }
+        enemyZoneAction(enemy) {
+            const damage = enemy.getAttackDamage();
+            const target = this.players.getRandomEntry();
+            if (target === null) {
+                return;
+            }
+            const targetHealth = target.get().getHealth();
+            targetHealth.dealDamage(damage);
+            if (targetHealth.getCurrentHealth() <= 0) {
+                console.log("player died");
+            }
         }
         createZoneHeaderElement(name) {
             const headerText = document.createElement("div");
@@ -850,37 +1087,27 @@ define("zones/zoneTypes/zone", ["require", "exports", "utils/messagingBus", "uti
             if (this.zoneContent === null) {
                 return;
             }
-            for (let i = 0; i < 3; i++) {
-                const fightRow = this.zoneContent.createOrFindElement("div", "fightRow" + i);
+            for (let y = 0; y < 3; y++) {
+                const fightRow = this.zoneContent.createOrFindElement("div", "fightRow" + y);
                 fightRow.getElement().className = "fight-content-row";
-                const player1 = this.players[i][0];
-                if (player1 === null) {
-                    this.drawEmptySquare(fightRow, i * 5);
+                for (let x = 0; x < 2; x++) {
+                    const player = this.players.get(x, y);
+                    if (player === null) {
+                        this.drawEmptySquare(fightRow, y * 5 + x);
+                    }
+                    else {
+                        this.drawPlayer(fightRow, "Player", player, y * 5 + x);
+                    }
                 }
-                else {
-                    this.drawPlayer(fightRow, "Player", player1, i * 5);
-                }
-                const player2 = this.players[i][1];
-                if (player2 === null) {
-                    this.drawEmptySquare(fightRow, i * 5 + 1);
-                }
-                else {
-                    this.drawPlayer(fightRow, "Player", player2, i * 5 + 1);
-                }
-                this.drawEmptySquare(fightRow, i * 5 + 2);
-                const enemy1 = this.enemies[i][0];
-                if (enemy1 === null) {
-                    this.drawEmptySquare(fightRow, i * 5 + 3);
-                }
-                else {
-                    this.drawEnemy(fightRow, enemy1, i * 5 + 3);
-                }
-                const enemy2 = this.enemies[i][1];
-                if (enemy2 === null) {
-                    this.drawEmptySquare(fightRow, i * 5 + 4);
-                }
-                else {
-                    this.drawEnemy(fightRow, enemy2, i * 5 + 4);
+                this.drawEmptySquare(fightRow, y * 5 + 2);
+                for (let x = 0; x < 2; x++) {
+                    const enemy = this.enemies.get(x, y);
+                    if (enemy === null) {
+                        this.drawEmptySquare(fightRow, y * 5 + x + 3);
+                    }
+                    else {
+                        this.drawEnemy(fightRow, enemy, y * 5 + x + 3);
+                    }
                 }
             }
         }
@@ -937,7 +1164,7 @@ define("zones/zoneTypes/caveZone", ["require", "exports", "activities/adventureA
                 this.zoneContent = this.createZoneContentContainer();
                 contentContainer.appendChild(this.zoneContent.getElement());
                 this.updateZoneContent();
-                body.appendChild(this.createBackButton("Leave Caves"));
+                parentContainer.appendChild(this.createBackButton("Leave Caves"));
                 body.appendChild(parentContainer);
             }
         }
@@ -989,7 +1216,7 @@ define("zones/zoneTypes/wildernessZone", ["require", "exports", "activities/adve
                 this.zoneContent = this.createZoneContentContainer();
                 contentContainer.appendChild(this.zoneContent.getElement());
                 this.updateZoneContent();
-                body.appendChild(this.createBackButton("Leave Wild"));
+                parentContainer.appendChild(this.createBackButton("Leave Wilderness"));
                 body.appendChild(parentContainer);
             }
         }
@@ -1040,7 +1267,7 @@ define("zones/zoneTypes/woodsZone", ["require", "exports", "activities/adventure
                 this.zoneContent = this.createZoneContentContainer();
                 contentContainer.appendChild(this.zoneContent.getElement());
                 this.updateZoneContent();
-                body.appendChild(this.createBackButton("Leave Woods"));
+                parentContainer.appendChild(this.createBackButton("Leave Woods"));
                 body.appendChild(parentContainer);
             }
         }
@@ -1063,7 +1290,6 @@ define("zones/zones", ["require", "exports", "utils/deletable", "utils/messaging
     exports.Zones = Zones;
     var ZoneManager;
     (function (ZoneManager) {
-        let lastZoneId = 0;
         const zoneMap = new deletable_1.NullableDeletableContainerMap();
         let Zone;
         (function (Zone) {
@@ -1086,9 +1312,8 @@ define("zones/zones", ["require", "exports", "utils/deletable", "utils/messaging
         }
         ZoneManager.CreateZone = CreateZone;
         function RegisterRenderer(zone) {
-            const id = ++lastZoneId;
-            zoneMap.set(id, zone);
-            return id;
+            zoneMap.set(zone.getId(), zone);
+            return zone.getId();
         }
         ZoneManager.RegisterRenderer = RegisterRenderer;
         function GetZone(zone) {
@@ -1254,22 +1479,25 @@ define("utils/messagingBus", ["require", "exports", "utils/debug"], function (re
         const resourceChangeBus = new MessagingBusData("ResourceChangeBus");
         function subscribeToResourceChange(callback, order) {
             return resourceChangeBus.subscribe((resourceChange) => {
-                callback(resourceChange[0], resourceChange[1]);
+                callback(resourceChange[0], resourceChange[1], resourceChange[2]);
             }, order);
         }
         MessagingBus.subscribeToResourceChange = subscribeToResourceChange;
-        function publishToResourceChange(resourceId, amount) {
-            const resourceChange = [resourceId, amount];
+        function publishToResourceChange(entityId, resourceId, amount) {
+            const resourceChange = [entityId, resourceId, amount];
             resourceChangeBus.publish(resourceChange);
         }
         MessagingBus.publishToResourceChange = publishToResourceChange;
         const addActivityProgressBus = new MessagingBusData("ActivityProgressBus");
         function subscribeToAddActivityProgress(callback, order) {
-            return addActivityProgressBus.subscribe(callback, order);
+            return addActivityProgressBus.subscribe((activityProgress) => {
+                callback(activityProgress[0], activityProgress[1]);
+            }, order);
         }
         MessagingBus.subscribeToAddActivityProgress = subscribeToAddActivityProgress;
-        function publishToAddActivityProgress(activityProgress) {
-            addActivityProgressBus.publish(activityProgress);
+        function publishToAddActivityProgress(entityId, amount) {
+            const addActivityProgressEvent = [entityId, amount];
+            addActivityProgressBus.publish(addActivityProgressEvent);
         }
         MessagingBus.publishToAddActivityProgress = publishToAddActivityProgress;
         const executeZoneActionBus = new MessagingBusData("ZoneActionBus");
@@ -1291,14 +1519,18 @@ define("inventory/inventoryData", ["require", "exports", "utils/messagingBus", "
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.InventoryData = void 0;
     class InventoryData {
-        constructor() {
+        constructor(parentId) {
             this.stackableResources = new Map();
+            this.parentId = parentId;
             messagingBus_8.MessagingBus.subscribeToResourceChange(this.addResource.bind(this));
         }
         getInventoryState() {
             return inventoryState_2.Inventory.State.fromInventoryData(this);
         }
-        addResource(resourceId, count) {
+        addResource(entityId, resourceId, count) {
+            if (this.parentId !== entityId) {
+                return;
+            }
             if (!this.stackableResources.has(resourceId)) {
                 this.stackableResources.set(resourceId, count);
                 return;
@@ -1348,7 +1580,7 @@ define("entities/characterData", ["require", "exports", "inventory/inventoryData
     class CharacterData extends battleEntity_2.ABattleEntity {
         constructor() {
             super();
-            this.inventory = new inventoryData_1.InventoryData();
+            this.inventory = new inventoryData_1.InventoryData(this.getId());
             this.equipment = new equipmentData_1.EquipmentData();
         }
         getInventory() {
@@ -1367,7 +1599,7 @@ define("entities/characterData", ["require", "exports", "inventory/inventoryData
     CharacterData.DEFAULT_ACTIVITY_TIME = 30;
     exports.CharacterData = CharacterData;
 });
-define("player", ["require", "exports", "entities/characterData", "utils/messagingBus", "zones/zones"], function (require, exports, characterData_1, messagingBus_9, zones_3) {
+define("player", ["require", "exports", "entities/characterData", "utils/messagingBus", "zones/zones"], function (require, exports, characterData_1, messagingBus_9, zones_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Player = void 0;
@@ -1379,19 +1611,20 @@ define("player", ["require", "exports", "entities/characterData", "utils/messagi
                 messagingBus_9.MessagingBus.subscribeToZoneChange((zone) => {
                     const currentZoneId = this.characterData.getZoneId();
                     if (currentZoneId !== null) {
-                        zones_3.ZoneManager.RemoveRenderer(currentZoneId);
+                        zones_2.ZoneManager.RemoveRenderer(currentZoneId);
                     }
                     this.characterData.setCurrentZone(zone);
                 });
-                messagingBus_9.MessagingBus.subscribeToAddActivityProgress((progress) => {
-                    const zoneId = this.characterData.getZoneId();
-                    if (zoneId === null) {
-                        console.warn("Activity progress should not occur when the player is not in a zone");
+                messagingBus_9.MessagingBus.subscribeToAddActivityProgress((entityId, amount) => {
+                    if (entityId !== this.characterData.getId()) {
                         return;
                     }
-                    if (this.characterData.addActivityProgress(progress)) {
-                        messagingBus_9.MessagingBus.publishToExecuteZoneAction(this.characterData.getId(), zoneId);
+                    const footer = document.getElementById("footer");
+                    if (footer === null) {
+                        return;
                     }
+                    const progress = Math.floor((this.characterData.getCurrentActivityProgress() / this.characterData.getActivityThreshold()) * 100);
+                    footer.innerHTML = "Progress: " + progress + "%";
                 });
             }
         }
@@ -1405,7 +1638,11 @@ define("player", ["require", "exports", "entities/characterData", "utils/messagi
         }
         Player.getInventory = getInventory;
         function getCurrentZoneActivity() {
-            return getCharacterData().getCurrentZoneActivity();
+            const zoneId = getCharacterData().getZoneId();
+            if (zoneId === null) {
+                return null;
+            }
+            return zones_2.ZoneManager.GetZone(zoneId);
         }
         Player.getCurrentZoneActivity = getCurrentZoneActivity;
     })(Player = exports.Player || (exports.Player = {}));
@@ -1479,7 +1716,10 @@ define("activities/inventoryActivity", ["require", "exports", "utils/messagingBu
     class InventoryActivity extends activity_4.AActivity {
         constructor() {
             super();
-            this.resourceChangeCallback = messagingBus_10.MessagingBus.subscribeToResourceChange((resourceId, amount) => {
+            this.resourceChangeCallback = messagingBus_10.MessagingBus.subscribeToResourceChange((entityId, resourceId, amount) => {
+                if (player_4.Player.getCharacterData().getId() !== entityId) {
+                    return;
+                }
                 this.buildDOM();
             });
         }

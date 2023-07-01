@@ -1,8 +1,5 @@
 import { InventoryData } from "../inventory/inventoryData";
-import { ZoneManager, Zones } from "../zones/zones";
 import { EquipmentData } from "../equipment/equipmentData";
-import { NullableDeletableContainer } from "../utils/deletable";
-import { AZoneRenderer } from "../zones/zoneIndex";
 import { ABattleEntity } from "./battleEntity";
 
 export class CharacterData extends ABattleEntity {
@@ -14,7 +11,7 @@ export class CharacterData extends ABattleEntity {
     constructor() {
         super();
 
-        this.inventory = new InventoryData();
+        this.inventory = new InventoryData(this.getId());
         this.equipment = new EquipmentData();
     }
 

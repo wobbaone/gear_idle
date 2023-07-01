@@ -1,16 +1,14 @@
-import { AZoneRenderer } from "../zones/zoneIndex";
-import { ZoneManager } from "../zones/zones";
 import { HealthData } from "./health";
+import { Identifiable } from "../utils/identifiable";
 
-export abstract class ABattleEntity {
-    private static lastId: number = 0;
-    private id: number;
-
+export abstract class ABattleEntity extends Identifiable{    
     protected health: HealthData;
     protected activityProgress: number;
     protected currentZoneId: number | null;
     
     constructor(health?: HealthData) {
+        super();
+
         if (health === undefined) {
             this.health = new HealthData(HealthData.DEFAULT_MAX_HEALTH);
         } else {
@@ -19,14 +17,9 @@ export abstract class ABattleEntity {
 
         this.activityProgress = 0;
         this.currentZoneId = null;
-        this.id = ++ABattleEntity.lastId;
     }
 
     abstract getActivityThreshold(): number;
-
-    getId(): number {
-        return this.id;
-    }
 
     getHealth(): HealthData {
         return this.health;
@@ -42,14 +35,6 @@ export abstract class ABattleEntity {
 
     getZoneId(): number | null {
         return this.currentZoneId;
-    }
-
-    getCurrentZoneActivity(): AZoneRenderer | null {
-        if (this.currentZoneId === null) {
-            return null;
-        }
-
-        return ZoneManager.GetZone(this.currentZoneId);
     }
 
     setCurrentZone(zoneId: number | null): void {

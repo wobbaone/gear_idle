@@ -3,43 +3,44 @@ import { MessagingBus } from "../../utils/messagingBus";
 import { IRenderer } from "../../renderers/renderer";
 import { Utils } from "../../utils/utils";
 import { IDeletable } from "../../utils/deletable";
-import { ZoneManager } from "../zones";
 import { CharacterData } from "../../entities/characterData";
 import { Enemies } from "../../enemies/enemies";
 import { HTMLContainer } from "../../utils/htmlContainer";
+import { Container2D, Container2DResult } from "../../utils/container2d";
+import { Identifiable } from "../../utils/identifiable";
+import { HealthData } from "../../entities/health";
+import { Items } from "../../inventory/items";
 
 
-export abstract class AZoneRenderer implements IRenderer, IDeletable {
-    protected players: (CharacterData | null)[][] = [[null, null], [null, null], [null, null]];
-    protected enemies: (Enemies.AEnemy | null)[][] = [[null, null], [null, null], [null, null]];
+export abstract class AZoneRenderer extends Identifiable implements IRenderer, IDeletable {
+    protected players: Container2D<CharacterData> = new Container2D<CharacterData>(2, 3);
+    protected enemies: Container2D<Enemies.AEnemy> = new Container2D<Enemies.AEnemy>(2, 3);
 
     protected parentZone: AZone;
     protected zoneContent: HTMLContainer | null = null;
 
     protected zoneActionListener: MessagingBus.Subscription<MessagingBus.ExecuteZoneActionEvent>;
 
-    private activityProgressListener: MessagingBus.Subscription<number>;
-    private id: number | null = null;
+    private activityProgressListener: MessagingBus.Subscription<MessagingBus.ActivityProgressEvent>;
+
+    private shouldRedraw: boolean = false;
 
     constructor(parentZone: AZone, zoneActionListener: MessagingBus.Subscription<MessagingBus.ExecuteZoneActionEvent>) {
+        super();
+
         this.parentZone = parentZone;
        
         this.zoneActionListener = zoneActionListener;
 
-        this.activityProgressListener = MessagingBus.subscribeToAddActivityProgress((activityProgress: number) => {
-            this.updateZoneContent();
-        }, 1000)
+        this.activityProgressListener = MessagingBus.subscribeToAddActivityProgress((entityId: number, amount: number) => {
+            if (amount > 0) {
+                this.shouldRedraw = true;
+            }
+        }, 1000);
     }
 
     abstract buildDOM(): void 
-    
-    setId(id: number): void {
-        this.id = id;
-    }
 
-    getId(): number | null {
-        return this.id;
-    }
 
     delete(): void {
         this.clearDOM();
@@ -52,11 +53,79 @@ export abstract class AZoneRenderer implements IRenderer, IDeletable {
     }
 
     addPlayer(character: CharacterData): void {
-        this.players[0][0] = character;
+        this.players.set(character, 1, 1);
     }
 
     onGameTick(): void {
-        MessagingBus.publishToAddActivityProgress(1);
+        for (const charData of this.players) {
+            const character: CharacterData = charData.get();
+
+            MessagingBus.publishToAddActivityProgress(character.getId(), 1);
+
+            if (character.addActivityProgress(1)) {
+                MessagingBus.publishToExecuteZoneAction(character.getId(), this.getId());
+
+                this.playerZoneAction(character);
+            }
+        }
+
+        for (const enemyData of this.enemies) {
+            const enemy: Enemies.AEnemy = enemyData.get();
+
+            MessagingBus.publishToAddActivityProgress(enemy.getId(), 1);  
+            
+            if (enemy.addActivityProgress(1)) {
+                MessagingBus.publishToExecuteZoneAction(enemy.getId(), this.getId());
+
+                this.enemyZoneAction(enemy);
+            }
+        }
+        
+        if (this.enemies.count() === 0) {
+            this.enemies.set(new Enemies.Boar(), 0, 1);
+        }
+
+        if (this.shouldRedraw) {
+            this.updateZoneContent();
+            this.shouldRedraw = false;
+        }
+    }
+
+    playerZoneAction(character: CharacterData): void {
+        const damage: number = character.getEquipment().getAttackDamage();
+        const target: Container2DResult<Enemies.AEnemy> | null  = this.enemies.getRandomEntry();
+
+        if (target === null) {
+            return;
+        }
+
+        const targetHealth: HealthData = target.get().getHealth(); 
+        targetHealth.dealDamage(damage);
+
+        if (targetHealth.getCurrentHealth() <= 0) {
+            const itemDrop: Items.Entry | null = target.get().getRandomDropItem();
+            if (itemDrop !== null) {
+                MessagingBus.publishToResourceChange(character.getId(), itemDrop.getId(), 1);
+            }
+
+            this.enemies.set(null, target.getX(), target.getY());
+        }
+    }
+
+    enemyZoneAction(enemy: Enemies.AEnemy): void {
+        const damage: number = enemy.getAttackDamage();
+        const target: Container2DResult<CharacterData> | null  = this.players.getRandomEntry();
+
+        if (target === null) {
+            return;
+        }
+
+        const targetHealth: HealthData = target.get().getHealth(); 
+        targetHealth.dealDamage(damage);
+        
+        if (targetHealth.getCurrentHealth() <= 0) {
+            console.log("player died");
+        }
     }
 
     protected createZoneHeaderElement(name: string): HTMLDivElement {
@@ -154,38 +223,28 @@ export abstract class AZoneRenderer implements IRenderer, IDeletable {
             return
         }
 
-        for (let i: number = 0; i < 3; i++) {
-            const fightRow: HTMLContainer = this.zoneContent.createOrFindElement("div", "fightRow"+i);
+        for (let y: number = 0; y < 3; y++) {
+            const fightRow: HTMLContainer = this.zoneContent.createOrFindElement("div", "fightRow"+y);
             fightRow.getElement().className = "fight-content-row";
 
-            const player1: (CharacterData | null) = this.players[i][0];
-            if (player1 === null) {
-                this.drawEmptySquare(fightRow, i * 5);
-            } else {
-                this.drawPlayer(fightRow, "Player", player1, i * 5);
+            for (let x: number = 0; x < 2; x++) {
+                const player: (CharacterData | null) = this.players.get(x, y);
+                if (player === null) {
+                    this.drawEmptySquare(fightRow, y * 5 + x);
+                } else {
+                    this.drawPlayer(fightRow, "Player", player, y * 5 + x);
+                }
             }
 
-            const player2 = this.players[i][1];
-            if (player2 === null) {
-                this.drawEmptySquare(fightRow, i * 5 + 1);
-            } else {
-                this.drawPlayer(fightRow, "Player", player2, i * 5 + 1);
-            }
+            this.drawEmptySquare(fightRow, y * 5 + 2);
 
-            this.drawEmptySquare(fightRow, i * 5 + 2);
-
-            const enemy1 = this.enemies[i][0];
-            if (enemy1 === null) {
-                this.drawEmptySquare(fightRow, i * 5 + 3);
-            } else {
-                this.drawEnemy(fightRow, enemy1, i * 5 + 3);
-            }
-
-            const enemy2 = this.enemies[i][1];
-            if (enemy2 === null) {
-                this.drawEmptySquare(fightRow, i * 5 + 4);
-            } else {
-                this.drawEnemy(fightRow, enemy2, i * 5 + 4);
+            for (let x: number = 0; x < 2; x++) {
+                const enemy: (Enemies.AEnemy | null) = this.enemies.get(x, y);
+                if (enemy === null) {
+                    this.drawEmptySquare(fightRow, y * 5 + x + 3);
+                } else {
+                    this.drawEnemy(fightRow, enemy, y * 5 + x + 3);
+                }
             }
         }
     }

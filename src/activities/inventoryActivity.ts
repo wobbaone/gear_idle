@@ -10,7 +10,11 @@ export class InventoryActivity extends AActivity {
     constructor() {
         super();
 
-        this.resourceChangeCallback = MessagingBus.subscribeToResourceChange((resourceId: number, amount: number) => {
+        this.resourceChangeCallback = MessagingBus.subscribeToResourceChange((entityId: number, resourceId: number, amount: number) => {
+            if (Player.getCharacterData().getId() !== entityId) {
+                return;
+            }
+
             this.buildDOM();
         });
     }

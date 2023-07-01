@@ -6,7 +6,6 @@ import * as Zones from "./zoneIndex"
 export { Zones }
 
 export namespace ZoneManager {
-    let lastZoneId: number = 0;
     const zoneMap: NullableDeletableContainerMap<number, Zones.AZoneRenderer> = new NullableDeletableContainerMap<number, Zones.AZoneRenderer>();
 
     export enum Zone {
@@ -30,10 +29,9 @@ export namespace ZoneManager {
     }
 
     export function RegisterRenderer(zone: Zones.AZoneRenderer): number {
-        const id: number = ++lastZoneId;
-        zoneMap.set(id, zone);
+        zoneMap.set(zone.getId(), zone);
 
-        return id;
+        return zone.getId();
     }
 
     export function GetZone(zone: number): Zones.AZoneRenderer | null {

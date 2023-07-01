@@ -1,7 +1,6 @@
 import { AdventureActivityType } from "../../activities/adventureActivity";
 import { MessagingBus } from "../../utils/messagingBus";
 import { AZone, AZoneRenderer } from "./zone";
-import { ZoneManager} from "../zones"
 import { Utils } from "../../utils/utils";
 
 export namespace Woods {
@@ -52,8 +51,9 @@ export namespace Woods {
 
             this.updateZoneContent();
     
-            body.appendChild(this.createBackButton("Leave Woods"));
+            parentContainer.appendChild(this.createBackButton("Leave Woods"));
             body.appendChild(parentContainer);
+            
         }
     }
 }

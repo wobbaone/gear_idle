@@ -16,4 +16,12 @@ export class HealthData {
     getMaxHealth(): number {
         return this.maxHealth;
     } 
+
+    dealDamage(amount: number): void {
+        this.currentHealth -= amount;
+
+        if (this.currentHealth < 0) {
+            this.currentHealth = 0;
+        }
+    }
 }
