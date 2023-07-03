@@ -10,6 +10,8 @@ import { Container2D, Container2DResult } from "../../utils/container2d";
 import { Identifiable } from "../../utils/identifiable";
 import { HealthData } from "../../entities/health";
 import { Items } from "../../inventory/items";
+import { ZoneManager } from "../zones";
+import { Player } from "../../player";
 
 
 export abstract class AZoneRenderer extends Identifiable implements IRenderer, IDeletable {
@@ -59,36 +61,45 @@ export abstract class AZoneRenderer extends Identifiable implements IRenderer, I
     }
 
     onGameTick(): void {
-        for (const charData of this.players) {
-            const character: CharacterData = charData.get();
-
-            MessagingBus.publishToAddActivityProgress(character.getId(), 1);
-
-            if (character.addActivityProgress(1)) {
-                MessagingBus.publishToExecuteZoneAction(character.getId(), this.getId());
-
-                this.playerZoneAction(character);
-            }
-        }
-
-        for (const enemyData of this.enemies) {
-            const enemy: Enemies.AEnemy = enemyData.get();
-
-            MessagingBus.publishToAddActivityProgress(enemy.getId(), 1);  
-            
-            if (enemy.addActivityProgress(1)) {
-                MessagingBus.publishToExecuteZoneAction(enemy.getId(), this.getId());
-
-                this.enemyZoneAction(enemy);
-            }
-        }
-        
         if (this.enemies.count() === 0) {
             this.currentRespawnProgress += 1;
             if (this.currentRespawnProgress >= this.parentZone.getZoneRespawnTime()) {
                 this.currentRespawnProgress = 0;
                 this.enemies.set(new Enemies.Boar(), 0, 1);
-            }    
+            } else {
+                for (const charData of this.players) {
+                    charData.get().getEquipment().eatIfNeeded();
+                }
+            }
+
+            for (const charData of this.players) {
+                const character: CharacterData = charData.get();
+                character.resetActivityProgress();
+            }
+        } else {
+            for (const charData of this.players) {
+                const character: CharacterData = charData.get();
+                
+                MessagingBus.publishToAddActivityProgress(character.getId(), 1);
+
+                if (character.addActivityProgress(1)) {
+                    MessagingBus.publishToExecuteZoneAction(character.getId(), this.getId());
+
+                    this.playerZoneAction(character);
+                }
+            }
+
+            for (const enemyData of this.enemies) {
+                const enemy: Enemies.AEnemy = enemyData.get();
+
+                MessagingBus.publishToAddActivityProgress(enemy.getId(), 1);  
+                
+                if (enemy.addActivityProgress(1)) {
+                    MessagingBus.publishToExecuteZoneAction(enemy.getId(), this.getId());
+
+                    this.enemyZoneAction(enemy);
+                }
+            }
         }
 
         if (this.shouldRedraw) {
@@ -98,15 +109,18 @@ export abstract class AZoneRenderer extends Identifiable implements IRenderer, I
     }
 
     playerZoneAction(character: CharacterData): void {
-        const damage: number = character.getEquipment().getAttackDamage();
         const target: Container2DResult<Enemies.AEnemy> | null  = this.enemies.getRandomEntry();
-
         if (target === null) {
             return;
         }
 
+        const damage: number = character.getEquipment().getAttackDamageVsTarget(target.get());
+        
         const targetHealth: HealthData = target.get().getHealth(); 
         targetHealth.dealDamage(damage);
+        for (const property of character.getEquipment().allEquippedPropertiesIterator()) {
+            property.onHit(character, target.get(), damage);
+        }
 
         if (targetHealth.getCurrentHealth() <= 0) {
             const itemDrop: Items.Entry | null = target.get().getRandomDropItem();
@@ -130,7 +144,10 @@ export abstract class AZoneRenderer extends Identifiable implements IRenderer, I
         targetHealth.dealDamage(damage);
 
         if (targetHealth.getCurrentHealth() <= 0) {
-            console.log("player died");
+            if (target.get().getId() === Player.getCharacterData().getId()) {
+                MessagingBus.publishToZoneChange(null);
+                targetHealth.setHealth(targetHealth.getMaxHealth());
+            }
         }
     }
 
@@ -174,7 +191,11 @@ export abstract class AZoneRenderer extends Identifiable implements IRenderer, I
     protected drawPlayer(parent: HTMLContainer, name: string, data: CharacterData, elementindex: number): HTMLContainer {
         const elementDiv: HTMLContainer = parent.createOrFindElement("div", "elementDiv" + elementindex);
         elementDiv.getElement().className = "fighter-element";
-        
+
+        const imageElement: HTMLContainer = elementDiv.createOrFindElement("img", "imageElement");
+        imageElement.setImageSource("./images/player.png");
+        imageElement.getElement().className = "player";
+
         const nameSpan: HTMLContainer = elementDiv.createOrFindElement("span", "nameSpan");
         nameSpan.getElement().innerHTML = name;
 
@@ -182,9 +203,10 @@ export abstract class AZoneRenderer extends Identifiable implements IRenderer, I
         const healthSpan: HTMLContainer = elementDiv.createOrFindElement("span", "healthSpan");
         healthSpan.getElement().innerHTML = healthData.getCurrentHealth() + "/" + healthData.getMaxHealth();
 
-        const imageElement: HTMLContainer = elementDiv.createOrFindElement("img", "imageElement");
-        imageElement.setImageSource("./images/player.png");
-        imageElement.getElement().className = "player";
+        const progressBar: HTMLContainer = elementDiv.createOrFindElement("progress", "progressElement");
+        const progressBarElement: HTMLProgressElement =  progressBar.getTypedElement<HTMLProgressElement>();
+        progressBarElement.value = data.getCurrentActivityProgress() / data.getActivityThreshold();
+        progressBarElement.hidden = false;
 
         return elementDiv;
     }
@@ -192,16 +214,19 @@ export abstract class AZoneRenderer extends Identifiable implements IRenderer, I
     protected drawEmptySquare(parent: HTMLContainer, elementindex: number): HTMLContainer {
         const elementDiv: HTMLContainer = parent.createOrFindElement("div", "elementDiv" + elementindex);
         elementDiv.getElement().className = "fighter-element";
-        
+
+        const imageElement: HTMLContainer = elementDiv.createOrFindElement("img", "imageElement");
+        imageElement.setImageSource("./images/blankSlot.png");
+        imageElement.getElement().className = "blank"; 
+         
         const nameSpan: HTMLContainer = elementDiv.createOrFindElement("span", "nameSpan");
         nameSpan.getElement().innerHTML = "";
 
         const healthSpan: HTMLContainer = elementDiv.createOrFindElement("span", "healthSpan");
         healthSpan.getElement().innerHTML = "";
 
-        const imageElement: HTMLContainer = elementDiv.createOrFindElement("img", "imageElement");
-        imageElement.setImageSource("./images/blankSlot.png");
-        imageElement.getElement().className = "blank"; 
+        const progressBar: HTMLContainer = elementDiv.createOrFindElement("progress", "progressElement");
+        progressBar.getElement().hidden = true;
 
         return elementDiv;
     }
@@ -209,7 +234,11 @@ export abstract class AZoneRenderer extends Identifiable implements IRenderer, I
     protected drawEnemy(parent: HTMLContainer, enemy: Enemies.AEnemy, elementindex: number): HTMLContainer {
         const elementDiv: HTMLContainer = parent.createOrFindElement("div", "elementDiv" + elementindex);
         elementDiv.getElement().className = "fighter-element";
-        
+
+        const imageElement: HTMLContainer = elementDiv.createOrFindElement("img", "imageElement");
+        imageElement.setImageSource(enemy.getImageSource());
+        imageElement.getElement().className = "monster";   
+
         const nameSpan: HTMLContainer = elementDiv.createOrFindElement("span", "nameSpan");
         nameSpan.getElement().innerHTML = enemy.getName();
 
@@ -217,9 +246,10 @@ export abstract class AZoneRenderer extends Identifiable implements IRenderer, I
         const healthSpan: HTMLContainer = elementDiv.createOrFindElement("span", "healthSpan");
         healthSpan.getElement().innerHTML = healthData.getCurrentHealth() + "/" + healthData.getMaxHealth();
 
-        const imageElement: HTMLContainer = elementDiv.createOrFindElement("img", "imageElement");
-        imageElement.setImageSource(enemy.getImageSource());
-        imageElement.getElement().className = "monster";   
+        const progressBar: HTMLContainer = elementDiv.createOrFindElement("progress", "progressElement");
+        const progressBarElement: HTMLProgressElement =  progressBar.getTypedElement<HTMLProgressElement>();
+        progressBarElement.value = enemy.getCurrentActivityProgress() / enemy.getActivityThreshold();
+        progressBarElement.hidden = false;
 
         return elementDiv;
     }

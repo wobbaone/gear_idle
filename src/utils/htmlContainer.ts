@@ -13,6 +13,10 @@ export class HTMLContainer  {
         return this.content;
     }
 
+    getTypedElement<T extends HTMLElement>(): T { 
+        return <T>this.content;
+    }   
+
     createOrFindElement(tagName: string, id: string): HTMLContainer {
         const target: (HTMLContainer | undefined) = this.children.get(id);
         if (target !== undefined) {

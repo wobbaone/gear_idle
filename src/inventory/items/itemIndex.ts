@@ -4,8 +4,6 @@ import { Entry } from "./itemEntry";
 export * from "./itemTypes/meatBoarItem"
 export * from "./itemTypes/oreCopperItem"
 export * from "./itemTypes/woodBirch"
-export * from "./weapon"
-export * from "./armor"
 export * from "./itemEntry"
 
 export function getItem(item: new(id: number) => Entry): Entry {

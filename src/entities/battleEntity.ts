@@ -52,4 +52,8 @@ export abstract class ABattleEntity extends Identifiable{
         this.activityProgress = 0;
         return true;
     }
+
+    resetActivityProgress(): void {
+        this.activityProgress = 0;
+    }
 }

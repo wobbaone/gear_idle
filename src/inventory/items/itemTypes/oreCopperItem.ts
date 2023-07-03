@@ -1,7 +1,11 @@
 import { Entry } from "../itemEntry";
+import { StackableProperty } from "../itemProperties/stackableProperty";
 
-export class OreCopperItem extends Entry {
-    constructor(id: number) {
-        super(id, "Copper Ore", "");
+export namespace OreCopper {
+    export class Item extends Entry {
+        constructor(id: number) {
+            super(id, "Copper Ore", "");
+            this.addProperty(new StackableProperty(this));
+        }
     }
 }

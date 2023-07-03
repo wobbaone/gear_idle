@@ -1,48 +1,8 @@
 import { InventoryData } from "./inventoryData";
+import { ItemState } from "./itemState";
 import { Items } from "./items";
 
 export namespace Inventory {
-    export class State { 
-        private items: ItemState[];
-
-        private constructor() {
-            this.items = [];
-        }
-
-        getItems(): ItemState[] {
-            return this.items;
-        }
-
-        static fromInventoryData(data: InventoryData): State {
-            const state: State =  new State();
-            const stackableResources: Map<number, number> = data.getStackableResources();
-
-            stackableResources.forEach((count: number, id: number) => {
-                state.items.push(new ItemState(itemData.itemList[id], count));
-            });
-
-            return state;
-        }
-    }
-
-    export class ItemState {
-        private item: Items.Entry;
-        private count: number;
-
-        constructor(item: Items.Entry, count: number) {
-            this.item = item;
-            this.count = count;
-        }
-
-        getItem(): Items.Entry {
-            return this.item;
-        }
-
-        getCount(): number {
-            return this.count;
-        }
-    }
-
     class ItemData {
         itemList: Items.Entry[];
         itemMap: Map<string, number>;
@@ -51,9 +11,9 @@ export namespace Inventory {
             this.itemList = [];
             this.itemMap = new Map<string, number>();
 
-            this.addItemToItemList(Items.OreCopperItem);
-            this.addItemToItemList(Items.WoodBirchItem);
-            this.addItemToItemList(Items.MeatBoarItem);
+            this.addItemToItemList(Items.OreCopper.Item);
+            this.addItemToItemList(Items.WoodBirch.Item);
+            this.addItemToItemList(Items.MeatBoar.Item);
         }
 
         private addItemToItemList<T extends Items.Entry>(ctor: new(id: number) => T): void {
@@ -95,5 +55,17 @@ export namespace Inventory {
         }
 
         return getEntryFromId(id);
+    }
+
+    export function getEntriesWithAnyPropertyTag(tags: string[]) : Items.Entry[] {
+        const results: Items.Entry[] = [];
+
+        for(const itemValue of itemData.itemList) {
+            if (itemValue.propertyContainsAnyTag(tags)) {
+                results.push(itemValue);
+            }
+        }
+
+        return results;
     }
 }

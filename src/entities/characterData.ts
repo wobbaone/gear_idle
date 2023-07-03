@@ -12,7 +12,7 @@ export class CharacterData extends ABattleEntity {
         super();
 
         this.inventory = new InventoryData(this.getId());
-        this.equipment = new EquipmentData();
+        this.equipment = new EquipmentData(this);
     }
 
     getInventory(): InventoryData {
@@ -24,7 +24,17 @@ export class CharacterData extends ABattleEntity {
     }
 
     getMaxHealth(): number {
-        return super.getMaxHealth() + this.getEquipment().getAddedHealth();
+        let flatHealth: number = super.getMaxHealth();
+        for (const property of this.getEquipment().allEquippedPropertiesIterator()) {
+            flatHealth += property.addedFlatHealth(this);        
+        }
+
+        let extraModifiedHealth = 0;
+        for (const property of this.getEquipment().allEquippedPropertiesIterator()) {
+            extraModifiedHealth += property.modifyExtraHealthBy(this, flatHealth);    
+        }
+
+        return flatHealth + extraModifiedHealth;
     }
 
     getActivityThreshold(): number {

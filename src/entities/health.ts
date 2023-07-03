@@ -24,4 +24,24 @@ export class HealthData {
             this.currentHealth = 0;
         }
     }
+
+    healDamage(amount: number): void {
+        this.currentHealth += amount;
+
+        if (this.currentHealth > this.maxHealth) {
+            this.currentHealth = this.maxHealth;
+        }
+    }
+
+    setHealth(amount: number): void {
+        this.currentHealth = amount;
+
+        if (this.currentHealth < 0) {
+            this.currentHealth = 0;
+        }
+
+        if (this.currentHealth > this.maxHealth) {
+            this.currentHealth = this.maxHealth;
+        }
+    }
 }
