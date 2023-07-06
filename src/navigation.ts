@@ -29,8 +29,8 @@ export class NavigationState {
     private currentActivity: DeletableContainer<AActivity> = new DeletableContainer<AActivity>(new LoginActivity());
 
     constructor() {
-        this.setScreen(Screen.Profile);
-        //this.setScreen(Screen.Login);
+        //this.setScreen(Screen.Profile);
+        this.setScreen(Screen.Login);
 
         Utils.addOnClickToElement("profile-nav", () => this.setScreen(Screen.Profile));
         Utils.addOnClickToElement("inventory-nav", () => this.setScreen(Screen.Inventory));
