@@ -3,13 +3,13 @@ import { AItemPropertyState } from "../inventory/itemPropertyState";
 import { ItemState } from "../inventory/itemState";
 import { Items } from "../inventory/items";
 import { EdibleProperty } from "../inventory/items/itemProperties/edibleProperty";
-import { CharacterData } from "../entities/characterData";
+import { PlayerCharacterData } from "../entities/characterData";
 import { StackableProperty, StackablePropertyState } from "../inventory/items/itemProperties/stackableProperty";
 
 export class EquipmentData {
     private static DEFAULT_DAMAGE = 1;
 
-    private owner: CharacterData; 
+    private owner: PlayerCharacterData; 
 
     private weapon: ItemState | null;
     private armor: ItemState | null;
@@ -17,7 +17,7 @@ export class EquipmentData {
 
     private allEquipped: ItemState[];
     
-    constructor(owner: CharacterData) {
+    constructor(owner: PlayerCharacterData) {
         this.weapon = null;
         this.armor = null;
         this.food = null;

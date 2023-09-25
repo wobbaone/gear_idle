@@ -22,6 +22,7 @@
             "args": [
                 "--compress",
                 "--mangle",
+                "--toplevel",
                 "--output",
                 "./out/main.min.js",
                 "--no-annotations",

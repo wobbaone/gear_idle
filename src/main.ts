@@ -1,15 +1,12 @@
-import { NavigationState } from "./navigation";
-import { Player } from "./player";
-import { Zones } from "./zones/zones";
+import { NavigationState } from "./client/navigation";
+import { Client } from "./client/client";
+import { Zones } from "./commons/zones/zoneManager";
 
 export namespace Game {
-    class GameState {
-        private navigation: NavigationState;
-    
+    class GameState {   
         private gameLoopThread: number | null;
     
         constructor() {
-            this.navigation = new NavigationState();
             this.gameLoopThread = null;
         }
     
@@ -30,22 +27,14 @@ export namespace Game {
         gameLoop(): void {
             console.log("In game loop");
             
-            const zone: Zones.AZoneRenderer | null = Player.getCurrentZoneActivity();
+            const zone: Zones.AZoneRenderer | null = Client.getCurrentZoneActivity();
             if (zone !== null) {
                 zone.onGameTick();
             }
-        }
-    
-        getNavigationState(): NavigationState {
-            return this.navigation;
         }
     }
     
     const game = new GameState();
     game.start();
-
-    export function getNavigationState(): NavigationState {
-        return game.getNavigationState();
-    }
 }
 

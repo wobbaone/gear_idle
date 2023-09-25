@@ -2,7 +2,7 @@ import { InventoryData } from "../inventory/inventoryData";
 import { EquipmentData } from "../equipment/equipmentData";
 import { ABattleEntity } from "./battleEntity";
 
-export class CharacterData extends ABattleEntity {
+export class PlayerCharacterData extends ABattleEntity {
     private static DEFAULT_ACTIVITY_TIME = 30;
 
     private inventory: InventoryData;
@@ -38,7 +38,7 @@ export class CharacterData extends ABattleEntity {
     }
 
     getActivityThreshold(): number {
-        return CharacterData.DEFAULT_ACTIVITY_TIME;
+        return PlayerCharacterData.DEFAULT_ACTIVITY_TIME;
     }
 }
 

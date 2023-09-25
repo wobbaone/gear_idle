@@ -1,6 +1,6 @@
 import { ABattleEntity } from "../entities/battleEntity";
 import { AItemProperty } from "./items/itemProperty";
-import { CharacterData } from "../entities/characterData";
+import { PlayerCharacterData } from "../entities/characterData";
 
 export abstract class AItemPropertyState {
     protected parent: AItemProperty;
@@ -26,9 +26,9 @@ export abstract class AItemPropertyState {
     }
     onRecieveHit(owner: ABattleEntity, attacker: ABattleEntity, damage: number): void {}
 
-    onCook(owner: CharacterData): void {}
-    onEat(owner: CharacterData): void {}
-    shouldEat(owner: CharacterData): boolean {
+    onCook(owner: PlayerCharacterData): void {}
+    onEat(owner: PlayerCharacterData): void {}
+    shouldEat(owner: PlayerCharacterData): boolean {
         return false;
     }
 

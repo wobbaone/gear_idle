@@ -46,7 +46,7 @@ jobs:
       - name: Minify
         run: |
           uglifyjs \
-            --compress --mangle \
+            --compress --mangle --toplevel \
             --output ./out/main.js \
             --no-annotations \
             -- ./out/main.js
@@ -55,12 +55,13 @@ jobs:
           shopt -s globstar
 
           FILES="$(ls ./**/imports/**/*.js) "
+          FILES+="$(ls ./**/imports/**/*.js.map) "
           FILES+="$(ls ./**/imports/**/*.txt) "
           FILES+="$(ls ./**/out/*.js) "
           FILES+="$(ls ./**/css/*.css) "
           FILES+="$(ls ./**/images/**/*) "
           FILES+="$(ls ./**/*.html)"
-          
+
           FILES="${FILES//[$'\t\r\n']/' '}"
 
           echo "File list to compress: $FILES"

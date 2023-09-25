@@ -1,6 +1,6 @@
 import { Entry } from "../itemEntry";
 import { AItemProperty } from "../itemProperty";
-import { CharacterData } from "../../../entities/characterData";
+import { PlayerCharacterData } from "../../../entities/characterData";
 import { HealthData } from "../../../entities/health";
 import { AItemPropertyState, ATypedPropertyState } from "../../itemPropertyState";
 
@@ -25,11 +25,11 @@ export class EdibleProperty extends AItemProperty {
 }
 
 class EdiblePropertyState extends ATypedPropertyState<EdibleProperty> {   
-    onEat(owner: CharacterData): void {
+    onEat(owner: PlayerCharacterData): void {
         owner.getHealth().healDamage(this.typedParent.getHealAmount());
     }
 
-    shouldEat(owner: CharacterData): boolean {
+    shouldEat(owner: PlayerCharacterData): boolean {
         const ownerHealth: HealthData = owner.getHealth();
         return ownerHealth.getMaxHealth() - ownerHealth.getCurrentHealth() >= this.typedParent.getHealAmount();
     }

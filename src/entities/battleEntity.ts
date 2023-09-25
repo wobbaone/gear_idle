@@ -1,5 +1,5 @@
 import { HealthData } from "./health";
-import { Identifiable } from "../utils/identifiable";
+import { Identifiable } from "../commons/utils/identifiable";
 
 export abstract class ABattleEntity extends Identifiable{    
     protected health: HealthData;

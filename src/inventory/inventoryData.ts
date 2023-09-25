@@ -1,4 +1,4 @@
-import { MessagingBus } from "../utils/messagingBus";
+import { MessagingBus } from "../commons/utils/messagingBus";
 import { Inventory } from "./inventoryState";
 import { AItemPropertyState } from "./itemPropertyState";
 import { ItemState } from "./itemState";
